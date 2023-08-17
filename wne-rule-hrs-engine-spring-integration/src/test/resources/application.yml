@@ -1,0 +1,47 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    multipart:
+      max-file-size: 100MB
+    tomcat:
+      maxSwallowSize: -1
+
+logging:
+  level:
+    wne: DEBUG
+    hcis: TRACE
+    com:
+      zaxxer:
+        hikari: TRACE
+        HikariConfig: DEBUG
+    org:
+      springframework:
+        transaction:
+          interceptor: TRACE
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:sample;
+    username: sa
+    password:
+    hikari:
+      auto-commit: true
+      connection-test-query: select 1
+      maximum-pool-size: 1
+      leakDetectionThreshold: 20000
+      registerMbeans: true
+      pool-name: my-pool
+      connection-timeout: 5000
+      connection-init-sql: select 1
+      validation-timeout: 2000
+      minimum-idle: 10
+      max-lifetime: 1800000
+
+hrs:
+  rule:
+    engine:
+      pool:
+        max-total: 2
+        max-wait-mills: 2000
