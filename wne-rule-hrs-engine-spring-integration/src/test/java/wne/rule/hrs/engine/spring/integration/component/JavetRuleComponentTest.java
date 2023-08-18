@@ -61,4 +61,57 @@ public class JavetRuleComponentTest {
 
         Assert.assertEquals(1, ((Map)obj.getResult()).get("1"));
     }
+
+    @Test
+    public void context_호출_테스트() throws Exception {
+        String script = "function my() {\n" +
+                "context.start('my');\n" +
+                "context.addParameter('my', 'key', 'value1'); \n" +
+                "console.log('my');\n" +
+                "context.end('my');\n" +
+                "sub(); \n" +
+
+                "return 'hi'; \n" +
+                "} \n" +
+                "function sub() {\n" +
+                "context.start('sub');\n" +
+                "context.addParameter('sub', 'key', 'value1'); \n" +
+                "console.log('sub');\n" +
+                "context.end('sub');\n" +
+                "}\n";
+
+        ruleService.updateRule("my", script);
+
+        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+
+        System.out.println("execute log:" +obj.getExecuteLog());
+        System.out.println("trace:" + obj.getTraceList());
+
+    }
+
+
+    @Test
+    public void break_호출_테스트() throws Exception {
+        String script = "function my() {\n" +
+                "context.start('my');\n" +
+                "context.addParameter('my', 'key', 'value1'); \n" +
+                "console.log('before braek');\n" +
+
+
+                "console.log('after break');\n" +
+                "context.end('my');\n" +
+
+
+                "return 'hi'; \n" +
+                "} \n"
+                ;
+
+        ruleService.updateRule("my", script);
+
+        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+
+        System.out.println("execute log:" +obj.getExecuteLog());
+        System.out.println("trace:" + obj.getTraceList());
+
+    }
 }

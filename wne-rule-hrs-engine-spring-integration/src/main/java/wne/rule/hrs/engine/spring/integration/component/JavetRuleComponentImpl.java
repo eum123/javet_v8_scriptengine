@@ -9,6 +9,7 @@ import wne.rule.hrs.engine.core.RuleEngineFactory;
 import wne.rule.hrs.engine.core.RuleExecuteResult;
 import wne.rule.hrs.engine.spring.integration.properties.RuleServiceProperties;
 import wne.rule.hrs.engine.spring.integration.vo.RuleResultVo;
+import wne.rule.hrs.engine.spring.integration.vo.RuleResultVoBuilder;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -34,7 +35,7 @@ public class JavetRuleComponentImpl implements RuleComponent {
             engine = factory.borrow();
             RuleExecuteResult r = engine.executeByRuleId(ruleId, parameter);
 
-            return RuleResultVo.builder().result(r.getResult()).build();
+            return RuleResultVoBuilder.convert(r);
         } finally {
             if(engine != null) {
                 factory.release(engine);
@@ -49,7 +50,7 @@ public class JavetRuleComponentImpl implements RuleComponent {
             engine = factory.borrow();
             RuleExecuteResult r = engine.executeByScript(script, parameter);
 
-            return RuleResultVo.builder().result(r.getResult()).build();
+            return RuleResultVoBuilder.convert(r);
         } finally {
             if(engine != null) {
                 factory.release(engine);

@@ -1,4 +1,4 @@
-package wne.rule.hrs.engine.core.util;
+package wne.rule.hrs.engine.core;
 
 import java.util.Optional;
 import java.util.Properties;

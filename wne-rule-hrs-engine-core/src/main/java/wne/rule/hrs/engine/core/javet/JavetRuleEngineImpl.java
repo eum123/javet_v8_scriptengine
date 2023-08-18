@@ -11,10 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import wne.rule.hrs.engine.core.ManagedRuleEngine;
 import wne.rule.hrs.engine.core.RuleContext;
 import wne.rule.hrs.engine.core.RuleEngine;
+import wne.rule.hrs.engine.core.constants.ExternalFunctionConstants;
+import wne.rule.hrs.engine.core.constants.SystemConstants;
 import wne.rule.hrs.engine.core.exception.*;
 import wne.rule.hrs.engine.core.external.ExternalLauncher;
 import wne.rule.hrs.engine.core.RuleExecuteResult;
-import wne.rule.hrs.engine.core.util.ManagedRuleEngineFactory;
+import wne.rule.hrs.engine.core.ManagedRuleEngineFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -65,12 +67,12 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
             v8Runtime.setConverter(new JavetProxyConverter());
 
             //system
-            v8Runtime.getGlobalObject().set("EXTERNAL", new ExternalLauncher());
+            v8Runtime.getGlobalObject().set(ExternalFunctionConstants.EXTERNAL_FUNCTION, new ExternalLauncher());
 
             //reserved java object
             Properties properties = factory.getReserveProperties().orElseThrow(() -> new ComponentException("Reserved Properties not found"));
             properties.entrySet().forEach(x -> {
-                log.info("regist reserved property. key:{}, value:{}", x.getKey(), x.getValue());
+                log.info("register reserved property. key:{}, value:{}", x.getKey(), x.getValue());
 
                 try {
                     v8Runtime.getGlobalObject().set(x.getKey(), Class.forName((String)x.getValue()));
@@ -122,76 +124,77 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
 
 
     public RuleExecuteResult executeByRuleId(String ruleId, Map parameters) throws RuleException {
+        return execute("ID", ruleId, parameters);
+    }
+
+    private void executeUsingId(RuleContext context, String ruleId, Map parameters) throws Exception {
+        validate(ruleId);
+
+        v8Runtime.getGlobalObject().set(SystemConstants.CONTEXT, context);
+
+        //execute pre
+        //TODO 전처리 구현
+
+        //execute main
+        Object result = v8Runtime.getGlobalObject().invokeObject(ruleId, parameters);
+
+        //execute post
+        //TODO 후 처리 구현
+
+
+    }
+
+    private void executeUsingScript(RuleContext context, String script, Map parameters) throws Exception {
+        //execute pre
+        //TODO 전처리 구현
+
+        //execute main
+        Object result = v8Runtime.getExecutor(script).executeObject();
+
+        //execute post
+        //TODO 후 처리 구현
+    }
+
+    private RuleExecuteResult execute(String type, String key, Map parameters) throws RuleException {
         lock.lock();
 
         RuleContext context = new RuleContext();
+        RuleExecuteResult executeResult = new RuleExecuteResult();
 
         try {
             if (factory.isUpdate()) {
                 updateCondition.await();
             }
 
-            validate(ruleId);
+            if(type.equals("ID")) {
+                //ID 방식
+                executeUsingId(context, key, parameters);
+            } else {
+                //script 방식
+                executeUsingScript(context, key, parameters);
+            }
 
-            v8Runtime.getGlobalObject().set("context", context);
 
-            //execute pre
-            //TODO 전처리 구현
-
-            //execute main
-            Object result = v8Runtime.getGlobalObject().invokeObject(ruleId, parameters);
-
-            //execute post
-            //TODO 후 처리 구현
-
-            System.out.println(byteArrayOutputStream.toString());
             log.debug("output log: {}", byteArrayOutputStream.toString());
 
-            return RuleExecuteResult.builder().result(result).build();
-        } catch (InterruptedException e) {
-            throw new RuleException(e);
+            executeResult.setTrace(context.getRuleTraces());
+            executeResult.setExecuteLog(byteArrayOutputStream.toString());
+
+            return executeResult;
         } catch (Exception e ) {
-            throw new RuleExecuteException(context, e);
+            executeResult.setTrace(context.getRuleTraces());
+            executeResult.setThrowable(e);
+            return executeResult;
         } finally {
             lock.unlock();
+
+            deleteSystem();
         }
 
     }
 
     public RuleExecuteResult executeByScript(String script, Map parameters) throws RuleException {
-        lock.lock();
-
-        RuleContext context = new RuleContext();
-
-        try {
-            if (factory.isUpdate()) {
-                updateCondition.await();
-            }
-
-            v8Runtime.getGlobalObject().set("context", context);
-
-            //execute pre
-            //TODO 전처리 구현
-
-            //execute main
-            Object result = v8Runtime.getExecutor(script).executeObject();
-
-            //execute post
-            //TODO 후 처리 구현
-
-            System.out.println(byteArrayOutputStream.toString());
-            log.debug("output log: {}", byteArrayOutputStream.toString());
-
-            return RuleExecuteResult.builder().result(result).build();
-
-        } catch (InterruptedException e) {
-            throw new RuleException(e);
-        } catch (Exception e ) {
-            throw new RuleExecuteException(context, e);
-        } finally {
-            lock.unlock();
-        }
-
+        return execute("SCRIPT", script, parameters);
     }
 
     private void validate(String ruleId) throws RuleException {
@@ -220,6 +223,16 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
 
             updateCondition.signalAll();
             lock.unlock();
+        }
+    }
+
+    private void deleteSystem() {
+        if(v8Runtime != null) {
+            try {
+                v8Runtime.getGlobalObject().delete(SystemConstants.CONTEXT);
+            } catch (Exception e) {
+                log.warn("내부 함수(객체) 삭제 오류", e);
+            }
         }
     }
 

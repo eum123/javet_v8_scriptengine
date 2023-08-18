@@ -6,7 +6,7 @@ import wne.rule.hrs.engine.core.javet.JavetRuleEngineImpl;
 import wne.rule.hrs.engine.core.ManagedRuleEngine;
 import wne.rule.hrs.engine.core.exception.ComponentException;
 import wne.rule.hrs.engine.core.exception.RuleException;
-import wne.rule.hrs.engine.core.util.ManagedRuleEngineFactory;
+import wne.rule.hrs.engine.core.ManagedRuleEngineFactory;
 
 import java.util.Optional;
 import java.util.Properties;
