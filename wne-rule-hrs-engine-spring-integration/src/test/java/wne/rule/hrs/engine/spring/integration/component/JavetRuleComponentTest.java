@@ -1,23 +1,23 @@
-package wne.rule.hrs.engine.spring.integration.service;
+package wne.rule.hrs.engine.spring.integration.component;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import wne.rule.hrs.engine.core.util.ApplicationContextProvider;
 import wne.rule.hrs.engine.spring.integration.TestApplication;
+import wne.rule.hrs.engine.spring.integration.vo.RuleResultVo;
 
 import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {TestApplication.class, ApplicationContextProvider.class})
-public class JavetRuleServiceTest {
+public class JavetRuleComponentTest {
 
     @Autowired
-    private RuleService ruleService;
+    private RuleComponent ruleService;
 
     @Test
     public void test() throws Exception {
@@ -33,7 +33,7 @@ public class JavetRuleServiceTest {
     }
 
     @Test
-    public void 외부함수_호출_테스트() throws Exception {
+    public void 외부DB_호출_테스트() throws Exception {
         String script = "function my() {\n" +
                 "var result = EXTERNAL.create().execute('jdbc:RuleDataSource?query=select 1', null); \n" +
                 "console.log('result:' + result); \n" +
@@ -42,8 +42,23 @@ public class JavetRuleServiceTest {
 
         ruleService.updateRule("my", script);
 
-        Map obj = (Map)ruleService.executeByRuleId("my", null);
+        RuleResultVo obj = ruleService.executeByRuleId("my", null);
 
-        Assert.assertEquals(1, obj.get("1"));
+        Assert.assertEquals(1, ((Map)obj.getResult()).get("1"));
+    }
+
+    @Test
+    public void 외부Bean_호출_테스트() throws Exception {
+        String script = "function my() {\n" +
+                "var result = EXTERNAL.create().execute('bean:myBean?method=hello', null); \n" +
+                "console.log('result:' + result); \n" +
+                "return result; \n" +
+                "} \n";
+
+        ruleService.updateRule("my", script);
+
+        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+
+        Assert.assertEquals(1, ((Map)obj.getResult()).get("1"));
     }
 }

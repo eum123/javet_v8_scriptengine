@@ -2,7 +2,7 @@ package wne.rule.hrs.engine.core.pool;
 
 import org.junit.Assert;
 import org.junit.Test;
-import wne.rule.hrs.engine.core.JavetRuleEngineImpl;
+import wne.rule.hrs.engine.core.javet.JavetRuleEngineImpl;
 import wne.rule.hrs.engine.core.ManagedRuleEngine;
 import wne.rule.hrs.engine.core.exception.ComponentException;
 import wne.rule.hrs.engine.core.exception.RuleException;

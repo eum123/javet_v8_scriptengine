@@ -10,12 +10,16 @@ import wne.rule.hrs.engine.external.jdbc.constants.JdbcParameterConstants;
 import wne.rule.hrs.engine.external.jdbc.helper.ResultSetConverter;
 
 import javax.sql.DataSource;
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+/**
+ * DB 호출하는 클래스.
+ * 단건인 경우 map으로 반환하고 여러건인경우 List<Map>으로 반환 한다.
+ */
 @Slf4j
 @ExternalComponent("jdbc")
 public class JdbcExternalExecutor implements ExternalExecutor {
@@ -50,19 +54,17 @@ public class JdbcExternalExecutor implements ExternalExecutor {
 
             resultSet.beforeFirst();
 
+            Map result = null;
             if (totalCount == 1) {
-                return ResultSetConverter.convertResultSetToMap(resultSet);
+                result =  ResultSetConverter.convertResultSetToMap(resultSet);
+            } else if(totalCount == 0) {
+                result = new HashMap<>();
+            } else {
+                //여러건인 경우
+                result = new HashMap();
+                result.put("result", ResultSetConverter.convertResultSetToArrayList(resultSet));
+
             }
-
-            if(totalCount == 0) {
-                return new HashMap<>();
-            }
-
-            //여러건인 경우
-            List<Map<String, Object>> list = ResultSetConverter.convertResultSetToArrayList(resultSet);
-            Map<String, List<Map<String, Object>>> result = new HashMap<>();
-            result.put("result", list);
-
             return result;
         } catch(Exception e) {
             throw new ComponentException(e);

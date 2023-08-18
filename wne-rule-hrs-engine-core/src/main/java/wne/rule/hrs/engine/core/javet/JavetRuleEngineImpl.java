@@ -1,4 +1,4 @@
-package wne.rule.hrs.engine.core;
+package wne.rule.hrs.engine.core.javet;
 
 import com.caoccao.javet.exceptions.JavetException;
 import com.caoccao.javet.interception.logging.JavetStandardConsoleInterceptor;
@@ -8,8 +8,12 @@ import com.caoccao.javet.interop.converters.JavetProxyConverter;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import wne.rule.hrs.engine.core.ManagedRuleEngine;
+import wne.rule.hrs.engine.core.RuleContext;
+import wne.rule.hrs.engine.core.RuleEngine;
 import wne.rule.hrs.engine.core.exception.*;
 import wne.rule.hrs.engine.core.external.ExternalLauncher;
+import wne.rule.hrs.engine.core.RuleExecuteResult;
 import wne.rule.hrs.engine.core.util.ManagedRuleEngineFactory;
 
 import java.io.ByteArrayOutputStream;
@@ -60,9 +64,8 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
 
             v8Runtime.setConverter(new JavetProxyConverter());
 
-            //external
+            //system
             v8Runtime.getGlobalObject().set("EXTERNAL", new ExternalLauncher());
-
 
             //reserved java object
             Properties properties = factory.getReserveProperties().orElseThrow(() -> new ComponentException("Reserved Properties not found"));
@@ -118,7 +121,7 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
 
 
 
-    public Object executeByRuleId(String ruleId, Map parameters) throws RuleException {
+    public RuleExecuteResult executeByRuleId(String ruleId, Map parameters) throws RuleException {
         lock.lock();
 
         RuleContext context = new RuleContext();
@@ -144,7 +147,7 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
             System.out.println(byteArrayOutputStream.toString());
             log.debug("output log: {}", byteArrayOutputStream.toString());
 
-            return result;
+            return RuleExecuteResult.builder().result(result).build();
         } catch (InterruptedException e) {
             throw new RuleException(e);
         } catch (Exception e ) {
@@ -155,7 +158,7 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
 
     }
 
-    public Object executeByScript(String script, Map parameters) throws RuleException {
+    public RuleExecuteResult executeByScript(String script, Map parameters) throws RuleException {
         lock.lock();
 
         RuleContext context = new RuleContext();
@@ -179,7 +182,8 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
             System.out.println(byteArrayOutputStream.toString());
             log.debug("output log: {}", byteArrayOutputStream.toString());
 
-            return result;
+            return RuleExecuteResult.builder().result(result).build();
+
         } catch (InterruptedException e) {
             throw new RuleException(e);
         } catch (Exception e ) {

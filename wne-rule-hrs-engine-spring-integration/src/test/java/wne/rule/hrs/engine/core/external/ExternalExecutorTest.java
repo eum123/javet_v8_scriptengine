@@ -1,7 +1,7 @@
 package wne.rule.hrs.engine.core.external;
 
 import org.junit.Test;
-import wne.rule.hrs.engine.core.JavetRuleEngineFactory;
+import wne.rule.hrs.engine.core.javet.JavetRuleEngineFactory;
 import wne.rule.hrs.engine.core.RuleConfig;
 import wne.rule.hrs.engine.core.RuleEngine;
 import wne.rule.hrs.engine.core.RuleEngineFactory;

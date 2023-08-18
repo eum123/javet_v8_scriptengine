@@ -1,10 +1,10 @@
-package wne.rule.hrs.engine.spring.integration.service;
+package wne.rule.hrs.engine.spring.integration.component;
 
-import wne.rule.hrs.engine.core.RuleEngine;
+import wne.rule.hrs.engine.spring.integration.vo.RuleResultVo;
 
 import java.util.Map;
 
-public interface RuleService {
+public interface RuleComponent {
     /**
      * RuleID를 이용한 rule 실행
      * @param ruleId
@@ -12,7 +12,7 @@ public interface RuleService {
      * @return
      * @throws Exception
      */
-    Object executeByRuleId(String ruleId, Map parameter) throws Exception;
+    RuleResultVo executeByRuleId(String ruleId, Map parameter) throws Exception;
 
     /**
      * rule script를 이용한 rule 실행
@@ -21,7 +21,7 @@ public interface RuleService {
      * @return
      * @throws Exception
      */
-    Object executeByScript(String script, Map parameter) throws Exception;
+    RuleResultVo executeByScript(String script, Map parameter) throws Exception;
 
     /**
      * Rule 변경

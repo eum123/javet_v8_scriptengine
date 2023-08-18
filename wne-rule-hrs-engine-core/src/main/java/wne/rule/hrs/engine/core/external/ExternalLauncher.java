@@ -1,7 +1,6 @@
 package wne.rule.hrs.engine.core.external;
 
 import lombok.extern.slf4j.Slf4j;
-import wne.rule.hrs.engine.core.exception.ComponentNotFoundException;
 import wne.rule.hrs.engine.core.util.URIParser;
 
 import java.util.Map;

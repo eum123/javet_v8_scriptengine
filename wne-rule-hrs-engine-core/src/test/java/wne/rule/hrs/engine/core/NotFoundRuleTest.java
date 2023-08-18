@@ -4,6 +4,7 @@ package wne.rule.hrs.engine.core;
 import org.junit.Assert;
 import org.junit.Test;
 import wne.rule.hrs.engine.core.exception.RuleExecuteException;
+import wne.rule.hrs.engine.core.javet.JavetRuleEngineFactory;
 
 public class NotFoundRuleTest  {
     @Test

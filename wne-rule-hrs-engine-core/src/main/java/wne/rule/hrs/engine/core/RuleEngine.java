@@ -5,8 +5,8 @@ import wne.rule.hrs.engine.core.exception.RuleException;
 import java.util.Map;
 
 public interface RuleEngine {
-    Object executeByRuleId(String ruleId, Map parameters) throws RuleException;
+    RuleExecuteResult executeByRuleId(String ruleId, Map parameters) throws RuleException;
 
-    Object executeByScript(String script, Map parameter) throws RuleException;
+    RuleExecuteResult executeByScript(String script, Map parameter) throws RuleException;
 
 }

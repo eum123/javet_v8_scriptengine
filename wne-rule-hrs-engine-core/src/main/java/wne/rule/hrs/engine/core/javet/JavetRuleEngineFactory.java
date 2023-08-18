@@ -1,6 +1,11 @@
-package wne.rule.hrs.engine.core;
+package wne.rule.hrs.engine.core.javet;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import wne.rule.hrs.engine.core.ManagedRuleEngine;
+import wne.rule.hrs.engine.core.RuleConfig;
+import wne.rule.hrs.engine.core.RuleEngine;
+import wne.rule.hrs.engine.core.RuleEngineFactory;
 import wne.rule.hrs.engine.core.exception.RuleException;
 import wne.rule.hrs.engine.core.external.ExternalExecutorRegistry;
 import wne.rule.hrs.engine.core.loader.ExternalRuleLoader;
@@ -17,6 +22,9 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
+
+@Slf4j
 public class JavetRuleEngineFactory implements RuleEngineFactory, ManagedRuleEngineFactory {
 
     private Lock lock = new ReentrantLock();
@@ -54,6 +62,14 @@ public class JavetRuleEngineFactory implements RuleEngineFactory, ManagedRuleEng
             lock.unlock();
         }
 
+    }
+
+    public void release(RuleEngine engine) {
+        try {
+            pool.release((ManagedRuleEngine) engine);
+        } catch (Exception e) {
+            log.error("release fail", e);
+        }
     }
 
 
