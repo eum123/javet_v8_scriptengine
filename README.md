@@ -2,91 +2,266 @@
 
 
 
-## Getting started
+## Script 문법
+일반적인 javascript 문법을 사용 가능하다.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+* 주의 사항
+  * 숫자로 시작하는 함수 및 변수명 사용 불가.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin http://211.197.235.121/gitlab2/site/shinhanez/wne/rule/wne-rule-javet.git
-git branch -M main
-git push -uf origin main
+### 함수 선언
+함수 선언은 아래와 같이 예전 방식만 가능하다.
+```javascript
+function name() {
+    
+}
 ```
 
-## Integrate with your tools
+아래 방식은 사용 불가능 하다
+```javascript
+var name = function() {
+    
+}
+```
 
-- [ ] [Set up project integrations](http://211.197.235.121/gitlab2/site/shinhanez/wne/rule/wne-rule-javet/-/settings/integrations)
+### Java 객체 사용 법
+java에서 제공하는 객체를 javascript 내에서 사용 가능하다.
+단 reserved_objects.properties에 선언된 객체만 사용 가능하다.
 
-## Collaborate with your team
+java Map에서 재공되는 method는 사용할 수 없고 json 형식으로 사용하면 된다.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+javascript 내에 생성한 객체는 다른 함수 호출시 parameter로 전달 가능하며
+return 시 생성한 map을 확인 할 수 있다.
 
-## Test and Deploy
+* 데이터 추가
+  map.변수명 = 값;  
+*
 
-Use the built-in continuous integration in GitLab.
+```javascript
+function name() {
+    var map = new HashMap();
+    map.name = 'hong';
+    
+    return map;
+}
+```
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+BigDecimal 사용
+```javascript
+function my() {
+    const a = new BigDecimal(10);
+    const b = new BigDecimal(2); 
+    return a.subtract(b); 
+}
+```
 
-***
+### 사용자 Java 객체 사용 방법
+javascript에서 사용자 객체를 생성하여 사용 가능하다
 
-# Editing this README
+* 주의사항
+  * default constructor 만 허용
+  * 생성 할 객체의 package까지 선언 해야 됨.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+```javascript
+function name() {
+    const obj = Type.of("javet.MyObject");
+    return obj.getName();
+}
+```
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
 
-## Name
-Choose a self-explaining name for your project.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+## 외부 호출 기능
+javascript 내에서 외부 호출 기능은 아래와 같이 제공한다.
+* jdbc를 이용한 select
+* spring bean 실행
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+### jdbc를 이용한 select
+EXTERNAL.create().execute()를 이용하여 외부 호출 가능함.
+* Parameter
+  * 명령 : jdbc:RuleDataSource?query=select 1
+    * jdbc: 호출 방식
+    * RuleDataSource : DataSource 이름. 반드시 등록된 이름을 사용해야 한다.
+    * query : select 쿼리 
+  * 참조 값 : HashMap
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+기본 예제
+```javascript
+function my() {
+    var result = EXTERNAL.create().execute("jdbc:RuleDataSource?query=select 1", null);
+    console.log("result:" + result);
+    return result;
+}
+```
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+변수 예제
+```javascript
+function my() {
+    const map = new HashMap();
+    map.name = 'hong';
+    
+    var result = EXTERNAL.create().execute("jdbc:RuleDataSource?query=select * from my_table where name='${name}'", map);
+    console.log("result:" + result);
+    return result;
+}
+```
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### spring bean 실행
+EXTERNAL.create().execute()를 이용하여 외부 호출 가능함.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+* Parameter
+    * 명령 : bean:myBean?method=hello
+        * bean: 호출 방식
+        * myBean : spring bean name
+        * method : 실행할 method 이름
+    * 참조 값 : HashMap - bean 실행 당시 parameter로 주입함.
+* 제약 조건
+  * 실행 할 메소드는 반드시 Map을 parameter로 받을수 있어야 한다.
+  * 실행 할 메소드는 반드시 Map을 return 해야 한다.
+```javascript
+function my() {
+    var result = EXTERNAL.create().execute('bean:myBean?method=hello', null);
+    console.log('result:' + result); 
+    return result;
+}
+```
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+## 실행 trace
+함수의 실행 결과를 저장 하기 위해 로직 시작 전, 후에 기록하는 함수 호출이 필요하다.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+* 사용방법
+  * 로직 시작 전 호출
+    * context.start(함수이름)
+    * context.addParameter(함수명, parameter key, parameter 값)
+  * 로직 시작 후
+    * context.end(함수이름, 실형 결과)
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+```javascript
+function my() {
+     context.start('my');
+     context.addParameter('my', 'key', 'value1'); 
+     console.log('my');
+     context.end('my', null);
+     sub(); 
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+     return 'hi'; 
+}
+                
+function sub() {
+    context.start('sub');
+    context.addParameter('sub', 'key', 'value1'); 
+    console.log('sub');
+    context.end('sub');
+}
+```
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+위 함수 실행 후 trace를 확인 하면
+```java
+public MyClass{
+    public void execute(){
+        //....
+        RuleResultVo obj=ruleService.executeByRuleId("my",null);
+        System.out.println("trace:"+obj.getTraceList());
 
-## License
-For open source projects, say how it is licensed.
+        //출력 내용
+        //trace:[RuleTrace(ruleId=my, parameter={key=value1}, result=null, startTime=1692593061408, endTime=1692593061409), RuleTrace(ruleId=sub, parameter={key=value1}, result=null, startTime=1692593061409, endTime=1692593061409)]
+    }
+}
+```
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+# 기타
+## 룰 ID별 DB 조회 기능 테스트
+Rule ID의 버전 관리를 위해 실행 단계에서 호출할 rule ID가 결정되어
+rule 실행 시 db에서 조회 하여 실행 하는 방식 테스트.
+
+스크립트 실행 시간은 제외 하였음.
+
+### 결과 
+* Engine 생성 시간이 약 1초 정도 소요되어 pool 에 미리 생성하여 진행
+* 대부분 DB 처리 시간 만큼 소요시간 걸림.
+* 실행 로그
+```
+13:56:57.212 [main] DEBUG javet.DBSelect - create================ : 1
+13:56:58.027 [main] DEBUG javet.DBSelect - DB>>>>>>>>>>>>>>>>> : 815
+13:56:58.032 [main] DEBUG javet.DBSelect - ================ : 821
+
+13:56:58.036 [main] DEBUG javet.DBSelect - create================ : 0
+13:56:58.296 [main] DEBUG javet.DBSelect - DB>>>>>>>>>>>>>>>>> : 260
+13:56:58.301 [main] DEBUG javet.DBSelect - ================ : 265
+
+13:56:58.312 [main] DEBUG javet.DBSelect - create================ : 0
+13:56:58.399 [main] DEBUG javet.DBSelect - DB>>>>>>>>>>>>>>>>> : 87
+13:56:58.400 [main] DEBUG javet.DBSelect - ================ : 88
+
+13:56:58.401 [main] DEBUG javet.DBSelect - create================ : 0
+13:56:58.493 [main] DEBUG javet.DBSelect - DB>>>>>>>>>>>>>>>>> : 92
+13:56:58.494 [main] DEBUG javet.DBSelect - ================ : 93
+
+13:56:58.495 [main] DEBUG javet.DBSelect - create================ : 0
+13:56:58.615 [main] DEBUG javet.DBSelect - DB>>>>>>>>>>>>>>>>> : 120
+13:56:58.615 [main] DEBUG javet.DBSelect - ================ : 120
+
+13:56:58.616 [main] DEBUG javet.DBSelect - create================ : 0
+13:56:58.778 [main] DEBUG javet.DBSelect - DB>>>>>>>>>>>>>>>>> : 162
+13:56:58.779 [main] DEBUG javet.DBSelect - ================ : 163
+
+13:56:58.781 [main] DEBUG javet.DBSelect - create================ : 0
+13:56:58.856 [main] DEBUG javet.DBSelect - DB>>>>>>>>>>>>>>>>> : 73
+13:56:58.857 [main] DEBUG javet.DBSelect - ================ : 76
+
+13:56:58.862 [main] DEBUG javet.DBSelect - create================ : 0
+13:56:58.929 [main] DEBUG javet.DBSelect - DB>>>>>>>>>>>>>>>>> : 67
+13:56:58.930 [main] DEBUG javet.DBSelect - ================ : 68
+
+13:56:58.930 [main] DEBUG javet.DBSelect - create================ : 0
+13:56:59.001 [main] DEBUG javet.DBSelect - DB>>>>>>>>>>>>>>>>> : 71
+13:56:59.001 [main] DEBUG javet.DBSelect - ================ : 71
+
+13:56:59.002 [main] DEBUG javet.DBSelect - create================ : 0
+13:56:59.072 [main] DEBUG javet.DBSelect - DB>>>>>>>>>>>>>>>>> : 70
+13:56:59.073 [main] DEBUG javet.DBSelect - ================ : 71
+```
+
+
+## 룰 ID별 Redis 조회 기능 테스트
+* 실행 로그
+```
+15:35:02.303 [main] DEBUG javet.RedisSelect - create================ : 2
+15:35:02.428 [main] DEBUG javet.RedisSelect - Redis>>>>>>>>>>>>>>>>> : 125
+15:35:02.435 [main] DEBUG javet.RedisSelect - ================ : 134
+
+15:35:02.438 [main] DEBUG javet.RedisSelect - create================ : 0
+15:35:02.453 [main] DEBUG javet.RedisSelect - Redis>>>>>>>>>>>>>>>>> : 14
+15:35:02.459 [main] DEBUG javet.RedisSelect - ================ : 21
+
+15:35:02.460 [main] DEBUG javet.RedisSelect - create================ : 0
+15:35:02.475 [main] DEBUG javet.RedisSelect - Redis>>>>>>>>>>>>>>>>> : 15
+15:35:02.504 [main] DEBUG javet.RedisSelect - ================ : 44
+
+15:35:02.505 [main] DEBUG javet.RedisSelect - create================ : 1
+15:35:02.521 [main] DEBUG javet.RedisSelect - Redis>>>>>>>>>>>>>>>>> : 16
+15:35:02.532 [main] DEBUG javet.RedisSelect - ================ : 28
+
+15:35:02.533 [main] DEBUG javet.RedisSelect - create================ : 0
+15:35:02.548 [main] DEBUG javet.RedisSelect - Redis>>>>>>>>>>>>>>>>> : 15
+15:35:02.553 [main] DEBUG javet.RedisSelect - ================ : 20
+
+15:35:02.553 [main] DEBUG javet.RedisSelect - create================ : 0
+15:35:02.568 [main] DEBUG javet.RedisSelect - Redis>>>>>>>>>>>>>>>>> : 15
+15:35:02.577 [main] DEBUG javet.RedisSelect - ================ : 24
+
+15:35:02.579 [main] DEBUG javet.RedisSelect - create================ : 0
+15:35:02.593 [main] DEBUG javet.RedisSelect - Redis>>>>>>>>>>>>>>>>> : 14
+15:35:02.598 [main] DEBUG javet.RedisSelect - ================ : 19
+
+15:35:02.600 [main] DEBUG javet.RedisSelect - create================ : 0
+15:35:02.640 [main] DEBUG javet.RedisSelect - Redis>>>>>>>>>>>>>>>>> : 40
+15:35:02.646 [main] DEBUG javet.RedisSelect - ================ : 46
+
+15:35:02.646 [main] DEBUG javet.RedisSelect - create================ : 0
+15:35:02.823 [main] DEBUG javet.RedisSelect - Redis>>>>>>>>>>>>>>>>> : 177
+15:35:02.854 [main] DEBUG javet.RedisSelect - ================ : 208
+
+15:35:02.855 [main] DEBUG javet.RedisSelect - create================ : 0
+15:35:02.870 [main] DEBUG javet.RedisSelect - Redis>>>>>>>>>>>>>>>>> : 15
+15:35:02.876 [main] DEBUG javet.RedisSelect - ================ : 21
+```

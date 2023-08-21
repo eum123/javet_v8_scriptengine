@@ -19,10 +19,13 @@ public class SampleTest {
     public void functionTest() throws Exception {
         String script = "function getName() {\n" +
                 "return 'hong'; \n" +
-                "} \n";
+                "}\n";
+
+
+
         try (V8Runtime v8Runtime = V8Host.getV8Instance().createV8Runtime()) {
 
-            v8Runtime.getExecutor(script).execute();
+            v8Runtime.getExecutor(script).executeVoid();
 
             String result = v8Runtime.getGlobalObject().invokeString("getName");
 

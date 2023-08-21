@@ -6,6 +6,8 @@ import wne.rule.hrs.engine.core.ManagedRuleEngine;
 import wne.rule.hrs.engine.core.RuleConfig;
 import wne.rule.hrs.engine.core.RuleEngine;
 import wne.rule.hrs.engine.core.RuleEngineFactory;
+import wne.rule.hrs.engine.core.exception.ComponentException;
+import wne.rule.hrs.engine.core.exception.RuleException;
 import wne.rule.hrs.engine.core.external.ExternalExecutorRegistry;
 import wne.rule.hrs.engine.core.loader.ExternalRuleLoader;
 import wne.rule.hrs.engine.core.loader.InternalRuleLoader;
@@ -47,7 +49,7 @@ public class JavetRuleEngineFactory implements RuleEngineFactory, ManagedRuleEng
     }
 
 
-    public RuleEngine borrow() throws InterruptedException {
+    public RuleEngine borrow() throws InterruptedException, RuleException, ComponentException {
         lock.lock();
         try {
             if(isUpdate) {

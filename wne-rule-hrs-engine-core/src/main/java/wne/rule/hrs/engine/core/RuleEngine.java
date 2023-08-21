@@ -9,4 +9,11 @@ public interface RuleEngine {
 
     RuleExecuteResult executeByScript(String script, Map parameter) throws RuleException;
 
+    /**
+     * RuleEngine에 script를 변경한다.
+     * @param ruleId
+     * @param script
+     */
+    void update(String ruleId, String script) throws RuleException;
+
 }

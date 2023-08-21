@@ -24,12 +24,14 @@ public class GenericObjectPool {
 
     private Map<String, ManagedRuleEngine> usedRuleEngines;
 
+    private PoolObjectFactory factory;
     private ObjectPoolConfig config;
 
     private boolean isUpdate = false;
 
     public GenericObjectPool(PoolObjectFactory factory, ObjectPoolConfig config) throws RuleException, ComponentException {
         this.config = config;
+        this.factory = factory;
 
         log.debug("config:{}", config);
 
@@ -66,7 +68,7 @@ public class GenericObjectPool {
         }
     }
 
-    public synchronized ManagedRuleEngine borrow() throws InterruptedException {
+    public synchronized ManagedRuleEngine borrow() throws InterruptedException, RuleException, ComponentException {
         lock.lock();
         try {
             if(isUpdate) {
@@ -76,7 +78,9 @@ public class GenericObjectPool {
             ManagedRuleEngine engine = idleRuleEngines.poll(config.getMaxWaitMills(), TimeUnit.MILLISECONDS);
 
             if(engine == null) {
-                throw new InterruptedException("no rules available");
+                log.warn("create RuleEngine");
+                engine = factory.create();
+
             }
             //사용으로 이동
             usedRuleEngines.put(engine.getEngineId(), engine);

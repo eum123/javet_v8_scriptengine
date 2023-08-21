@@ -127,7 +127,7 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
         return execute("ID", ruleId, parameters);
     }
 
-    private void executeUsingId(RuleContext context, String ruleId, Map parameters) throws Exception {
+    private Object executeUsingId(RuleContext context, String ruleId, Map parameters) throws Exception {
         validate(ruleId);
 
         v8Runtime.getGlobalObject().set(SystemConstants.CONTEXT, context);
@@ -141,10 +141,10 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
         //execute post
         //TODO 후 처리 구현
 
-
+        return result;
     }
 
-    private void executeUsingScript(RuleContext context, String script, Map parameters) throws Exception {
+    private Object executeUsingScript(RuleContext context, String script, Map parameters) throws Exception {
         //execute pre
         //TODO 전처리 구현
 
@@ -153,6 +153,8 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
 
         //execute post
         //TODO 후 처리 구현
+
+        return result;
     }
 
     private RuleExecuteResult execute(String type, String key, Map parameters) throws RuleException {
@@ -166,22 +168,24 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
                 updateCondition.await();
             }
 
+            Object result;
             if(type.equals("ID")) {
                 //ID 방식
-                executeUsingId(context, key, parameters);
+                result = executeUsingId(context, key, parameters);
             } else {
                 //script 방식
-                executeUsingScript(context, key, parameters);
+                result = executeUsingScript(context, key, parameters);
             }
-
 
             log.debug("output log: {}", byteArrayOutputStream.toString());
 
+            executeResult.setResult(result);
             executeResult.setTrace(context.getRuleTraces());
             executeResult.setExecuteLog(byteArrayOutputStream.toString());
 
             return executeResult;
         } catch (Exception e ) {
+            log.error("execute fail", e);
             executeResult.setTrace(context.getRuleTraces());
             executeResult.setThrowable(e);
             return executeResult;
@@ -233,6 +237,10 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
             } catch (Exception e) {
                 log.warn("내부 함수(객체) 삭제 오류", e);
             }
+        }
+
+        if(byteArrayOutputStream != null) {
+            byteArrayOutputStream.reset();
         }
     }
 

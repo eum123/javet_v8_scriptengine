@@ -34,5 +34,8 @@ public class RuleContext {
     public void end(String ruleId, Object result) {
         traceMap.get(ruleId).setResult(result);
     }
+    public void end(String ruleId) {
+        end(ruleId, null);
+    }
 
 }
