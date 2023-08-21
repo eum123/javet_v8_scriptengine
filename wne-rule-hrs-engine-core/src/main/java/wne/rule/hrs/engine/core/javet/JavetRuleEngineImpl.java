@@ -8,15 +8,11 @@ import com.caoccao.javet.interop.converters.JavetProxyConverter;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import wne.rule.hrs.engine.core.ManagedRuleEngine;
-import wne.rule.hrs.engine.core.RuleContext;
-import wne.rule.hrs.engine.core.RuleEngine;
+import wne.rule.hrs.engine.core.*;
 import wne.rule.hrs.engine.core.constants.ExternalFunctionConstants;
 import wne.rule.hrs.engine.core.constants.SystemConstants;
 import wne.rule.hrs.engine.core.exception.*;
 import wne.rule.hrs.engine.core.external.ExternalLauncher;
-import wne.rule.hrs.engine.core.RuleExecuteResult;
-import wne.rule.hrs.engine.core.ManagedRuleEngineFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -45,10 +41,15 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
     private PrintStream printStream;
     private JavetStandardConsoleInterceptor interceptor;
 
+    @Getter
+    private boolean start = false;
+
     public JavetRuleEngineImpl(ManagedRuleEngineFactory factory) throws ComponentException {
         this.factory = factory;
 
         init();
+
+        start = true;
     }
 
     private void init() throws ComponentException {
@@ -95,6 +96,8 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
     }
 
     public void terminate() {
+
+        start = false;
 
         if(byteArrayOutputStream != null) {
             try {
@@ -160,7 +163,7 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
     private RuleExecuteResult execute(String type, String key, Map parameters) throws RuleException {
         lock.lock();
 
-        RuleContext context = new RuleContext();
+        RuleContext context = new RuleContext((RuleEngineFactory) this.factory);
         RuleExecuteResult executeResult = new RuleExecuteResult();
 
         try {

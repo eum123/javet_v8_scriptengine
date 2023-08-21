@@ -12,4 +12,8 @@ public class ObjectPoolConfig {
 
     @Getter
     private int maxWaitMills;
+
+    @Getter
+    @Builder.Default
+    private ObjectCreatePolicy objectCreatePolicy = ObjectCreatePolicy.INCREASE;
 }

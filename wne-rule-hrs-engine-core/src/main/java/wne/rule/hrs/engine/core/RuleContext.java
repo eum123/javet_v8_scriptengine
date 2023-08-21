@@ -14,6 +14,12 @@ public class RuleContext {
     @Getter @Setter
     private String ruleExecuteLog = "";
 
+    private RuleEngineFactory factory;
+
+    public RuleContext(RuleEngineFactory factory) {
+        this.factory = factory;
+    }
+
     private List<String> order = new LinkedList<>();
     private Map<String, RuleTrace> traceMap = new HashMap<>();
 
@@ -36,6 +42,30 @@ public class RuleContext {
     }
     public void end(String ruleId) {
         end(ruleId, null);
+    }
+
+    /**
+     * 대기중인 engine 개수
+     * @return
+     */
+    public int getIdle() {
+        return factory.getIdle();
+    }
+
+    /**
+     * 사용중인 engine 개수
+     * @return
+     */
+    public int getActive() {
+        return factory.getActive();
+    }
+
+    /**
+     * 설정한 최대 engine 개수
+     * @return
+     */
+    public int getMaxTotal() {
+        return factory.getMaxTotal();
     }
 
 }

@@ -76,7 +76,7 @@ public class DBSearchTest {
 
         RuleEngineFactory factory = null;
         factory = new JavetRuleEngineFactory(RuleConfig.builder().maxWaitMills(1000)
-                .maxTotal(10)
+                .maxTotal(1)
                 .build());
 
         String script = "function b() {\n" +

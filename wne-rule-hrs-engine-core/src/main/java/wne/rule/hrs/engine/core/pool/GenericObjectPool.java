@@ -51,7 +51,15 @@ public class GenericObjectPool {
         return idleRuleEngines.size();
     }
 
+    public int getMaxTotal() {
+        return config.getMaxTotal();
+    }
+
     public void release(ManagedRuleEngine engine) throws InterruptedException {
+
+        if(engine == null) {
+            return;
+        }
 
         lock.lock();
         try {
@@ -59,9 +67,14 @@ public class GenericObjectPool {
               updateCondition.await();
             }
 
-            if(usedRuleEngines.containsKey(engine.getEngineId())) {
+            if(engine.isStart()) {
+                if (usedRuleEngines.containsKey(engine.getEngineId())) {
+                    //사용중에서 대기로 이동한다.
+                    idleRuleEngines.add(usedRuleEngines.remove(engine.getEngineId()));
+                }
+            } else {
+                //종료 인 경우 삭제만 한다.
                 usedRuleEngines.remove(engine.getEngineId());
-                idleRuleEngines.add(engine);
             }
         } finally {
             lock.unlock();
@@ -75,13 +88,25 @@ public class GenericObjectPool {
                 updateCondition.await();
             }
 
-            ManagedRuleEngine engine = idleRuleEngines.poll(config.getMaxWaitMills(), TimeUnit.MILLISECONDS);
+            ManagedRuleEngine engine = null;
 
-            if(engine == null) {
-                log.warn("create RuleEngine");
-                engine = factory.create();
+            if(this.config.getObjectCreatePolicy() == ObjectCreatePolicy.INCREASE) {
 
+                engine = idleRuleEngines.poll();
+
+                if(engine == null) {
+                    log.debug("create object instance : {}", engine );
+                    engine = factory.create();
+
+                }
+            } else {
+                engine = idleRuleEngines.poll(config.getMaxWaitMills(), TimeUnit.MILLISECONDS);
+
+                if(engine == null) {
+                    throw new RuntimeException("pool empty. increase maxtotal");
+                }
             }
+
             //사용으로 이동
             usedRuleEngines.put(engine.getEngineId(), engine);
 

@@ -10,5 +10,6 @@ public interface ManagedRuleEngine {
 
     void update(String ruleId, String script) throws RuleException;
 
+    boolean isStart();
 
 }

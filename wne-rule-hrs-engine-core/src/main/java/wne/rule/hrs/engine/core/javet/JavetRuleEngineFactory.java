@@ -101,4 +101,16 @@ public class JavetRuleEngineFactory implements RuleEngineFactory, ManagedRuleEng
             lock.unlock();
         }
     }
+
+    public int getIdle() {
+        return pool.getIdle();
+    }
+
+    public int getActive() {
+        return pool.getActive();
+    }
+
+    public int getMaxTotal() {
+        return pool.getMaxTotal();
+    }
 }
