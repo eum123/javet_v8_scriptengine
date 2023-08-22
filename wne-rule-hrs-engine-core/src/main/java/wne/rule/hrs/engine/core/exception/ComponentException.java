@@ -1,6 +1,6 @@
 package wne.rule.hrs.engine.core.exception;
 
-public class ComponentException extends Exception {
+public class ComponentException extends RuleException {
     public ComponentException(String message) {
         super(message);
     }

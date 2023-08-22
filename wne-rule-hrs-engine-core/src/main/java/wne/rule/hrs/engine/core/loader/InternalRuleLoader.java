@@ -12,8 +12,24 @@ public class InternalRuleLoader {
 
     private static final String FILE_NAME = "internal.js";
 
+    private static String script = null;
+
     public static Optional<String> load() {
-        String script = "";
+        try {
+            if(script == null || script.isEmpty()) {
+                return loadForce();
+            }
+
+            return Optional.ofNullable(script);
+
+        } catch (Exception e) {
+            log.warn("internal rule error", e);
+        }
+
+        return Optional.empty();
+    }
+
+    public static Optional<String> loadForce() {
         try {
             script = Files.readAllLines(Paths.get(
                     ClassLoader.getSystemResource("internal/" + FILE_NAME).toURI())

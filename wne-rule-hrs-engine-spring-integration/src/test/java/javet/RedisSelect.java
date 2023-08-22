@@ -16,7 +16,6 @@ public class RedisSelect {
 
         long start = System.currentTimeMillis();
 
-
         RuleEngine engine = factory.borrow();
 
         log.debug("create================ : {}", (System.currentTimeMillis() - start));

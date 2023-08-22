@@ -1,12 +1,11 @@
 package wne.rule.hrs.engine.spring.integration.component;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
+import wne.rule.hrs.engine.core.*;
 import wne.rule.hrs.engine.core.javet.JavetRuleEngineFactory;
-import wne.rule.hrs.engine.core.RuleConfig;
-import wne.rule.hrs.engine.core.RuleEngine;
-import wne.rule.hrs.engine.core.RuleEngineFactory;
-import wne.rule.hrs.engine.core.RuleExecuteResult;
 import wne.rule.hrs.engine.spring.integration.properties.RuleServiceProperties;
 import wne.rule.hrs.engine.spring.integration.vo.RuleResultVo;
 import wne.rule.hrs.engine.spring.integration.vo.RuleResultVoBuilder;
@@ -21,12 +20,19 @@ public class JavetRuleComponentImpl implements RuleComponent {
     private final RuleServiceProperties properties;
     private RuleEngineFactory factory = null;
 
+    private ScriptFetcher scriptFetcher;
+
     @PostConstruct
     public void init() throws Exception {
 
         factory = new JavetRuleEngineFactory(RuleConfig.builder().maxWaitMills(properties.getMaxWaitMills())
                 .maxTotal(properties.getMaxTotal())
                 .build());
+    }
+
+    public void setScriptFetcher(ScriptFetcher scriptFetcher) {
+        this.scriptFetcher = scriptFetcher;
+        this.factory.setScriptFetcher(scriptFetcher);
     }
 
     public RuleResultVo executeByRuleId(String ruleId, Map parameter) throws Exception {

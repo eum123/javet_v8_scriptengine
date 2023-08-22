@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import wne.rule.hrs.engine.core.ManagedRuleEngine;
 import wne.rule.hrs.engine.core.exception.ComponentException;
 import wne.rule.hrs.engine.core.exception.RuleException;
+import wne.rule.hrs.engine.core.exception.EngineInitializationException;
+import wne.rule.hrs.engine.core.exception.EngineResetException;
 
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -63,19 +65,31 @@ public class GenericObjectPool {
 
         lock.lock();
         try {
-            if(isUpdate) {
-              updateCondition.await();
+            if (isUpdate) {
+                updateCondition.await();
             }
 
-            if(engine.isStart()) {
-                if (usedRuleEngines.containsKey(engine.getEngineId())) {
-                    //사용중에서 대기로 이동한다.
-                    idleRuleEngines.add(usedRuleEngines.remove(engine.getEngineId()));
+            try {
+                if (config.isReset()) {
+                    engine.reset();
+                    engine.init();
                 }
-            } else {
-                //종료 인 경우 삭제만 한다.
+
+                if (engine.isStart()) {
+                    if (usedRuleEngines.containsKey(engine.getEngineId())) {
+                        //사용중에서 대기로 이동한다.
+                        idleRuleEngines.add(usedRuleEngines.remove(engine.getEngineId()));
+                    }
+                } else {
+                    //종료 인 경우 삭제만 한다.
+                    usedRuleEngines.remove(engine.getEngineId());
+                }
+            } catch (RuleException e) {
+                log.warn("init fail. remove engine", e);
+                //오류 발생 시 engine삭제한다.
                 usedRuleEngines.remove(engine.getEngineId());
             }
+
         } finally {
             lock.unlock();
         }

@@ -2,23 +2,18 @@ package wne.rule.hrs.engine.core.exception;
 
 import lombok.Getter;
 
-public class RuleInitializationException extends RuleException {
-    @Getter
-    private String ruleId;
+public class EngineInitializationException extends RuleException {
 
-    public RuleInitializationException(String ruleId, String message) {
+    public EngineInitializationException(String message) {
         super(message);
-        this.ruleId = ruleId;
     }
 
-    public RuleInitializationException(String ruleId, String message, Throwable throwable) {
+    public EngineInitializationException(String message, Throwable throwable) {
         super( message, throwable);
-        this.ruleId = ruleId;
     }
 
-    public RuleInitializationException(String ruleId, Throwable throwable) {
+    public EngineInitializationException(Throwable throwable) {
         super(throwable);
-        this.ruleId = ruleId;
     }
 
 

@@ -12,11 +12,20 @@ import java.util.Properties;
 public class ReservedObjectLoader {
 
     private static final String FILE_NAME = "reserved_objects.properties";
+    private static Properties properties = null;
     public static Optional<Properties> load() {
+
+        if(properties == null) {
+            return loadForce();
+        }
+        return Optional.ofNullable(properties);
+    }
+
+    public static Optional<Properties> loadForce() {
 
         try(InputStream inputStream = ReservedObjectLoader.class.getClassLoader().getResourceAsStream("reserved/" + FILE_NAME)) {
 
-            Properties properties = new Properties();
+            properties = new Properties();
             properties.load(inputStream);
 
             log.info("reserved properties loaded. length:{}", properties.size());

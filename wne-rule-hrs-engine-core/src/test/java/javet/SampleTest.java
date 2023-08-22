@@ -210,5 +210,37 @@ public class SampleTest {
     }
 
 
+    @Test
+    public void newFunctionTest() throws Exception {
+        String script = "var f = function(나이) {\n" +
+                "return 'hong' + 나이; \n" +
+                "} \n" +
+                "f(1); \n";
+        try (V8Runtime v8Runtime = V8Host.getV8Instance().createV8Runtime()) {
 
+            String result = v8Runtime.getExecutor(script).executeString();
+
+            Assert.assertEquals("hong1", result);
+
+        }
+
+    }
+
+    @Test
+    public void newFunction1Test() throws Exception {
+        String script = "var f = function(나이) {\n" +
+                "return 'hong' + 나이; \n" +
+                "} \n" +
+                "\n";
+        try (V8Runtime v8Runtime = V8Host.getV8Instance().createV8Runtime()) {
+
+            v8Runtime.getExecutor(script).executeVoid();
+
+            String result =v8Runtime.getGlobalObject().invokeObject("f", 1);
+
+            Assert.assertEquals("hong1", result);
+
+        }
+
+    }
 }

@@ -68,4 +68,20 @@ public class RuleContext {
         return factory.getMaxTotal();
     }
 
+    /**
+     * 새로운 rule engine을 생성하여 실행.
+     * @param ruleId
+     * @param args
+     * @return
+     */
+    public RuleExecuteResult newEngine(String ruleId, Object ... args) {
+        RuleExecuteResult result = new RuleExecuteResult();
+        try {
+            RuleEngine engine = factory.borrow();
+            return engine.executeByRuleId(ruleId, args);
+        } catch (Exception e) {
+            result.setThrowable(e);
+            return result;
+        }
+    }
 }

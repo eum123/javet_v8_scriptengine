@@ -274,4 +274,5 @@ public class JavetRuleComponentTest {
         System.out.println("log:" + obj.getExecuteLog());
 
     }
+
 }

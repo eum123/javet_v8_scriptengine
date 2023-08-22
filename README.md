@@ -1,6 +1,29 @@
 # WNE-RULE-JAVET
 
+## javet 이란
+Chrome 브라우저에서 사용하는 V8 엔진을 java에서 사용할수 있게 구성한 opensource
 
+### 지원 OS
+https://www.caoccao.com/Javet/tutorial/basic/installation.html
+
+|OS| Compatible |
+|---|------------|
+|Windows 11| yes        |
+|Windows 10| Yes        |
+|Windows 7| Yes           |
+|Windows Server|  Not Tested          |
+|Ubuntu 20.04|  Yes          |
+|Ubuntu 18.04| Yes           |
+|Ubuntu 16.04| Yes           |
+|CentOS 8| Yes           |
+|CentOS 7|Yes|
+|Other Linux Distributions|Not Tested|
+|Mac OS x86_64|Temporarily Yes (Donate)|
+|Mac OS arm64|Temporarily Yes (Donate)|
+
+### javet 성능 테스트
+* 테스트 소스 : https://github.com/caoccao/JavetPerf
+* 결과 : http://www.caoccao.com/JavetPerf/
 
 ## Script 문법
 일반적인 javascript 문법을 사용 가능하다.
@@ -68,7 +91,18 @@ function name() {
 }
 ```
 
+## RuleEngine 생성 기능
+javascript 내부에서 신규 rule engine을 생성하여 함수를 처리하는 방식.
+이 방식은 ScriptFetcher를 주입되어 있어야 동작한다.
 
+ScriptFetcher를 통해 실행할 javascript를 조회하여 실행하는 방식이다.
+
+```javascript
+function my() {
+    var result = context.newEngine('sub').getResult();
+    return result;
+}
+```
 
 ## 외부 호출 기능
 javascript 내에서 외부 호출 기능은 아래와 같이 제공한다.

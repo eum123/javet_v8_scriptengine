@@ -80,6 +80,7 @@
             <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
 
+
         <!-- Linux and Windows (x86_64) -->
         <dependency>
             <groupId>com.caoccao.javet</groupId>
@@ -118,7 +119,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
-            <version>2.7.2</version>
+<!--            <version>2.7.2</version>-->
             <scope>test</scope>
         </dependency>
 

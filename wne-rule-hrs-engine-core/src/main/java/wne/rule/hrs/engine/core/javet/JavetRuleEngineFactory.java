@@ -1,11 +1,9 @@
 package wne.rule.hrs.engine.core.javet;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import wne.rule.hrs.engine.core.ManagedRuleEngine;
-import wne.rule.hrs.engine.core.RuleConfig;
-import wne.rule.hrs.engine.core.RuleEngine;
-import wne.rule.hrs.engine.core.RuleEngineFactory;
+import wne.rule.hrs.engine.core.*;
 import wne.rule.hrs.engine.core.exception.ComponentException;
 import wne.rule.hrs.engine.core.exception.RuleException;
 import wne.rule.hrs.engine.core.external.ExternalExecutorRegistry;
@@ -15,7 +13,6 @@ import wne.rule.hrs.engine.core.loader.ReservedObjectLoader;
 import wne.rule.hrs.engine.core.pool.GenericObjectPool;
 import wne.rule.hrs.engine.core.pool.JavetPoolObjectFactory;
 import wne.rule.hrs.engine.core.pool.ObjectPoolConfig;
-import wne.rule.hrs.engine.core.ManagedRuleEngineFactory;
 
 import java.util.Optional;
 import java.util.Properties;
@@ -34,6 +31,9 @@ public class JavetRuleEngineFactory implements RuleEngineFactory, ManagedRuleEng
 
     private RuleConfig ruleConfig;
     private ExternalExecutorRegistry registry;
+
+    @Setter @Getter
+    private ScriptFetcher scriptFetcher;
 
     private GenericObjectPool pool = null;
 
@@ -113,4 +113,5 @@ public class JavetRuleEngineFactory implements RuleEngineFactory, ManagedRuleEng
     public int getMaxTotal() {
         return pool.getMaxTotal();
     }
+
 }

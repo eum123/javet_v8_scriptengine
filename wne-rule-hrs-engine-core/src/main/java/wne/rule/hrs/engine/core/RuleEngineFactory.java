@@ -45,4 +45,6 @@ public interface RuleEngineFactory {
      * @return
      */
     int getMaxTotal();
+
+    void setScriptFetcher(ScriptFetcher scriptFetcher);
 }

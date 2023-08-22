@@ -11,4 +11,7 @@ public interface ManagedRuleEngineFactory {
     Optional<String> getExternalScript();
 
     boolean isUpdate();
+
+    void setScriptFetcher(ScriptFetcher scriptFetcher);
+    ScriptFetcher getScriptFetcher();
 }
