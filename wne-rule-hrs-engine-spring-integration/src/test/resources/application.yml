@@ -43,10 +43,10 @@ hrs:
   rule:
     engine:
       javet:
-        externalScriptPaths:
+        external-script-paths:
           - classpath://external/prorule.js
-        externalClasses:
-          RuleFunction: wne.rule.hrs.engine.spring.integration.custom.RuleExternalFunction
+        external-classes:
+          RuleFunction: wne.rule.hrs.engine.spring.integration.custom.RuleFunction
           RuleExternalFunction: wne.rule.hrs.engine.spring.integration.custom.RuleExternalFunction
         pool:
           max-total: 5
