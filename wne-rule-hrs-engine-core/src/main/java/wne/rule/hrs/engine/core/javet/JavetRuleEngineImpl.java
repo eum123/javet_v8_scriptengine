@@ -9,10 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import wne.rule.hrs.engine.core.*;
-import wne.rule.hrs.engine.core.constants.ExternalFunctionConstants;
 import wne.rule.hrs.engine.core.constants.SystemConstants;
 import wne.rule.hrs.engine.core.exception.*;
-import wne.rule.hrs.engine.core.external.ExternalLauncher;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -70,27 +68,10 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
             v8Runtime.setConverter(new JavetProxyConverter());
 
             //system
-            v8Runtime.getGlobalObject().set(ExternalFunctionConstants.EXTERNAL_FUNCTION, new ExternalLauncher());
+            JavetSystemBinder.bind(factory, v8Runtime);
 
-            //reserved java object
-            Properties properties = factory.getReserveProperties().orElseThrow(() -> new ComponentException("Reserved Properties not found"));
-            properties.entrySet().forEach(x -> {
-                log.info("register reserved property. key:{}, value:{}", x.getKey(), x.getValue());
-
-                try {
-                    v8Runtime.getGlobalObject().set(x.getKey(), Class.forName((String)x.getValue()));
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                } catch (JavetException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-
-            //load internal js
-            v8Runtime.getExecutor(factory.getInternalScript().orElse("")).executeVoid();
-
-            //load external js
-            v8Runtime.getExecutor(factory.getExternalScript().orElse("")).executeVoid();
+            //custom
+            JavetCustomBinder.bind(factory, v8Runtime);
 
         } catch (Exception e) {
             throw new EngineInitializationException(e);

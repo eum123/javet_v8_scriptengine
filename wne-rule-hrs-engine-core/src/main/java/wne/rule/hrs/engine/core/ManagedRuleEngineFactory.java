@@ -14,4 +14,6 @@ public interface ManagedRuleEngineFactory {
 
     void setScriptFetcher(ScriptFetcher scriptFetcher);
     ScriptFetcher getScriptFetcher();
+
+    RuleConfig getRuleConfig();
 }

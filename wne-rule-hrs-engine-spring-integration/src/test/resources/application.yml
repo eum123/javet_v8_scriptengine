@@ -42,6 +42,12 @@ spring:
 hrs:
   rule:
     engine:
-      pool:
-        max-total: 2
-        max-wait-mills: 2000
+      javet:
+        externalScriptPaths:
+          - classpath://external/prorule.js
+        externalClasses:
+          RuleFunction: wne.rule.hrs.engine.spring.integration.custom.RuleExternalFunction
+          RuleExternalFunction: wne.rule.hrs.engine.spring.integration.custom.RuleExternalFunction
+        pool:
+          max-total: 5
+          max-wait-mills: 2000

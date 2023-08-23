@@ -2,6 +2,7 @@ package wne.rule.hrs.engine.core.pool;
 
 import org.junit.Assert;
 import org.junit.Test;
+import wne.rule.hrs.engine.core.RuleConfig;
 import wne.rule.hrs.engine.core.ScriptFetcher;
 import wne.rule.hrs.engine.core.javet.JavetRuleEngineImpl;
 import wne.rule.hrs.engine.core.ManagedRuleEngine;
@@ -130,6 +131,11 @@ public class GenericObjectPoolTest {
 
         @Override
         public ScriptFetcher getScriptFetcher() {
+            return null;
+        }
+
+        @Override
+        public RuleConfig getRuleConfig() {
             return null;
         }
     }

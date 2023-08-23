@@ -27,9 +27,9 @@ public class JavetRuleComponentTest {
                 "}\n";
         ruleService.updateRule("my", script);
 
-        Object obj = ruleService.executeByRuleId("my", null);
+        RuleResultVo obj = ruleService.executeByRuleId("my", null);
 
-        Assert.assertEquals("hong", obj);
+        Assert.assertEquals("hong", obj.getResult());
 
     }
 
@@ -274,6 +274,33 @@ public class JavetRuleComponentTest {
 
         System.out.println("result:" +obj.getResult());
         System.out.println("log:" + obj.getExecuteLog());
+
+    }
+
+    @Test
+    public void serverLoggerTest() throws Exception {
+        String script = "function my() {\n" +
+                "LOGGER.debug('dddddd');" +
+                "return 'hong'; \n" +
+                "}\n";
+        ruleService.updateRule("my", script);
+
+        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+
+        Assert.assertEquals("hong", obj.getResult());
+
+    }
+
+    @Test
+    public void externalClassTest() throws Exception {
+        String script = "function my() {\n" +
+                "return RuleExternalFunction.isLeapYear('2023');" +
+                "}\n";
+        ruleService.updateRule("my", script);
+
+        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+
+        Assert.assertEquals(false, obj.getResult());
 
     }
 

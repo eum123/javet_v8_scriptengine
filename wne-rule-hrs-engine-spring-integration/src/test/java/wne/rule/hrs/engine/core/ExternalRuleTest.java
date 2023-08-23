@@ -115,6 +115,7 @@ public class ExternalRuleTest {
 
     }
 
+    //TODO 결과 이상. 검증 필요
     @Test
     public void CAL_MINUTES_BETWEEN() throws Exception{
         Assert.assertTrue(v8Runtime.getGlobalObject().has("CAL_MINUTES_BETWEEN"));

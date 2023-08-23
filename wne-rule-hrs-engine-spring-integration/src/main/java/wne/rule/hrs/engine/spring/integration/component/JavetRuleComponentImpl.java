@@ -25,9 +25,10 @@ public class JavetRuleComponentImpl implements RuleComponent {
     @PostConstruct
     public void init() throws Exception {
 
-        factory = new JavetRuleEngineFactory(RuleConfig.builder().maxWaitMills(properties.getMaxWaitMills())
-                .maxTotal(properties.getMaxTotal())
+        factory = new JavetRuleEngineFactory(RuleConfig.builder().maxWaitMills(properties.getPool().getMaxWaitMills())
+                .maxTotal(properties.getPool().getMaxTotal())
                 .externalScriptPaths(properties.getExternalScriptPaths())
+                .externalClasses(properties.getExternalClasses())
                 .build());
     }
 

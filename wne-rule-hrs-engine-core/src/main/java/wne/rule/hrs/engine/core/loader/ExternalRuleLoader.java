@@ -34,7 +34,7 @@ public class ExternalRuleLoader {
             return Optional.ofNullable(script);
 
         } catch (Exception e) {
-            log.warn("internal rule error", e);
+            log.warn("external rule error : {}", pathList);
         }
 
         return Optional.empty();
@@ -56,7 +56,7 @@ public class ExternalRuleLoader {
                     log.warn("not support protocol : {}", x);
                 }
             } catch (Exception e) {
-                log.warn("external rule load fail: {}", x, e);
+                log.warn("external rule load fail: {}", x);
             }
         });
 

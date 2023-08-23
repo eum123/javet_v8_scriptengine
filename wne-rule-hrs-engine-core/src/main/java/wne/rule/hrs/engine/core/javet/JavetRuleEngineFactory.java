@@ -29,6 +29,7 @@ public class JavetRuleEngineFactory implements RuleEngineFactory, ManagedRuleEng
     @Getter
     private boolean isUpdate = false;
 
+    @Getter
     private RuleConfig ruleConfig;
     private ExternalExecutorRegistry registry;
 
