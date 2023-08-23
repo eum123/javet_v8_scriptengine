@@ -85,7 +85,7 @@ public class JavetRuleEngineFactory implements RuleEngineFactory, ManagedRuleEng
     }
 
     public Optional<String> getExternalScript() {
-        return ExternalRuleLoader.load(ruleConfig.getExternalScriptPath());
+        return ExternalRuleLoader.load(ruleConfig.getExternalScriptPaths());
     }
 
     public void update(String ruleId, String script) {

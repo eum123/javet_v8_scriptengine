@@ -27,6 +27,7 @@ public class JavetRuleComponentImpl implements RuleComponent {
 
         factory = new JavetRuleEngineFactory(RuleConfig.builder().maxWaitMills(properties.getMaxWaitMills())
                 .maxTotal(properties.getMaxTotal())
+                .externalScriptPaths(properties.getExternalScriptPaths())
                 .build());
     }
 

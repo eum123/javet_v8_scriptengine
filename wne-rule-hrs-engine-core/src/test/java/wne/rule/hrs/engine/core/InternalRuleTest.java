@@ -31,6 +31,7 @@ public class InternalRuleTest {
     @Before
     public void init() throws Exception {
         v8Runtime = V8Host.getV8Instance().createV8Runtime();
+        v8Runtime.setConverter(new JavetProxyConverter());
 
         //reserved java object
         Properties properties = ReservedObjectLoader.load().orElseThrow(() -> new ComponentException("Reserved Properties not found"));
@@ -49,7 +50,7 @@ public class InternalRuleTest {
 
         v8Runtime.getGlobalObject().set("out", System.out);
 
-        v8Runtime.setConverter(new JavetProxyConverter());
+
     }
 
     @Test
@@ -88,6 +89,7 @@ public class InternalRuleTest {
         Assert.assertTrue(v8Runtime.getGlobalObject().has("MAX"));
         Object result = v8Runtime.getGlobalObject().invokeObject("MAX", 11, 12, 14, 4, 20);
         Assert.assertEquals(20, result);
+
     }
 
     @Test
@@ -125,7 +127,29 @@ public class InternalRuleTest {
     @Test
     public void IS_EMPTY_OBJECT() throws Exception{
         Assert.assertTrue(v8Runtime.getGlobalObject().has("IS_EMPTY_OBJECT"));
-        Object result = v8Runtime.getGlobalObject().invokeObject("IS_EMPTY_OBJECT", new Integer[]{});
-        System.out.println(result);
+
+        Object result = null;
+        String script = "" +
+                "const arr = []; \n" +
+                "IS_EMPTY_OBJECT(arr);\n";
+
+        result = v8Runtime.getExecutor(script).executeObject();
+        Assert.assertTrue((Boolean)result);
+
+        script = "" +
+                "var arr1; \n" +
+                "IS_EMPTY_OBJECT(arr1);\n";
+
+        result = v8Runtime.getExecutor(script).executeObject();
+        Assert.assertTrue((Boolean)result);
+
+        script = "" +
+                "const arr2 = [1]; \n" +
+                "IS_EMPTY_OBJECT(arr2);\n";
+
+        result = v8Runtime.getExecutor(script).executeObject();
+        Assert.assertFalse((Boolean)result);
     }
+
+
 }

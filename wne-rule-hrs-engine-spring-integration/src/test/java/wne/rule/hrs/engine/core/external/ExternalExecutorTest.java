@@ -1,5 +1,6 @@
 package wne.rule.hrs.engine.core.external;
 
+import org.assertj.core.util.Lists;
 import org.junit.Test;
 import wne.rule.hrs.engine.core.javet.JavetRuleEngineFactory;
 import wne.rule.hrs.engine.core.RuleConfig;
@@ -11,7 +12,7 @@ public class ExternalExecutorTest {
     @Test
     public void test() throws Exception {
 
-        RuleConfig config = RuleConfig.builder().externalScriptPath("./rule").maxTotal(2).build();
+        RuleConfig config = RuleConfig.builder().externalScriptPaths(Lists.newArrayList("file://./rule")).maxTotal(2).build();
 
         RuleEngineFactory factory = new JavetRuleEngineFactory(config);
 

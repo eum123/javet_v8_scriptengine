@@ -60,12 +60,15 @@ function IS_EMPTY(inputValue) {
     return false;
 }
 
+
 function IS_EMPTY_OBJECT(inputValue) {
-    if(Array.isArray(inputValue) && inputValue.length == 0) {
+    if(IS_EMPTY(inputValue)) {
         return true;
     }
-    if(inputValue.constructor == Object && Object.keys(inputValue).length == 0) {
+
+    if(Array.isArray(inputValue) && !inputValue?.length) {
         return true;
     }
     return false;
 }
+

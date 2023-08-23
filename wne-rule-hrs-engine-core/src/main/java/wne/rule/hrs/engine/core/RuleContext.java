@@ -3,10 +3,7 @@ package wne.rule.hrs.engine.core;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RuleContext {
@@ -75,10 +72,21 @@ public class RuleContext {
      * @return
      */
     public RuleExecuteResult newEngine(String ruleId, Object ... args) {
+
         RuleExecuteResult result = new RuleExecuteResult();
         try {
             RuleEngine engine = factory.borrow();
-            return engine.executeByRuleId(ruleId, args);
+
+            //TODO history 저장. script내에서 수행하면 이부분 제외
+            this.start(ruleId);
+            this.addParameter(ruleId, "parameter", args);
+
+            result =  engine.executeByRuleId(ruleId, args);
+
+            this.end(ruleId, result.getResult());
+
+            return result;
+
         } catch (Exception e) {
             result.setThrowable(e);
             return result;

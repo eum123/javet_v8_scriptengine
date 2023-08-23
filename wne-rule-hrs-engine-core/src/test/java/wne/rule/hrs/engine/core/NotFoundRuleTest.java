@@ -1,6 +1,7 @@
 package wne.rule.hrs.engine.core;
 
 
+import org.assertj.core.util.Lists;
 import org.junit.Assert;
 import org.junit.Test;
 import wne.rule.hrs.engine.core.exception.RuleExecuteException;
@@ -10,7 +11,7 @@ public class NotFoundRuleTest  {
     @Test
     public void test() throws Exception {
 
-        RuleConfig config = RuleConfig.builder().externalScriptPath("./rule").maxTotal(2).build();
+        RuleConfig config = RuleConfig.builder().externalScriptPaths(Lists.newArrayList("file://./rule")).maxTotal(2).build();
 
         RuleEngineFactory factory = new JavetRuleEngineFactory(config);
 

@@ -3,10 +3,12 @@ package wne.rule.hrs.engine.core;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Builder
 public class RuleConfig {
     @Getter
-    private String externalScriptPath;
+    private List<String> externalScriptPaths;
 
     @Getter
     private int maxTotal = 1;

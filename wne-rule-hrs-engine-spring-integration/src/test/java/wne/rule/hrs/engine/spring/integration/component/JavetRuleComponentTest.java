@@ -171,6 +171,8 @@ public class JavetRuleComponentTest {
         System.out.println("execute log:" +obj.getExecuteLog());
         System.out.println("trace:" + obj.getTraceList());
 
+        ruleService.updateRule("my", script);
+
         obj = ruleService.executeByRuleId("sub", null);
 
         System.out.println("execute log:" +obj.getExecuteLog());
