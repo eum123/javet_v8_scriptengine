@@ -1,5 +1,6 @@
 package wne.rule.hrs.engine.spring.integration.custom;
 
+import com.caoccao.javet.annotations.V8Function;
 import jdk.nashorn.internal.runtime.Undefined;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ public class RuleFunction {
 	// 숫자
 	//======================
 	//BigDecimal 리턴
+	@V8Function(name = "AMT")
 	public static BigDecimal AMT(Object val) {
 		if (val instanceof Undefined) {
 			throw new RuntimeException("RuleFunction AMT : 전달받은 Value는 undefined 입니다.");
@@ -37,6 +39,7 @@ public class RuleFunction {
 	//======================
 	
 	//오늘일자
+	@V8Function(name = "TODAY")
 	public static String TODAY() {
 		Calendar c = Calendar.getInstance();
 		int y = c.get(Calendar.YEAR);
@@ -44,34 +47,42 @@ public class RuleFunction {
 		int d = c.get(Calendar.DATE);
 		return y+(m<10?"0"+m:m+"")+(d<10?"0"+d:d+"");
 	}
+
 	
 	//날짜의 년도를 숫자로 변환
+	@V8Function(name = "YEAR")
 	public static int YEAR(String date) {
 		return Integer.parseInt(date.substring(0, 4));
 	}
 	
 	//두 날짜사이의 월수 계산
+	@V8Function(name = "MONTHS_BETWEEN")
 	public static int MONTHS_BETWEEN(String date1, String date2) {
 		return difference(date1, date2, Calendar.MONTH);
 	}
 	
 	//두 날짜사이의 일수 계산
+	@V8Function(name = "DAYS")
 	public static int DAYS(String date1, String date2) {
 		return difference(date1, date2, Calendar.DATE);
 	}
 	
 	//요일 구하기
+	@V8Function(name = "WEEK_DAY")
 	public static int WEEK_DAY(String dateString) {
 		return TO_DATE(dateString).get(Calendar.DAY_OF_WEEK);
 	}
 	
 	//요일 텍스트 구하기
 	private static String[] WEEK_DAY_TEXT_ARRAY = new String[] {"","일","월","화","수","목","금","토"};
+
+	@V8Function(name = "WEEK_DAY_TEXT")
 	public static String WEEK_DAY_TEXT(String dateString) {
 		return WEEK_DAY_TEXT_ARRAY[WEEK_DAY(dateString)];
 	}
 	
 	//만나이 계산
+	@V8Function(name = "LEGAL_AGE")
 	public static int LEGAL_AGE(String birthDate, String baseDate) {
 		birthDate = birthDate.replaceAll("-", "");
 		baseDate = baseDate.replaceAll("-", "");
@@ -213,6 +224,7 @@ public class RuleFunction {
 	//======================
 	// 사칙연산에서 사용.
 	//======================
+	@V8Function(name = "ROUND")
 	public static BigDecimal ROUND(BigDecimal arg, int scale) {
 		
 		if (arg != null && scale != 0) {
@@ -221,7 +233,8 @@ public class RuleFunction {
 		
 		return new BigDecimal(0);
 	}
-	
+
+	@V8Function(name = "ROUNDDOWN")
 	public static BigDecimal ROUNDDOWN(BigDecimal arg, int scale) {
 		
 		if (arg != null && scale != 0) {
@@ -230,7 +243,8 @@ public class RuleFunction {
 		
 		return new BigDecimal(0);
 	}
-	
+
+	@V8Function(name = "ROUNDUP")
 	public static BigDecimal ROUNDUP(BigDecimal arg, int scale) {
 		
 		if (arg != null && scale != 0) {
@@ -239,7 +253,8 @@ public class RuleFunction {
 		
 		return new BigDecimal(0);
 	}
-	
+
+	@V8Function(name = "PARSEINT")
 	public static BigDecimal PARSEINT(BigDecimal arg) {
 		
 		if (arg != null) {
@@ -248,7 +263,8 @@ public class RuleFunction {
 		
 		return new BigDecimal(0);
 	}
-	
+
+	@V8Function(name = "PARSEFLOAT")
 	public static BigDecimal PARSEFLOAT(BigDecimal arg) {
 		
 		if (arg != null) {
@@ -257,7 +273,8 @@ public class RuleFunction {
 		
 		return new BigDecimal(0);
 	}
-	
+
+	@V8Function(name = "PARSEDOUBLE")
 	public static BigDecimal PARSEDOUBLE(BigDecimal arg) {
 		
 		if (arg != null) {

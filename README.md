@@ -86,10 +86,44 @@ javascript에서 사용자 객체를 생성하여 사용 가능하다
 
 ```javascript
 function name() {
-    const obj = Type.of("javet.MyObject");
+    const obj = Java.type("javet.MyObject");
     return obj.getName();
 }
 ```
+
+### Logging
+* servier Logging
+  서버의 logger 설정에 맞게 로깅됨
+```javascript
+function my() {
+    LOGGER.debug('debug');
+    LOGGER.info('debug');
+    LOGGER.warn('warn');
+    return result;
+}
+```
+
+### Java static Method 사용방법
+
+Javet에서 static Method이름이 대문자인 경우 인식을 못함.
+@V8Function(name = AMT) 을 추가하여 script에서 사용할 변수 명을 설정
+
+```java
+import com.caoccao.javet.annotations.V8Function;
+class RuleFunction {
+    @V8Function(name = "AMT")
+    public static BigDecimal AMT(Object val) {
+        return new BigDecimal(String.valueOf(val));
+    }
+}
+```
+java의 static method를 호출하는 방식과 동일하게 class이름.메소드명 방식으로 호출
+```javascript
+function my() {
+    return RuleFunction.AMT(1);
+}
+```
+
 
 ## RuleEngine 생성 기능
 javascript 내부에서 신규 rule engine을 생성하여 함수를 처리하는 방식.
@@ -138,6 +172,9 @@ function my() {
     return result;
 }
 ```
+
+
+
 
 ### spring bean 실행
 EXTERNAL.create().execute()를 이용하여 외부 호출 가능함.

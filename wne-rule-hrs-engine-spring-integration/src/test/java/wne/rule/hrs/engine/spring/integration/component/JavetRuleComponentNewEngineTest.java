@@ -45,7 +45,7 @@ public class JavetRuleComponentNewEngineTest {
     class DefaultScriptFetcher implements ScriptFetcher {
 
         @Override
-        public String fetch(String ruleId) {
+        public String fetch(String ruleId, String ruleName) {
 
             System.out.println("call fetch()");
 

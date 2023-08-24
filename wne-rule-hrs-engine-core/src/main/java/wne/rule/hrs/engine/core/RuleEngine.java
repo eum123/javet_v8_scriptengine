@@ -5,9 +5,7 @@ import wne.rule.hrs.engine.core.exception.RuleException;
 import java.util.Map;
 
 public interface RuleEngine {
-    RuleExecuteResult executeByRuleId(String ruleId, Object ... parameters) throws RuleException;
-
-    RuleExecuteResult executeByScript(String script, Map replaceData) throws RuleException;
+    RuleExecuteResult executeByRuleId(String ruleId, String ruleName, Object ... parameters) throws RuleException;
 
     /**
      * RuleEngine에 script를 변경한다.

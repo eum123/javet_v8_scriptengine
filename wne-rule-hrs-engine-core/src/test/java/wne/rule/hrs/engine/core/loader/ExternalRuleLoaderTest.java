@@ -3,6 +3,7 @@ package wne.rule.hrs.engine.core.loader;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
 import org.junit.Test;
+import wne.rule.hrs.engine.core.function.loader.ExternalRuleLoader;
 
 import java.net.URI;
 import java.util.Optional;

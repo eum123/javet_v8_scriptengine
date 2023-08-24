@@ -126,7 +126,7 @@ public class JavetRuleComponentTest {
     public void BigDecimal_계산_테스트() throws Exception {
         String script = "function my() {\n" +
                 "const a = new BigDecimal(10); \n" +
-                "const b = new BigDecimal(2); \n" +
+                "const b = new BigDecimal(0); \n" +
                 "return a.subtract(b); \n" +
                 "} \n"
                 ;
@@ -295,6 +295,19 @@ public class JavetRuleComponentTest {
     public void externalClassTest() throws Exception {
         String script = "function my() {\n" +
                 "return RuleExternalFunction.isLeapYear('2023');" +
+                "}\n";
+        ruleService.updateRule("my", script);
+
+        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+
+        Assert.assertEquals(false, obj.getResult());
+
+    }
+
+    @Test
+    public void externalClassAMTTest() throws Exception {
+        String script = "function my() {\n" +
+                "return RuleFunction.AMT('2023');" +
                 "}\n";
         ruleService.updateRule("my", script);
 

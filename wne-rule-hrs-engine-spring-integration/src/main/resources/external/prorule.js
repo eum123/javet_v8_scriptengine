@@ -110,6 +110,10 @@ function CAL_MINUTES_BETWEEN(date1, date2) {
     }
     return  Math.floor(interval  /  (1000*60));
 }
+
+function RESULT(result) {
+    return result;
+}
 //-----------------
 /*
 function CAL_SECOND_BETWEEN(date1, date2) {

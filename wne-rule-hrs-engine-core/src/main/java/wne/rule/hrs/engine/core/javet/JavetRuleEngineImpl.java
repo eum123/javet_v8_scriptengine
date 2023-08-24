@@ -1,10 +1,12 @@
 package wne.rule.hrs.engine.core.javet;
 
 import com.caoccao.javet.exceptions.JavetException;
+import com.caoccao.javet.exceptions.JavetExecutionException;
 import com.caoccao.javet.interception.logging.JavetStandardConsoleInterceptor;
 import com.caoccao.javet.interop.V8Host;
 import com.caoccao.javet.interop.V8Runtime;
 import com.caoccao.javet.interop.converters.JavetProxyConverter;
+import com.caoccao.javet.values.reference.V8ValueObject;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,8 @@ import wne.rule.hrs.engine.core.exception.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.locks.Condition;
@@ -34,6 +38,7 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
     private String engineId = String.valueOf(System.currentTimeMillis());
 
     private V8Runtime v8Runtime = null;
+    private List<V8ValueObject> v8ValueObjects = new ArrayList<>();
 
     private ManagedRuleEngineFactory factory;
 
@@ -55,6 +60,7 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
     public void init() throws EngineInitializationException {
         try {
             v8Runtime = V8Host.getV8Instance().createV8Runtime();
+            v8Runtime.setConverter(new JavetProxyConverter());
 
             byteArrayOutputStream = new ByteArrayOutputStream();
             printStream = new PrintStream(byteArrayOutputStream);
@@ -64,14 +70,11 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
             interceptor.setLog(printStream);
             interceptor.register(v8Runtime.getGlobalObject());
 
-
-            v8Runtime.setConverter(new JavetProxyConverter());
-
             //system
             JavetSystemBinder.bind(factory, v8Runtime);
 
             //custom
-            JavetCustomBinder.bind(factory, v8Runtime);
+            v8ValueObjects.addAll(JavetCustomBinder.bind(factory, v8Runtime));
 
         } catch (Exception e) {
             throw new EngineInitializationException(e);
@@ -109,35 +112,10 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
 
 
 
-    public RuleExecuteResult executeByRuleId(String ruleId, Object ... parameters) throws RuleException {
-        return execute(ID_EXECUTE_TYPE, ruleId, parameters);
-    }
-
-    private Object executeUsingId(RuleContext context, String ruleId, Object ... parameters) throws Exception {
-
-        v8Runtime.getGlobalObject().set(SystemConstants.CONTEXT, context);
-        validate(ruleId);
-
-        //execute main
-        Object result = v8Runtime.getGlobalObject().invokeObject(ruleId, parameters);
-
-
-        return result;
-    }
-
-    private Object executeUsingScript(RuleContext context, String script, Map replaceData) throws Exception {
-
-        //execute main
-        Object result = v8Runtime.getExecutor(script).executeObject();
-
-
-        return result;
-    }
-
-    private RuleExecuteResult execute(String type, String key, Object ... parameters) throws RuleException {
+    public RuleExecuteResult executeByRuleId(String ruleId, String ruleName, Object ... parameters) throws RuleException {
         lock.lock();
 
-        RuleContext context = new RuleContext((RuleEngineFactory) this.factory);
+        RuleContext context = new RuleContext((RuleEngineFactory) this.factory, ruleId, ruleName);
         RuleExecuteResult executeResult = new RuleExecuteResult();
 
         try {
@@ -146,22 +124,18 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
             }
 
             if(factory.getScriptFetcher() != null) {
-                //실행 하기 전 script를 조회 한다.
-                v8Runtime.getExecutor(factory.getScriptFetcher().fetch(key)).executeVoid();
+                //실행 하기 전 script를 조회 후 engine에 등록한다.
+                v8Runtime.getExecutor(factory.getScriptFetcher().fetch(ruleId, ruleName)).executeVoid();
             }
 
-            Object result;
-            if(type.equals(ID_EXECUTE_TYPE)) {
-                //ID 방식
-                result = executeUsingId(context, key, parameters);
-            } else {
-                //script 방식
-                if(parameters.length > 0 ) {
+            //context 추가
+            v8Runtime.getGlobalObject().set(SystemConstants.CONTEXT, context);
 
-                }
+            validate(ruleId);
 
-                result = executeUsingScript(context, key, null);
-            }
+            //execute main
+            Object result = v8Runtime.getGlobalObject().invokeObject(ruleId, parameters);
+
 
             log.debug("output log: {}", byteArrayOutputStream.toString());
 
@@ -172,6 +146,11 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
             return executeResult;
         } catch (Exception e ) {
             log.error("execute fail", e);
+
+            if(e instanceof JavetExecutionException) {
+                log.debug("linenumber : {}", ((JavetExecutionException)e).getScriptingError().getLineNumber());
+            }
+
             executeResult.setTrace(context.getRuleTraces());
             executeResult.setThrowable(e);
             return executeResult;
@@ -180,12 +159,9 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
 
             deleteSystem();
         }
-
     }
 
-    public RuleExecuteResult executeByScript(String script, Map parameters) throws RuleException {
-        return execute("SCRIPT", script, parameters);
-    }
+
 
     private void validate(String ruleId) throws RuleException {
         try {
@@ -220,6 +196,8 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
         if(v8Runtime != null) {
             try {
                 v8Runtime.getGlobalObject().delete(SystemConstants.CONTEXT);
+                JavetSystemBinder.unbind(v8Runtime);
+
             } catch (Exception e) {
                 log.warn("내부 함수(객체) 삭제 오류", e);
             }
@@ -231,8 +209,18 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
     }
 
     public void reset() throws EngineResetException {
+        if(v8ValueObjects != null) {
+            v8ValueObjects.forEach(x -> {
+                try {
+                    x.close();
+                } catch (JavetException e) {
+                }
+            });
+            v8ValueObjects.clear();
+        }
         if(v8Runtime != null) {
             try {
+                //전체 초기화
                 v8Runtime.resetContext();
             } catch (JavetException e) {
                 throw new EngineResetException(e);

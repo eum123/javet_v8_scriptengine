@@ -3,6 +3,7 @@ package wne.rule.hrs.engine.core.loader;
 
 import org.junit.Assert;
 import org.junit.Test;
+import wne.rule.hrs.engine.core.function.loader.ReservedObjectLoader;
 
 import java.util.Optional;
 import java.util.Properties;

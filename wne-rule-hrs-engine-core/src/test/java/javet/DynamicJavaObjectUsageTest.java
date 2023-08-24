@@ -13,7 +13,7 @@ public class DynamicJavaObjectUsageTest {
     @Test
     public void test() throws Exception {
         String script = "function myfunction() {\n" +
-                "const obj = Type.of('javet.MyObject'); \n" +
+                "const obj = Java.type('javet.MyObject'); \n" +
                 "return obj.getName(); \n" +
                 "} \n";
         try (V8Runtime v8Runtime = V8Host.getV8Instance().createV8Runtime()) {
@@ -21,7 +21,7 @@ public class DynamicJavaObjectUsageTest {
             //반드시 필요
             v8Runtime.setConverter(new JavetProxyConverter());
 
-            v8Runtime.getGlobalObject().set("Type", new CreateInstance());
+            v8Runtime.getGlobalObject().set("Java", new CreateInstance());
 
             v8Runtime.getExecutor(script).executeVoid();
 

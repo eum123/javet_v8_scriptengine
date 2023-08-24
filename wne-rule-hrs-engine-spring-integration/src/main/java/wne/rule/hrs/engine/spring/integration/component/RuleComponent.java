@@ -9,20 +9,12 @@ public interface RuleComponent {
     /**
      * RuleID를 이용한 rule 실행
      * @param ruleId
-     * @param parameter
+     * @param parameters
      * @return
      * @throws Exception
      */
-    RuleResultVo executeByRuleId(String ruleId, Map parameter) throws Exception;
+    RuleResultVo executeByRuleId(String ruleId, String ruleName, Object ... parameters) throws Exception;
 
-    /**
-     * rule script를 이용한 rule 실행
-     * @param script
-     * @param parameter
-     * @return
-     * @throws Exception
-     */
-    RuleResultVo executeByScript(String script, Map parameter) throws Exception;
 
     /**
      * Rule 변경

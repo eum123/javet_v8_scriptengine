@@ -1,8 +1,6 @@
-package wne.rule.hrs.engine.core.loader;
+package wne.rule.hrs.engine.core.function.loader;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.util.Optional;

@@ -11,12 +11,11 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import wne.rule.hrs.engine.core.exception.ComponentException;
-import wne.rule.hrs.engine.core.loader.InternalRuleLoader;
-import wne.rule.hrs.engine.core.loader.ReservedObjectLoader;
+import wne.rule.hrs.engine.core.function.loader.InternalRuleLoader;
+import wne.rule.hrs.engine.core.function.loader.ReservedObjectLoader;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.Date;
 import java.util.Properties;
 
 public class InternalRuleTest {

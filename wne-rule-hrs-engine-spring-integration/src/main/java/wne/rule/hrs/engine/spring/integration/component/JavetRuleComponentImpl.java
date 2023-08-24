@@ -37,11 +37,11 @@ public class JavetRuleComponentImpl implements RuleComponent {
         this.factory.setScriptFetcher(scriptFetcher);
     }
 
-    public RuleResultVo executeByRuleId(String ruleId, Map parameter) throws Exception {
+    public RuleResultVo executeByRuleId(String ruleId, String ruleName, Object ... parameter) throws Exception {
         RuleEngine engine = null;
         try {
             engine = factory.borrow();
-            RuleExecuteResult r = engine.executeByRuleId(ruleId, parameter);
+            RuleExecuteResult r = engine.executeByRuleId(ruleId, ruleName, parameter);
 
             return RuleResultVoBuilder.convert(r);
         } finally {
@@ -51,20 +51,6 @@ public class JavetRuleComponentImpl implements RuleComponent {
         }
     }
 
-    public RuleResultVo executeByScript(String script, Map parameter) throws Exception {
-
-        RuleEngine engine = null;
-        try {
-            engine = factory.borrow();
-            RuleExecuteResult r = engine.executeByScript(script, parameter);
-
-            return RuleResultVoBuilder.convert(r);
-        } finally {
-            if(engine != null) {
-                factory.release(engine);
-            }
-        }
-    }
 
     public void updateRule(String ruleId, String script) {
         factory.update(ruleId, script);

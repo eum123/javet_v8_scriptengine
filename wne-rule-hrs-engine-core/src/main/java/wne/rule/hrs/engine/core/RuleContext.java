@@ -2,22 +2,39 @@ package wne.rule.hrs.engine.core;
 
 import lombok.Getter;
 import lombok.Setter;
+import wne.rule.hrs.engine.core.javet.RuleLogger;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+
 public class RuleContext {
+
+    @Getter
+    private String ruleId;
+
+    @Getter
+    private String ruleName;
 
     @Getter @Setter
     private String ruleExecuteLog = "";
 
     private RuleEngineFactory factory;
 
-    public RuleContext(RuleEngineFactory factory) {
+    private RuleLogger logger = new RuleLogger(this);
+
+    public RuleContext(RuleEngineFactory factory, String ruleId, String ruleName) {
         this.factory = factory;
+        this.ruleId = ruleId;
+        this.ruleName = ruleName;
     }
 
+    // 함수 실행 순서
     private List<String> order = new LinkedList<>();
+    //실행한 함수들
     private Map<String, RuleTrace> traceMap = new HashMap<>();
 
     public List<RuleTrace> getRuleTraces() {
@@ -71,7 +88,7 @@ public class RuleContext {
      * @param args
      * @return
      */
-    public RuleExecuteResult newEngine(String ruleId, Object ... args) {
+    public RuleExecuteResult newEngine(String ruleId, String ruleName, Object ... args) {
 
         RuleExecuteResult result = new RuleExecuteResult();
         try {
@@ -81,7 +98,7 @@ public class RuleContext {
             this.start(ruleId);
             this.addParameter(ruleId, "parameter", args);
 
-            result =  engine.executeByRuleId(ruleId, args);
+            result =  engine.executeByRuleId(ruleId, ruleName, args);
 
             this.end(ruleId, result.getResult());
 
@@ -91,5 +108,9 @@ public class RuleContext {
             result.setThrowable(e);
             return result;
         }
+    }
+
+    public RuleLogger logger() {
+        return logger;
     }
 }

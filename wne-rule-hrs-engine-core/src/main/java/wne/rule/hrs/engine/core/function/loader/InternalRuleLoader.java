@@ -1,4 +1,4 @@
-package wne.rule.hrs.engine.core.loader;
+package wne.rule.hrs.engine.core.function.loader;
 
 import lombok.extern.slf4j.Slf4j;
 

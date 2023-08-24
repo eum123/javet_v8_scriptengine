@@ -1,5 +1,7 @@
 package wne.rule.hrs.engine.spring.integration.custom;
 
+import com.caoccao.javet.annotations.V8Function;
+
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.DecimalFormat;
@@ -114,6 +116,7 @@ public class RuleExternalFunction {
 	 * 
 	 * @return 윤달 수
 	 */
+	@V8Function(name = "CAL_LEAP_MONTS")
 	public static int CAL_LEAP_MONTS(Date startDate, Date endDate) {
 		GregorianCalendar startCal = convertGregorianCalendar(startDate);
 		GregorianCalendar endCal = convertGregorianCalendar(endDate);
