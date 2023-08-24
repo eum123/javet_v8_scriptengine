@@ -110,7 +110,7 @@ public class RuleContext {
         }
     }
 
-    public RuleLogger logger() {
+    public RuleLogger getLogger() {
         return logger;
     }
 }

@@ -96,9 +96,9 @@ function name() {
   서버의 logger 설정에 맞게 로깅됨
 ```javascript
 function my() {
-    LOGGER.debug('debug');
-    LOGGER.info('debug');
-    LOGGER.warn('warn');
+    CONTEXT.getLogger().debug('debug');
+    CONTEXT.getLogger().info('debug');
+    CONTEXT.getLogger().warn('warn');
     return result;
 }
 ```
@@ -133,7 +133,7 @@ ScriptFetcher를 통해 실행할 javascript를 조회하여 실행하는 방식
 
 ```javascript
 function my() {
-    var result = context.newEngine('sub').getResult();
+    var result = CONTEXT.newEngine('sub').getResult();
     return result;
 }
 ```
@@ -156,7 +156,7 @@ EXTERNAL.create().execute()를 이용하여 외부 호출 가능함.
 ```javascript
 function my() {
     var result = EXTERNAL.create().execute("jdbc:RuleDataSource?query=select 1", null);
-    console.log("result:" + result);
+    
     return result;
 }
 ```
@@ -168,7 +168,7 @@ function my() {
     map.name = 'hong';
     
     var result = EXTERNAL.create().execute("jdbc:RuleDataSource?query=select * from my_table where name='${name}'", map);
-    console.log("result:" + result);
+    
     return result;
 }
 ```
@@ -191,7 +191,7 @@ EXTERNAL.create().execute()를 이용하여 외부 호출 가능함.
 ```javascript
 function my() {
     var result = EXTERNAL.create().execute('bean:myBean?method=hello', null);
-    console.log('result:' + result); 
+    
     return result;
 }
 ```
@@ -201,27 +201,27 @@ function my() {
 
 * 사용방법
   * 로직 시작 전 호출
-    * context.start(함수이름)
-    * context.addParameter(함수명, parameter key, parameter 값)
+    * CONTEXT.start(함수이름)
+    * CONTEXT.addParameter(함수명, parameter key, parameter 값)
   * 로직 시작 후
-    * context.end(함수이름, 실형 결과)
+    * CONTEXT.end(함수이름, 실형 결과)
 
 ```javascript
 function my() {
-     context.start('my');
-     context.addParameter('my', 'key', 'value1'); 
-     console.log('my');
-     context.end('my', null);
+     CONTEXT.start('my');
+     CONTEXT.addParameter('my', 'key', 'value1'); 
+     
+     CONTEXT.end('my', null);
      sub(); 
 
      return 'hi'; 
 }
                 
 function sub() {
-    context.start('sub');
-    context.addParameter('sub', 'key', 'value1'); 
-    console.log('sub');
-    context.end('sub');
+    CONTEXT.start('sub');
+    CONTEXT.addParameter('sub', 'key', 'value1'); 
+    
+    CONTEXT.end('sub');
 }
 ```
 
