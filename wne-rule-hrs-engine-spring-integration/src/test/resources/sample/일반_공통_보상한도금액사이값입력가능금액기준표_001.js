@@ -7,6 +7,7 @@ var 일반_공통_보상한도금액사이값입력가능금액기준표_001 = f
     var 보상한도금액적합성여부 = "0"
 
 CONTEXT.getLogger().debug("상품코드:" + 상품코드);
+CONTEXT.getLogger().debug("상품코드:{}", 상품코드);
     // Compiler Version 1 , Created : 2023-08-23 14:41:05
     var canSheetNext = true
     if(canSheetNext) {
