@@ -7,6 +7,7 @@ import wne.rule.hrs.engine.core.*;
 import wne.rule.hrs.engine.core.exception.ComponentException;
 import wne.rule.hrs.engine.core.exception.RuleException;
 import wne.rule.hrs.engine.core.external.ExternalExecutorRegistry;
+import wne.rule.hrs.engine.core.fetcher.ScriptFetcher;
 import wne.rule.hrs.engine.core.function.loader.ExternalRuleLoader;
 import wne.rule.hrs.engine.core.function.loader.InternalRuleLoader;
 import wne.rule.hrs.engine.core.function.loader.ReservedObjectLoader;
@@ -41,6 +42,8 @@ public class JavetRuleEngineFactory implements RuleEngineFactory, ManagedRuleEng
     public JavetRuleEngineFactory(RuleConfig config) throws Exception {
         this.ruleConfig = config;
 
+        log.debug("config : {}", config);
+
         // external call 기능 등록
         registry = new ExternalExecutorRegistry();
         registry.load();
@@ -51,6 +54,11 @@ public class JavetRuleEngineFactory implements RuleEngineFactory, ManagedRuleEng
 
 
     public RuleEngine borrow() throws InterruptedException, RuleException, ComponentException {
+
+        if(scriptFetcher == null) {
+            throw new RuleException("ScriptFetcher not found");
+        }
+
         lock.lock();
         try {
             if(isUpdate) {

@@ -1,5 +1,7 @@
 package wne.rule.hrs.engine.core;
 
+import wne.rule.hrs.engine.core.fetcher.ScriptFetcher;
+
 import java.util.Optional;
 import java.util.Properties;
 

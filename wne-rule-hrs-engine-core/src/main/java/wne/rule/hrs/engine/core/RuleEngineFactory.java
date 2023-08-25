@@ -2,9 +2,7 @@ package wne.rule.hrs.engine.core;
 
 import wne.rule.hrs.engine.core.exception.ComponentException;
 import wne.rule.hrs.engine.core.exception.RuleException;
-
-import java.util.Optional;
-import java.util.Properties;
+import wne.rule.hrs.engine.core.fetcher.ScriptFetcher;
 
 public interface RuleEngineFactory {
 

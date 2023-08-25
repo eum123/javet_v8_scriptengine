@@ -27,9 +27,9 @@ public class RuleExecuteResult {
     @Getter
     private Object result;
 
-    @Getter @Setter
+    @Setter
     @Builder.Default
-    private String executeLog = "";
+    private StringBuilder ruleExecuteLog = new StringBuilder();
 
     @Getter
     private Throwable throwable;
@@ -54,12 +54,19 @@ public class RuleExecuteResult {
     @Getter @Setter
     private String errorDetailMessage;
 
-    @Getter
     private List<RuleExecuteResult> subRuleExecuteResult = new LinkedList<>();
 
     public RuleExecuteResult(String ruleId, String ruleName) {
         this.ruleId = ruleId;
         this.ruleName = ruleName;
+    }
+
+    public void appendRuleExecuteLog(String message) {
+        this.ruleExecuteLog.append(message);
+        this.ruleExecuteLog.append("\r\n");
+    }
+    public String getRuleExecuteLog() {
+        return ruleExecuteLog.toString();
     }
 
     /**
@@ -100,13 +107,58 @@ public class RuleExecuteResult {
      */
     public void addSubRuleExecuteResult(RuleExecuteResult result) {
         subRuleExecuteResult.add(result);
+
     }
+
+    public List<RuleExecuteResult> getSubRuleExecuteResult() {
+        List<RuleExecuteResult> list = new LinkedList<>();
+        for (RuleExecuteResult executeResult : subRuleExecuteResult) {
+
+            list.add(executeResult.copy());
+
+            List<RuleExecuteResult> subList = executeResult.getSubRuleExecuteResult();
+            if(!subList.isEmpty()) {
+                //sub 실행 결과가 있는 경우
+                list.addAll(getSubRuleExecuteResult(subList));
+            }
+        }
+
+        return list;
+    }
+
+    private List<RuleExecuteResult> getSubRuleExecuteResult(List<RuleExecuteResult> list) {
+        List<RuleExecuteResult> newList = new LinkedList<>();
+        for (RuleExecuteResult executeResult : list) {
+
+            newList.add(executeResult.copy());
+
+            List<RuleExecuteResult> subList = executeResult.getSubRuleExecuteResult();
+            if(!subList.isEmpty()) {
+                //sub 실행 결과가 있는 경우
+                newList.addAll(getSubRuleExecuteResult(subList));
+            }
+        }
+
+        return newList;
+    }
+
     /**
-     * sub 함수의 실행 결과를 추가한다..
-     * @param list
+     * subRuleExecuteResult를 제외한 모든 내용을 복사한다.
+     * @return
      */
-    public void addSubRuleExecuteResult(List<RuleExecuteResult> list) {
-        subRuleExecuteResult.addAll(list);
+    public RuleExecuteResult copy() {
+        RuleExecuteResult ruleExecuteResult = new RuleExecuteResult(this.ruleId, this.ruleName);
+        ruleExecuteResult.ruleExecuteLog = this.ruleExecuteLog;
+        ruleExecuteResult.result = this.result;
+        ruleExecuteResult.endTime = this.endTime;
+        ruleExecuteResult.startTime = this.startTime;
+        ruleExecuteResult.errorDetailMessage = this.errorDetailMessage;
+        ruleExecuteResult.errorMessage = this.errorMessage;
+        ruleExecuteResult.errorLineNumber = this.errorLineNumber;
+        ruleExecuteResult.ruleParameters = this.ruleParameters;
+        ruleExecuteResult.throwable = throwable;
+
+        return ruleExecuteResult;
     }
 
 }

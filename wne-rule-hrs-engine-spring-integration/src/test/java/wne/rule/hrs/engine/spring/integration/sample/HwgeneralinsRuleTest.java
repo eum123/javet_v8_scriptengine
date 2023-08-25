@@ -95,7 +95,7 @@ public class HwgeneralinsRuleTest {
                 );
 
         System.out.println(obj.getResult());
-        System.out.println(obj.getExecuteLog());
+        System.out.println(obj.getRuleExecuteLog());
         System.out.println(obj.getThrowable());
 
 
@@ -123,7 +123,7 @@ public class HwgeneralinsRuleTest {
         );
 
         System.out.println(obj.getResult());
-        System.out.println(obj.getExecuteLog());
+        System.out.println(obj.getRuleExecuteLog());
         System.out.println(obj.getThrowable());
 
         Assert.assertNotNull(obj.getThrowable());
@@ -144,7 +144,7 @@ public class HwgeneralinsRuleTest {
         RuleExecuteResult obj = ruleService.executeByRuleId("my", "ruleName");
 
         System.out.println(obj.getResult().getClass());
-        System.out.println(obj.getExecuteLog());
+        System.out.println(obj.getRuleExecuteLog());
         System.out.println(obj.getThrowable());
 
         Assert.assertNull(obj.getThrowable());
