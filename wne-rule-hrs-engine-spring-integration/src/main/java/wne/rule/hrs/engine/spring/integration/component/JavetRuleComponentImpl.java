@@ -3,6 +3,7 @@ package wne.rule.hrs.engine.spring.integration.component;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import wne.rule.hrs.engine.core.*;
 import wne.rule.hrs.engine.core.javet.JavetRuleEngineFactory;
@@ -14,6 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.Map;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class JavetRuleComponentImpl implements RuleComponent {

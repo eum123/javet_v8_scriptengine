@@ -1,12 +1,7 @@
 package wne.rule.hrs.engine.core;
 
 import lombok.Getter;
-import wne.rule.hrs.engine.core.exception.ComponentException;
 import wne.rule.hrs.engine.core.exception.RuleException;
-import wne.rule.hrs.engine.core.javet.RuleLogger;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class RuleContext {
@@ -23,8 +18,6 @@ public class RuleContext {
 
     @Getter
     private RuleExecuteResult ruleExecuteResult;
-
-    private StringBuilder ruleExecuteLog = new StringBuilder();
 
     public RuleContext(RuleEngineFactory factory, String ruleId, String ruleName) {
         this.factory = factory;
@@ -47,11 +40,6 @@ public class RuleContext {
      */
     public void end(Object result) {
         ruleExecuteResult.setResult(result);
-        ruleExecuteResult.setExecuteLog(ruleExecuteLog.toString());
-    }
-
-    public void appendRuleLog(String message) {
-        ruleExecuteLog.append(message);
     }
 
     /**
@@ -80,20 +68,17 @@ public class RuleContext {
 
     /**
      * 새로운 rule engine을 생성하여 실행.
-     * @param ruleId
-     * @param args
      * @return
      */
-    public Object newEngine(String ruleId, String ruleName, Object ... args) {
+    public Object newEngineByName(String ruleName, String date, Object ... args) {
 
-        RuleExecuteResult result = null;
         try {
             RuleEngine engine = factory.borrow();
 
-            result =  engine.executeByRuleId(ruleId, ruleName, args);
+            RuleExecuteResult result =  engine.executeByRuleName(ruleId, ruleName, args);
 
             //append sub result
-            this.ruleExecuteResult.addSubRuleExecuteResult(result.getSubRuleExecuteResult());
+            this.ruleExecuteResult.addSubRuleExecuteResult(result);
 
             return result.getResult();
 

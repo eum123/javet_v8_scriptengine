@@ -110,11 +110,11 @@ public class JavetRuleComponentTest {
 
         RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
-        System.out.println("execute log:" +obj.getExecuteLog());
+        System.out.println("execute log:" +obj.getRuleExecuteLog());
 
         obj = ruleService.executeByRuleId("my", null);
 
-        System.out.println("execute log:" +obj.getExecuteLog());
+        System.out.println("execute log:" +obj.getRuleExecuteLog());
         System.out.println("result:" + obj.getResult());
 
     }
@@ -132,7 +132,7 @@ public class JavetRuleComponentTest {
 
         RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
-        System.out.println("execute log:" +obj.getExecuteLog());
+        System.out.println("execute log:" +obj.getRuleExecuteLog());
 
         System.out.println("result:" + obj.getResult());
 
@@ -164,13 +164,13 @@ public class JavetRuleComponentTest {
 
         RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
-        System.out.println("execute log:" +obj.getExecuteLog());
+        System.out.println("execute log:" +obj.getRuleExecuteLog());
 
         ruleService.updateRule("my", script);
 
         obj = ruleService.executeByRuleId("sub", null);
 
-        System.out.println("execute log:" +obj.getExecuteLog());
+        System.out.println("execute log:" +obj.getRuleExecuteLog());
 
     }
 
@@ -234,12 +234,12 @@ public class JavetRuleComponentTest {
 
         RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
-        System.out.println("execute log:" +obj.getExecuteLog());
+        System.out.println("execute log:" +obj.getRuleExecuteLog());
         System.out.println("exception:" + obj.getThrowable());
 
         obj = ruleService.executeByRuleId("sub", null);
 
-        System.out.println("execute log:" +obj.getExecuteLog());
+        System.out.println("execute log:" +obj.getRuleExecuteLog());
 
 
     }
@@ -265,7 +265,7 @@ public class JavetRuleComponentTest {
         RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
         System.out.println("result:" +obj.getResult());
-        System.out.println("log:" + obj.getExecuteLog());
+        System.out.println("log:" + obj.getRuleExecuteLog());
 
     }
 

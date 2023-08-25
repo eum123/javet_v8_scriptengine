@@ -122,10 +122,9 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
                 updateCondition.await();
             }
 
-            if(factory.getScriptFetcher() != null) {
-                //실행 하기 전 script를 조회 후 engine에 등록한다.
-                v8Runtime.getExecutor(factory.getScriptFetcher().fetch(ruleId, ruleName)).executeVoid();
-            }
+            //실행 하기 전 script를 조회 후 engine에 등록한다.
+            ScriptFetchResult scriptFetchResult = factory.getScriptFetcher().fetchByRuleId(ruleId);
+            v8Runtime.getExecutor(scriptFetchResult.getScript()).executeVoid();
 
             //context 추가
             v8Runtime.getGlobalObject().set(SystemConstants.CONTEXT, context);
@@ -136,6 +135,49 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
 
             //execute script
             Object result = v8Runtime.getGlobalObject().invokeObject(ruleId, parameters);
+
+            //종료시간
+            context.end(result);
+
+            return context.getRuleExecuteResult();
+        } catch (Exception e ) {
+            log.error("execute fail", e);
+
+            context.getRuleExecuteResult().setThrowable(e);
+
+            return context.getRuleExecuteResult();
+        } finally {
+            lock.unlock();
+
+            deleteSystem();
+        }
+    }
+
+    public RuleExecuteResult executeByRuleName(String ruleName, String date, Object ... parameters) {
+        lock.lock();
+
+        //TODO: 예외 처리
+        ScriptFetchResult scriptFetchResult = factory.getScriptFetcher().fetchByRuleName(ruleName, date);
+
+        RuleContext context = new RuleContext((RuleEngineFactory) this.factory, scriptFetchResult.getRuleId(), ruleName);
+
+        try {
+            if (factory.isUpdate()) {
+                updateCondition.await();
+            }
+
+            //실행 하기 전 script를 조회 후 engine에 등록한다.
+            v8Runtime.getExecutor(scriptFetchResult.getScript()).executeVoid();
+
+            //context 추가
+            v8Runtime.getGlobalObject().set(SystemConstants.CONTEXT, context);
+            validate(scriptFetchResult.getRuleId());
+
+            //시작 시간
+            context.start();
+
+            //execute script
+            Object result = v8Runtime.getGlobalObject().invokeObject(scriptFetchResult.getRuleId(), parameters);
 
             //종료시간
             context.end(result);

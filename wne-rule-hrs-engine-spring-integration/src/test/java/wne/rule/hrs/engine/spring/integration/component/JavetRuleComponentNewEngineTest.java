@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import wne.rule.hrs.engine.core.RuleExecuteResult;
+import wne.rule.hrs.engine.core.ScriptFetchResult;
 import wne.rule.hrs.engine.core.ScriptFetcher;
 import wne.rule.hrs.engine.core.util.ApplicationContextProvider;
 import wne.rule.hrs.engine.spring.integration.TestApplication;
@@ -19,35 +20,65 @@ public class JavetRuleComponentNewEngineTest {
 
     @Test
     public void newEngine_테스트() throws Exception {
-        String script = "function my() {\n" +
-                "var result = CONTEXT.newEngine('sub'); \n" +
 
-                "return result; \n" +
-                "} \n";
-
-
-        ruleService.updateRule("my", script);
 
         ruleService.setScriptFetcher(new DefaultScriptFetcher());
 
 
         RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
-        System.out.println("result:" +obj.getResult());
+        System.out.println("result:" +obj);
 
 
     }
 
     class DefaultScriptFetcher implements ScriptFetcher {
 
+        private int order = 0;
+
         @Override
-        public String fetch(String ruleId, String ruleName) {
+        public ScriptFetchResult fetchByRuleId(String ruleId) {
 
-            System.out.println("call fetch()");
+            System.out.println("call fetchByRuleId ()");
 
-            return "function sub() {\n" +
-                    " return 'hong' \n"+
-                    "}\n";
+            String script = "function my() {\n" +
+                    "CONTEXT.getLogger().debug('my'); \n" +
+                    "var result = CONTEXT.newEngineByName('sub', 'date'); \n" +
+
+                    "return result; \n" +
+                    "} \n";
+
+            return ScriptFetchResult.builder().ruleId(ruleId)
+                    .ruleName("my")
+                    .script(script)
+                    .build();
+        }
+
+
+        @Override
+        public ScriptFetchResult fetchByRuleName(String ruleName, String date) {
+            System.out.println("call fetchByRuleName ()");
+
+            if(order == 0) {
+                order++;
+                return ScriptFetchResult.builder()
+                        .ruleId("sub")
+                        .ruleName("sub")
+                        .script("function sub() {\n" +
+                                "CONTEXT.getLogger().debug('sub'); \n" +
+                                "var a = CONTEXT.newEngineByName('sub1', 'date'); \n" +
+                                " return a + CONTEXT.newEngineByName('sub1', 'date'); \n" +
+                                "}\n")
+                        .build();
+            } else {
+                return ScriptFetchResult.builder().ruleName("sub" + order)
+                        .ruleId("sub1")
+                        .script("function sub1() {\n" +
+                                "CONTEXT.getLogger().debug('sub1'); \n" +
+                                " return 'hong' \n" +
+                                "}\n")
+                        .build();
+            }
         }
     }
 }

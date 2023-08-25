@@ -41,6 +41,8 @@ public class JavetRuleEngineFactory implements RuleEngineFactory, ManagedRuleEng
     public JavetRuleEngineFactory(RuleConfig config) throws Exception {
         this.ruleConfig = config;
 
+        log.debug("config : {}", config);
+
         // external call 기능 등록
         registry = new ExternalExecutorRegistry();
         registry.load();
@@ -51,6 +53,11 @@ public class JavetRuleEngineFactory implements RuleEngineFactory, ManagedRuleEng
 
 
     public RuleEngine borrow() throws InterruptedException, RuleException, ComponentException {
+
+        if(scriptFetcher == null) {
+            throw new RuleException("ScriptFetcher not found");
+        }
+
         lock.lock();
         try {
             if(isUpdate) {

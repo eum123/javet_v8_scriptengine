@@ -2,11 +2,14 @@ package wne.rule.hrs.engine.core;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@ToString
 @Builder
 public class RuleConfig {
     @Getter
@@ -29,4 +32,5 @@ public class RuleConfig {
     public void addExternalClass(Class clazz) {
         externalClasses.put(clazz.getName(), clazz);
     }
+
 }

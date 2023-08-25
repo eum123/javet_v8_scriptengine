@@ -133,7 +133,7 @@ ScriptFetcher를 통해 실행할 javascript를 조회하여 실행하는 방식
 
 ```javascript
 function my() {
-    var result = CONTEXT.newEngine('sub', Object ... parameters);
+    var result = CONTEXT.newEngineByName('sub', 'date', Object ... parameters);
     return result;
 }
 ```
