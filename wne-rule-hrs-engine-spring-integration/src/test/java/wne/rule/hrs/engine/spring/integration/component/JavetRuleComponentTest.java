@@ -6,9 +6,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import wne.rule.hrs.engine.core.RuleExecuteResult;
 import wne.rule.hrs.engine.core.util.ApplicationContextProvider;
 import wne.rule.hrs.engine.spring.integration.TestApplication;
-import wne.rule.hrs.engine.spring.integration.vo.RuleResultVo;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -27,7 +27,7 @@ public class JavetRuleComponentTest {
                 "}\n";
         ruleService.updateRule("my", script);
 
-        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+        RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
         Assert.assertEquals("hong", obj.getResult());
 
@@ -43,7 +43,7 @@ public class JavetRuleComponentTest {
 
         ruleService.updateRule("my", script);
 
-        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+        RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
         Assert.assertEquals(1, ((Map)obj.getResult()).get("1"));
     }
@@ -58,7 +58,7 @@ public class JavetRuleComponentTest {
 
         ruleService.updateRule("my", script);
 
-        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+        RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
         Assert.assertEquals(1, ((Map)obj.getResult()).get("1"));
     }
@@ -83,10 +83,9 @@ public class JavetRuleComponentTest {
 
         ruleService.updateRule("my", script);
 
-        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+        RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
-        System.out.println("execute log:" +obj.getExecuteLog());
-        System.out.println("trace:" + obj.getTraceList());
+        System.out.println("execute log:" +obj);
 
     }
 
@@ -109,15 +108,13 @@ public class JavetRuleComponentTest {
 
         ruleService.updateRule("my", script);
 
-        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+        RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
         System.out.println("execute log:" +obj.getExecuteLog());
-        System.out.println("trace:" + obj.getTraceList());
 
         obj = ruleService.executeByRuleId("my", null);
 
         System.out.println("execute log:" +obj.getExecuteLog());
-        System.out.println("trace:" + obj.getTraceList());
         System.out.println("result:" + obj.getResult());
 
     }
@@ -133,10 +130,9 @@ public class JavetRuleComponentTest {
 
         ruleService.updateRule("my", script);
 
-        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+        RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
         System.out.println("execute log:" +obj.getExecuteLog());
-        System.out.println("trace:" + obj.getTraceList());
 
         System.out.println("result:" + obj.getResult());
 
@@ -166,17 +162,15 @@ public class JavetRuleComponentTest {
 
         ruleService.updateRule("my", script);
 
-        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+        RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
         System.out.println("execute log:" +obj.getExecuteLog());
-        System.out.println("trace:" + obj.getTraceList());
 
         ruleService.updateRule("my", script);
 
         obj = ruleService.executeByRuleId("sub", null);
 
         System.out.println("execute log:" +obj.getExecuteLog());
-        System.out.println("trace:" + obj.getTraceList());
 
     }
 
@@ -201,7 +195,7 @@ public class JavetRuleComponentTest {
 
         Assert.assertThrows(Exception.class, () -> ruleService.updateRule("1my", script));
 
-        RuleResultVo obj = null;
+        RuleExecuteResult obj = null;
 
         String script1 = "function sub() {\n" +
                 "context.start('sub');\n" +
@@ -238,16 +232,14 @@ public class JavetRuleComponentTest {
 
         ruleService.updateRule("my", script);
 
-        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+        RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
         System.out.println("execute log:" +obj.getExecuteLog());
-        System.out.println("trace:" + obj.getTraceList());
         System.out.println("exception:" + obj.getThrowable());
 
         obj = ruleService.executeByRuleId("sub", null);
 
         System.out.println("execute log:" +obj.getExecuteLog());
-        System.out.println("trace:" + obj.getTraceList());
 
 
     }
@@ -270,7 +262,7 @@ public class JavetRuleComponentTest {
 
         ruleService.updateRule("my", script);
 
-        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+        RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
         System.out.println("result:" +obj.getResult());
         System.out.println("log:" + obj.getExecuteLog());
@@ -285,7 +277,7 @@ public class JavetRuleComponentTest {
                 "}\n";
         ruleService.updateRule("my", script);
 
-        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+        RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
         Assert.assertEquals("hong", obj.getResult());
 
@@ -298,7 +290,7 @@ public class JavetRuleComponentTest {
                 "}\n";
         ruleService.updateRule("my", script);
 
-        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+        RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
         Assert.assertEquals(false, obj.getResult());
 
@@ -311,7 +303,7 @@ public class JavetRuleComponentTest {
                 "}\n";
         ruleService.updateRule("my", script);
 
-        RuleResultVo obj = ruleService.executeByRuleId("my", null);
+        RuleExecuteResult obj = ruleService.executeByRuleId("my", null);
 
         Assert.assertEquals(false, obj.getResult());
 

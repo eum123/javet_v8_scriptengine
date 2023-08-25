@@ -1,5 +1,6 @@
 package wne.rule.hrs.engine.spring.integration.component;
 
+import wne.rule.hrs.engine.core.RuleExecuteResult;
 import wne.rule.hrs.engine.core.ScriptFetcher;
 import wne.rule.hrs.engine.spring.integration.vo.RuleResultVo;
 
@@ -13,7 +14,7 @@ public interface RuleComponent {
      * @return
      * @throws Exception
      */
-    RuleResultVo executeByRuleId(String ruleId, String ruleName, Object ... parameters) throws Exception;
+    RuleExecuteResult executeByRuleId(String ruleId, String ruleName, Object ... parameters) throws Exception;
 
 
     /**

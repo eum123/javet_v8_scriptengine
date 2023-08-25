@@ -37,13 +37,12 @@ public class JavetRuleComponentImpl implements RuleComponent {
         this.factory.setScriptFetcher(scriptFetcher);
     }
 
-    public RuleResultVo executeByRuleId(String ruleId, String ruleName, Object ... parameter) throws Exception {
+    public RuleExecuteResult executeByRuleId(String ruleId, String ruleName, Object ... parameter) throws Exception {
         RuleEngine engine = null;
         try {
             engine = factory.borrow();
-            RuleExecuteResult r = engine.executeByRuleId(ruleId, ruleName, parameter);
+            return engine.executeByRuleId(ruleId, ruleName, parameter);
 
-            return RuleResultVoBuilder.convert(r);
         } finally {
             if(engine != null) {
                 factory.release(engine);

@@ -5,10 +5,8 @@ import jdk.nashorn.internal.runtime.Undefined;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.script.SimpleBindings;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Calendar;
 
 public class RuleFunctionTest {
 	

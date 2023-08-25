@@ -54,6 +54,9 @@ public class RuleExecuteResult {
     @Getter @Setter
     private String errorDetailMessage;
 
+    @Getter
+    private List<RuleExecuteResult> subRuleExecuteResult = new LinkedList<>();
+
     public RuleExecuteResult(String ruleId, String ruleName) {
         this.ruleId = ruleId;
         this.ruleName = ruleName;
@@ -89,6 +92,21 @@ public class RuleExecuteResult {
             this.errorMessage = javetExecutionException.getScriptingError().getMessage();
             this.errorDetailMessage = javetExecutionException.getScriptingError().getDetailedMessage();
         }
+    }
+
+    /**
+     * sub 함수의 실행 결과를 추가한다.
+     * @param result
+     */
+    public void addSubRuleExecuteResult(RuleExecuteResult result) {
+        subRuleExecuteResult.add(result);
+    }
+    /**
+     * sub 함수의 실행 결과를 추가한다..
+     * @param list
+     */
+    public void addSubRuleExecuteResult(List<RuleExecuteResult> list) {
+        subRuleExecuteResult.addAll(list);
     }
 
 }

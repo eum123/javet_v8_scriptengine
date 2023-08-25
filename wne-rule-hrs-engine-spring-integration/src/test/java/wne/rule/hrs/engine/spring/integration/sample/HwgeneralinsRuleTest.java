@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import wne.rule.hrs.engine.core.RuleExecuteResult;
 import wne.rule.hrs.engine.core.util.ApplicationContextProvider;
 import wne.rule.hrs.engine.spring.integration.TestApplication;
 import wne.rule.hrs.engine.spring.integration.component.RuleComponent;
@@ -64,7 +65,7 @@ public class HwgeneralinsRuleTest {
 
          */
 
-        RuleResultVo obj = ruleService.executeByRuleId("일반_상해_공통_보험료수식적용_001", "일반_상해_공통_보험료수식적용",
+        RuleExecuteResult obj = ruleService.executeByRuleId("일반_상해_공통_보험료수식적용_001", "일반_상해_공통_보험료수식적용",
                 1000, 10000, 1.0, 1.0, 1.0
                 , 0.2, 0.1, "A", 10, "A01"
                 , 0.1, 4, 1000, 10, 0.2
@@ -95,7 +96,6 @@ public class HwgeneralinsRuleTest {
 
         System.out.println(obj.getResult());
         System.out.println(obj.getExecuteLog());
-        System.out.println(obj.getTraceList());
         System.out.println(obj.getThrowable());
 
 
@@ -117,14 +117,13 @@ public class HwgeneralinsRuleTest {
 
          */
 
-        RuleResultVo obj = ruleService.executeByRuleId("일반_공통_보상한도금액사이값입력가능금액기준표_001", "일반_공통_보상한도금액사이값입력가능금액기준표",
+        RuleExecuteResult obj = ruleService.executeByRuleId("일반_공통_보상한도금액사이값입력가능금액기준표_001", "일반_공통_보상한도금액사이값입력가능금액기준표",
                 "FA00050003", "RFA00030", "A601", "A301", "CFA10112"
                 , "02", "02", 5000000
         );
 
         System.out.println(obj.getResult());
         System.out.println(obj.getExecuteLog());
-        System.out.println(obj.getTraceList());
         System.out.println(obj.getThrowable());
 
         Assert.assertNotNull(obj.getThrowable());
@@ -142,11 +141,10 @@ public class HwgeneralinsRuleTest {
 
         ruleService.updateRule("일반_상해_공통_보험료수식적용_001", script);
 
-        RuleResultVo obj = ruleService.executeByRuleId("my", "ruleName");
+        RuleExecuteResult obj = ruleService.executeByRuleId("my", "ruleName");
 
         System.out.println(obj.getResult().getClass());
         System.out.println(obj.getExecuteLog());
-        System.out.println(obj.getTraceList());
         System.out.println(obj.getThrowable());
 
         Assert.assertNull(obj.getThrowable());

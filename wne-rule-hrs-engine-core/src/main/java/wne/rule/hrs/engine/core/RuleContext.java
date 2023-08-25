@@ -92,7 +92,8 @@ public class RuleContext {
 
             result =  engine.executeByRuleId(ruleId, ruleName, args);
 
-            //TODO append result
+            //append sub result
+            this.ruleExecuteResult.addSubRuleExecuteResult(result.getSubRuleExecuteResult());
 
             return result.getResult();
 

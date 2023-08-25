@@ -1,12 +1,14 @@
 package wne.rule.hrs.engine.core;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+@ToString
 public class RuleParameters {
     @Getter
     private List<String> parameterOrder = new LinkedList<>();
