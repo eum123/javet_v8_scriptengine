@@ -1,4 +1,4 @@
-package wne.rule.hrs.engine.core;
+package wne.rule.hrs.engine.core.fetcher;
 
 /**
  * script를 외부(DB, redis 등)으로 조회.

@@ -1,7 +1,6 @@
 package wne.rule.hrs.engine.core.javet;
 
 import com.caoccao.javet.exceptions.JavetException;
-import com.caoccao.javet.exceptions.JavetExecutionException;
 import com.caoccao.javet.interception.logging.JavetStandardConsoleInterceptor;
 import com.caoccao.javet.interop.V8Host;
 import com.caoccao.javet.interop.V8Runtime;
@@ -13,14 +12,13 @@ import lombok.extern.slf4j.Slf4j;
 import wne.rule.hrs.engine.core.*;
 import wne.rule.hrs.engine.core.constants.SystemConstants;
 import wne.rule.hrs.engine.core.exception.*;
+import wne.rule.hrs.engine.core.fetcher.ScriptFetchResult;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;

@@ -7,6 +7,7 @@ import wne.rule.hrs.engine.core.*;
 import wne.rule.hrs.engine.core.exception.ComponentException;
 import wne.rule.hrs.engine.core.exception.RuleException;
 import wne.rule.hrs.engine.core.external.ExternalExecutorRegistry;
+import wne.rule.hrs.engine.core.fetcher.ScriptFetcher;
 import wne.rule.hrs.engine.core.function.loader.ExternalRuleLoader;
 import wne.rule.hrs.engine.core.function.loader.InternalRuleLoader;
 import wne.rule.hrs.engine.core.function.loader.ReservedObjectLoader;

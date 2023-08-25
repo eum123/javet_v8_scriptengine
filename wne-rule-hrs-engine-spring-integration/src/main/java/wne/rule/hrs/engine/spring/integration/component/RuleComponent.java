@@ -1,10 +1,7 @@
 package wne.rule.hrs.engine.spring.integration.component;
 
 import wne.rule.hrs.engine.core.RuleExecuteResult;
-import wne.rule.hrs.engine.core.ScriptFetcher;
-import wne.rule.hrs.engine.spring.integration.vo.RuleResultVo;
-
-import java.util.Map;
+import wne.rule.hrs.engine.core.fetcher.ScriptFetcher;
 
 public interface RuleComponent {
     /**

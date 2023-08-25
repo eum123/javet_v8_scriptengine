@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import wne.rule.hrs.engine.core.RuleExecuteResult;
-import wne.rule.hrs.engine.core.ScriptFetchResult;
-import wne.rule.hrs.engine.core.ScriptFetcher;
+import wne.rule.hrs.engine.core.fetcher.ScriptFetchResult;
+import wne.rule.hrs.engine.core.fetcher.ScriptFetcher;
 import wne.rule.hrs.engine.core.util.ApplicationContextProvider;
 import wne.rule.hrs.engine.spring.integration.TestApplication;
 

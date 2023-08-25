@@ -1,4 +1,4 @@
-package wne.rule.hrs.engine.core;
+package wne.rule.hrs.engine.core.fetcher;
 
 import lombok.Builder;
 import lombok.Getter;
