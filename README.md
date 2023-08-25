@@ -39,7 +39,7 @@ function name() {
 }
 ```
 
-아래 방식은 사용 불가능 하다
+아래 방식도 사용 가능 하다
 ```javascript
 var name = function() {
     
@@ -133,7 +133,7 @@ ScriptFetcher를 통해 실행할 javascript를 조회하여 실행하는 방식
 
 ```javascript
 function my() {
-    var result = CONTEXT.newEngine('sub').getResult();
+    var result = CONTEXT.newEngine('sub', Object ... parameters).getResult();
     return result;
 }
 ```

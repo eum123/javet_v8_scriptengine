@@ -62,13 +62,13 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
             v8Runtime = V8Host.getV8Instance().createV8Runtime();
             v8Runtime.setConverter(new JavetProxyConverter());
 
-            byteArrayOutputStream = new ByteArrayOutputStream();
-            printStream = new PrintStream(byteArrayOutputStream);
-
-            interceptor =
-                    new JavetStandardConsoleInterceptor(v8Runtime);
-            interceptor.setLog(printStream);
-            interceptor.register(v8Runtime.getGlobalObject());
+//            byteArrayOutputStream = new ByteArrayOutputStream();
+//            printStream = new PrintStream(byteArrayOutputStream);
+//
+//            interceptor =
+//                    new JavetStandardConsoleInterceptor(v8Runtime);
+//            interceptor.setLog(printStream);
+//            interceptor.register(v8Runtime.getGlobalObject());
 
             //system
             JavetSystemBinder.bind(factory, v8Runtime);
@@ -112,11 +112,10 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
 
 
 
-    public RuleExecuteResult executeByRuleId(String ruleId, String ruleName, Object ... parameters) throws RuleException {
+    public RuleExecuteResult executeByRuleId(String ruleId, String ruleName, Object ... parameters) {
         lock.lock();
 
         RuleContext context = new RuleContext((RuleEngineFactory) this.factory, ruleId, ruleName);
-        RuleExecuteResult executeResult = new RuleExecuteResult();
 
         try {
             if (factory.isUpdate()) {
@@ -130,30 +129,24 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
 
             //context 추가
             v8Runtime.getGlobalObject().set(SystemConstants.CONTEXT, context);
-
             validate(ruleId);
 
-            //execute main
+            //시작 시간
+            context.start();
+
+            //execute script
             Object result = v8Runtime.getGlobalObject().invokeObject(ruleId, parameters);
 
+            //종료시간
+            context.end(result);
 
-            log.debug("output log: {}", byteArrayOutputStream.toString());
-
-            executeResult.setResult(result);
-            executeResult.setTrace(context.getRuleTraces());
-            executeResult.setExecuteLog(byteArrayOutputStream.toString());
-
-            return executeResult;
+            return context.getRuleExecuteResult();
         } catch (Exception e ) {
             log.error("execute fail", e);
 
-            if(e instanceof JavetExecutionException) {
-                log.debug("linenumber : {}", ((JavetExecutionException)e).getScriptingError().getLineNumber());
-            }
+            context.getRuleExecuteResult().setThrowable(e);
 
-            executeResult.setTrace(context.getRuleTraces());
-            executeResult.setThrowable(e);
-            return executeResult;
+            return context.getRuleExecuteResult();
         } finally {
             lock.unlock();
 

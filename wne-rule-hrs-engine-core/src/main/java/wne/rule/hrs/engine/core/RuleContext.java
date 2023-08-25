@@ -1,13 +1,11 @@
 package wne.rule.hrs.engine.core;
 
 import lombok.Getter;
-import lombok.Setter;
+import wne.rule.hrs.engine.core.exception.ComponentException;
+import wne.rule.hrs.engine.core.exception.RuleException;
 import wne.rule.hrs.engine.core.javet.RuleLogger;
 
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -19,43 +17,41 @@ public class RuleContext {
     @Getter
     private String ruleName;
 
-    @Getter @Setter
-    private String ruleExecuteLog = "";
-
     private RuleEngineFactory factory;
 
     private RuleLogger logger = new RuleLogger(this);
+
+    @Getter
+    private RuleExecuteResult ruleExecuteResult;
+
+    private StringBuilder ruleExecuteLog = new StringBuilder();
 
     public RuleContext(RuleEngineFactory factory, String ruleId, String ruleName) {
         this.factory = factory;
         this.ruleId = ruleId;
         this.ruleName = ruleName;
+        this.ruleExecuteResult = new RuleExecuteResult(ruleId, ruleName);
     }
 
-    // 함수 실행 순서
-    private List<String> order = new LinkedList<>();
-    //실행한 함수들
-    private Map<String, RuleTrace> traceMap = new HashMap<>();
-
-    public List<RuleTrace> getRuleTraces() {
-        return order.stream().map(x -> traceMap.get(x)).collect(Collectors.toList());
+    public void start() {
+        ruleExecuteResult.setStartTime(System.currentTimeMillis());
     }
 
-    public void start(String ruleId) {
-        RuleTrace trace = new RuleTrace(ruleId);
-        order.add(ruleId);
-        traceMap.put(ruleId, trace);
+    public void addParameter(String key, Object value) {
+        ruleExecuteResult.addParameter(key, value);
     }
 
-    public void addParameter(String ruleId, String key, Object value) {
-        traceMap.get(ruleId).addParameter(key, value);
+    /**
+     * script 처리 결과 저장
+     * @param result
+     */
+    public void end(Object result) {
+        ruleExecuteResult.setResult(result);
+        ruleExecuteResult.setExecuteLog(ruleExecuteLog.toString());
     }
 
-    public void end(String ruleId, Object result) {
-        traceMap.get(ruleId).setResult(result);
-    }
-    public void end(String ruleId) {
-        end(ruleId, null);
+    public void appendRuleLog(String message) {
+        ruleExecuteLog.append(message);
     }
 
     /**
@@ -88,25 +84,21 @@ public class RuleContext {
      * @param args
      * @return
      */
-    public RuleExecuteResult newEngine(String ruleId, String ruleName, Object ... args) {
+    public Object newEngine(String ruleId, String ruleName, Object ... args) {
 
-        RuleExecuteResult result = new RuleExecuteResult();
+        RuleExecuteResult result = null;
         try {
             RuleEngine engine = factory.borrow();
 
-            //TODO history 저장. script내에서 수행하면 이부분 제외
-            this.start(ruleId);
-            this.addParameter(ruleId, "parameter", args);
-
             result =  engine.executeByRuleId(ruleId, ruleName, args);
 
-            this.end(ruleId, result.getResult());
+            //TODO append result
 
-            return result;
+            return result.getResult();
 
-        } catch (Exception e) {
-            result.setThrowable(e);
-            return result;
+        } catch (RuleException | InterruptedException e) {
+            //engine 생성 오류
+            throw new RuntimeException(e);
         }
     }
 

@@ -8,7 +8,7 @@ public class RuleResultVoBuilder {
         vo.setExecuteLog(executeResult.getExecuteLog());
         vo.setResult(executeResult.getResult());
         vo.setThrowable(executeResult.getThrowable());
-        vo.setTraceList(executeResult.getTrace());
+
         return vo;
     }
 }

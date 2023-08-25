@@ -98,6 +98,8 @@ public class HwgeneralinsRuleTest {
         System.out.println(obj.getTraceList());
         System.out.println(obj.getThrowable());
 
+
+
     }
 
     @Test
@@ -125,6 +127,7 @@ public class HwgeneralinsRuleTest {
         System.out.println(obj.getTraceList());
         System.out.println(obj.getThrowable());
 
+        Assert.assertNotNull(obj.getThrowable());
     }
 
     @Test
