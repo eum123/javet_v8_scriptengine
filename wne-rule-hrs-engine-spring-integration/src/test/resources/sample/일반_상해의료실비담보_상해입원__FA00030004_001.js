@@ -1,0 +1,1 @@
+var 일반_상해의료실비담보_상해입원__FA00030004_001 = AdvancedGridDSD

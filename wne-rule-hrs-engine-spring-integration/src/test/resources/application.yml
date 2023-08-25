@@ -52,3 +52,15 @@ hrs:
           max-total: 5
           max-wait-mills: 2000
 
+# 서버DB 프로파일 설정
+---
+spring:
+  config:
+    activate:
+      on-profile: db-server
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://172.16.51.75:4521/wne
+    username: papricarun
+    password: password
