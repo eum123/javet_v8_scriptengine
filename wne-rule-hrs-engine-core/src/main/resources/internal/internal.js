@@ -1,8 +1,29 @@
+//###################################################
+// Internal script
+// engine에서 공통으로 사용되는 함수 정의
+// 사이트별 함수는 external rule에 정의
+//###################################################
+
 /**
- * Internal script
- * engine에서 공통으로 사용되는 함수 정의
- * 사이트별 함수는 external rule에 정의
+ * 신규 Rule Engine을 이용하여 실행
+ * @param ruleName 룰 이름
+ * @param baseDate 기준일자
+ * @param args  parameters
+ * @returns {*}
+ * @constructor
  */
+function NEW_ENGINE_BY_NAME(ruleName, baseDate, ...args) {
+    return CONTEXT.newEngineByName(ruleName, baseDate, args);
+}
+
+function _GET_GLOBAL(loggerId) {
+    return CONTEXT.getRuleExecuteResult().getGlobalVariable(loggerId);
+}
+
+function _SET_GLOBAL(loggerId, data) {
+    CONTEXT.getRuleExecuteResult().setGlobalVariable(loggerId, data);
+}
+
 
 function LPAD(val, char) {
     return ''+(val<10?char+val:val);
@@ -71,4 +92,5 @@ function IS_EMPTY_OBJECT(inputValue) {
     }
     return false;
 }
+
 

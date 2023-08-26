@@ -116,12 +116,14 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
         RuleContext context = new RuleContext((RuleEngineFactory) this.factory, ruleId, ruleName);
 
         try {
+
             if (factory.isUpdate()) {
                 updateCondition.await();
             }
 
+            ScriptFetchResult scriptFetchResult = context.fetchByRuleId(ruleId);
+
             //실행 하기 전 script를 조회 후 engine에 등록한다.
-            ScriptFetchResult scriptFetchResult = factory.getScriptFetcher().fetchByRuleId(ruleId);
             v8Runtime.getExecutor(scriptFetchResult.getScript()).executeVoid();
 
             //context 추가
@@ -154,12 +156,12 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
     public RuleExecuteResult executeByRuleName(String ruleName, String date, Object ... parameters) {
         lock.lock();
 
-        //TODO: 예외 처리
-        ScriptFetchResult scriptFetchResult = factory.getScriptFetcher().fetchByRuleName(ruleName, date);
-
-        RuleContext context = new RuleContext((RuleEngineFactory) this.factory, scriptFetchResult.getRuleId(), ruleName);
+        RuleContext context = null;
 
         try {
+            ScriptFetchResult scriptFetchResult = factory.getScriptFetcher().fetchByRuleName(ruleName, date);
+            context = new RuleContext((RuleEngineFactory) this.factory, scriptFetchResult.getRuleId(), ruleName);
+
             if (factory.isUpdate()) {
                 updateCondition.await();
             }

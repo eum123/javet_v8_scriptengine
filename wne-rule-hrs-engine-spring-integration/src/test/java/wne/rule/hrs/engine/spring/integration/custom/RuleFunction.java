@@ -99,6 +99,7 @@ public class RuleFunction {
 	}
 	
 	//보험연령 계산
+	@V8Function(name = "INSURANCE_AGE")
 	public static int INSURANCE_AGE(String birthDate, String baseDate) {
 		birthDate = birthDate.replaceAll("-", "");
 		baseDate = baseDate.replaceAll("-", "");

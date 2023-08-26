@@ -1,4 +1,4 @@
-function(건물급수코드,업종코드 ){var start = new Date().getTime();
+var 일반_화재공장물건_특정물건_기본요율_001 = function(건물급수코드,업종코드 ){var start = new Date().getTime();
 var __hrs_logger_content = [];
 var __hrs_logger_input = [];
 var __hrs_logger_output = {};

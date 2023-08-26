@@ -1,6 +1,7 @@
-/**
- * PRO Rule 전환
- */
+
+//##########################################
+// ProRule 전환
+//##########################################
 function MAX_BETWEEN_TWO(n1, n2) {
     return Math.max(n1, n2);
 }
@@ -114,80 +115,80 @@ function CAL_MINUTES_BETWEEN(date1, date2) {
 function RESULT(result) {
     return result;
 }
-//-----------------
-/*
+//-----------------미 테스트
+
 function CAL_SECOND_BETWEEN(date1, date2) {
-    + "    var interval\n"
-    + "    var dateValue1 = date1\n"
-    + "    var dateValue2 = date2\n"
-    + "  	if(!(date1 instanceof Date)) {\n"
-    + "     	dateValue1 = GET_NEW_DATE(date1)\n"
-    + "    }\n"
-    + "  	if(!(date2 instanceof Date)) {\n"
-    + "     	dateValue2 = GET_NEW_DATE(date2)\n"
-    + "    }\n"
-    + "    if(dateValue1 > dateValue2) {\n"
-    + "        interval = dateValue1.getTime() - dateValue2.getTime()\n"
-    + "    } else {\n"
-    + "        interval = dateValue2.getTime() - dateValue1.getTime()\n"
-    + "    }\n"
-    + "    return Math.floor(interval / (1000*60))\n"
+    var interval;
+    var dateValue1 = date1;
+    var dateValue2 = date2;
+    if(!(date1 instanceof Date)) {
+        dateValue1 = GET_NEW_DATE(date1);
+    }
+    if(!(date2 instanceof Date)) {
+        dateValue2 = GET_NEW_DATE(date2);
+    }
+    if(dateValue1 > dateValue2) {
+        interval = dateValue1.getTime() - dateValue2.getTime();
+    } else {
+        interval = dateValue2.getTime() - dateValue1.getTime();
+    }
+    return Math.floor(interval / (1000*60));
 }
 
 function CAL_MILLISECOND_BETWEEN(date1, date2) {
-    + "    var interval\n"
-    + "    var dateValue1 = date1\n"
-    + "    var dateValue2 = date2\n"
-    + "  	if(!(date1 instanceof Date)) {\n"
-    + "     	dateValue1 = GET_NEW_DATE(date1)\n"
-    + "    }\n"
-    + "  	if(!(date2 instanceof Date)) {\n"
-    + "     	dateValue2 = GET_NEW_DATE(date2)\n"
-    + "    }\n"
-    + "    if(dateValue1 > dateValue2) {\n"
-    + "        interval = dateValue1.getTime() - dateValue2.getTime()\n"
-    + "    } else {\n"
-    + "        interval = dateValue2.getTime() - dateValue1.getTime()\n"
-    + "    }\n"
-    + "    return Math.floor(interval / (1000))\n"
+    var interval;
+    var dateValue1 = date1;
+    var dateValue2 = date2;
+    if(!(date1 instanceof Date)) {
+        dateValue1 = GET_NEW_DATE(date1);
+    }
+    if(!(date2 instanceof Date)) {
+        dateValue2 = GET_NEW_DATE(date2);
+    }
+    if(dateValue1 > dateValue2) {
+        interval = dateValue1.getTime() - dateValue2.getTime();
+    } else {
+        interval = dateValue2.getTime() - dateValue1.getTime();
+    }
+    return Math.floor(interval / (1000));
 }
 
 function CAL_MONTHS_BETWEEN(date1, date2) {
-    + "    var interval\n"
-    + "    var dateValue1 = date1\n"
-    + "    var dateValue2 = date2\n"
-    + "  	if(!(date1 instanceof Date)) {\n"
-    + "     	dateValue1 = GET_NEW_DATE(date1)\n"
-    + "    }\n"
-    + "  	if(!(date2 instanceof Date)) {\n"
-    + "     	dateValue2 = GET_NEW_DATE(date2)\n"
-    + "    }\n"
-    + "    if(dateValue1 > dateValue2) {\n"
-    + "        interval = dateValue1.getMonth() - dateValue2.getMonth() +\n"
-    + "            12 * ( dateValue1.getYear() -  dateValue2.getYear())\n"
-    + "    } else {\n"
-    + "        interval = dateValue2.getMonth() - dateValue1.getMonth() +\n"
-    + "            12 * ( dateValue2.getYear() -  dateValue1.getYear())\n"
-    + "    }\n"
-    + "    return interval \n"
+    var interval;
+    var dateValue1 = date1;
+    var dateValue2 = date2;
+    if(!(date1 instanceof Date)) {
+        dateValue1 = GET_NEW_DATE(date1);
+    }
+    if(!(date2 instanceof Date)) {
+        dateValue2 = GET_NEW_DATE(date2);
+    }
+    if(dateValue1 > dateValue2) {
+        interval = dateValue1.getMonth() - dateValue2.getMonth() +
+            12 * ( dateValue1.getYear() -  dateValue2.getYear());
+    } else {
+        interval = dateValue2.getMonth() - dateValue1.getMonth() +
+            12 * ( dateValue2.getYear() -  dateValue1.getYear());
+    }
+    return interval ;
 }
 
 function CAL_YEARS_BETWEEN(date1, date2) {
-    + "    var interval\n"
-    + "    var dateValue1 = date1\n"
-    + "    var dateValue2 = date2\n"
-    + "  	if(!(date1 instanceof Date)) {\n"
-    + "     	dateValue1 = GET_NEW_DATE(date1)\n"
-    + "    }\n"
-    + "  	if(!(date2 instanceof Date)) {\n"
-    + "     	dateValue2 = GET_NEW_DATE(date2)\n"
-    + "    }\n"
-    + "    if(dateValue1 > dateValue2) {\n"
-    + "        interval = dateValue1.getYear() - dateValue2.getYear()\n"
-    + "    } else {\n"
-    + "        interval = dateValue2.getYear() - dateValue1.getYear()\n"
-    + "    }\n"
-    + "    return interval\n"
+    var interval;
+    var dateValue1 = date1;
+    var dateValue2 = date2;
+    if(!(date1 instanceof Date)) {
+        dateValue1 = GET_NEW_DATE(date1);
+    }
+    if(!(date2 instanceof Date)) {
+        dateValue2 = GET_NEW_DATE(date2);
+    }
+    if(dateValue1 > dateValue2) {
+        interval = dateValue1.getYear() - dateValue2.getYear();
+    } else {
+        interval = dateValue2.getYear() - dateValue1.getYear();
+    }
+    return interval;
 }
 
 function CAL_ELAPSED_DAYS(time) {
@@ -211,17 +212,17 @@ function CAL_ELAPSED_MILLISEC(time) {
 }
 
 function COVERT_DATE_FORMAT(dateTimeStr) {
-    + "	var yyyy = dateTimeStr.substring(0, 4);\n"
-    + "	var mm = dateTimeStr.substring(5,7);\n"
-    + "	var dd = dateTimeStr.substring(8,10);\n"
-    + " return yyyy+mm+dd;\n"
+    var yyyy = dateTimeStr.substring(0, 4);
+    var mm = dateTimeStr.substring(5,7);
+    var dd = dateTimeStr.substring(8,10);
+    return yyyy+mm+dd;
 }
 
 function COVERT_DATE_TIME_FORMAT(dateStr) {
-    + "    var yyyy = dateStr.substring(0,4);\n"
-    + "    var mm = dateStr.substring(4,6);\n"
-    + "    var dd = dateStr.substring(6,8);\n"
-    + "    return yyyy + '-' + mm + '-' + dd + ' 00:00:00';\n"
+    var yyyy = dateStr.substring(0,4);
+    var mm = dateStr.substring(4,6);
+    var dd = dateStr.substring(6,8);
+    return yyyy + '-' + mm + '-' + dd + ' 00:00:00';
 }
 
 function LEFT(value, length) {
@@ -245,8 +246,8 @@ function TRIM(value) {
 }
 
 function ADD_ARRAY_ELEMENT(arrayA, element) {
-    + "  arrayA.push(element)\n"
-    + "  return arrayA  \n"
+      arrayA.push(element)
+      return arrayA  
 }
 
 function CONCAT_ARRAY(arrayA, arrayB) {
@@ -254,24 +255,24 @@ function CONCAT_ARRAY(arrayA, arrayB) {
 }
 
 function FIND_MAX_ELEMENT(arrayA) {
-    + "    var maxValue = arrayA[0]\n"
-    + "    for(var i = 0; i < arrayA.length; i++) {"
-    + "       maxValue = Math.max(Number(maxValue), Number(arrayA[i]))"
-    + "    }"
-    + "    return maxValue;
+    var maxValue = arrayA[0]
+    for(var i = 0; i < arrayA.length; i++) {
+       maxValue = Math.max(Number(maxValue), Number(arrayA[i]));
+    }
+    return maxValue;
 }
 
 function FIND_MIN_ELEMENT(arrayA) {
-    + "    var minValue = arrayA[0]\n"
-    + "    for(var i = 0; i < arrayA.length; i++) {"
-    + "       minValue = Math.min(Number(minValue), Number(arrayA[i]))"
-    + "    }"
-    + "    return minValue;
+    var minValue = arrayA[0]
+    for(var i = 0; i < arrayA.length; i++) {
+       minValue = Math.min(Number(minValue), Number(arrayA[i]));
+    }
+    return minValue;
 }
 
 function SPLICE_ELEMENT(arrayA, index) {
-    + "  arrayA.splice(index, 1) \n"
-    + "  return arrayA;
+  arrayA.splice(index, 1)
+  return arrayA;
 }
 
 function REVERSE_ARRAY(arrayA) {
@@ -283,27 +284,38 @@ function GET_SUB_ARRAY(arrayA, fromIdx, toIndx) {
 }
 
 function SORT_ARRAY(arrayA, type) {
-    + "  if(type === 'ASC') {\n"
-    + "    arrayA = arrayA.sort()\n"
-    + "  } else if(type === 'DESC') {\n"
-    + "    arrayA = arrayA.sort().reverse()\n"
-    + "  }"
-    + "  return arrayA ;
+    if(type === 'ASC') {
+        arrayA = arrayA.sort()
+    } else if(type === 'DESC') {
+        arrayA = arrayA.sort().reverse()
+    }
+    return arrayA ;
 }
 
 function SUM_ARRAY_ELEMENT(arrayA) {
-    + "    var sumValue = 0\n"
-    + "    for(var i = 0; i < arrayA.length; i++) {"
-    + "       sumValue += Number(arrayA[i])\n"
-    + "    }"
-    + "    return sumValue\n"
+        var sumValue = 0
+        for(var i = 0; i < arrayA.length; i++) {
+           sumValue += Number(arrayA[i]);
+        }
+        return sumValue;
 }
 
 function SWAP_ARRAY_ELEMENT(arrayA, i, j) {
-    + "   var temp = arrayA[i]\n"
-    + "   arrayA[i] = arrayA[j]\n"
-    + "   arrayA[j] = temp\n"
-    + "  return arrayA
+      var temp = arrayA[i];
+      arrayA[i] = arrayA[j];
+      arrayA[j] = temp;
+      return arrayA;
 }
 
-*/
+
+
+//##########################################
+// 기존 함수 wrapping
+//##########################################
+function LEGAL_AGE(birthDate, baseDate) {
+    return RuleFunction.LEGAL_AGE(birthDate, baseDate);
+}
+
+function INSURANCE_AGE(birthDate, baseDate) {
+    return RuleFunction.INSURANCE_AGE(birthDate, baseDate);
+}

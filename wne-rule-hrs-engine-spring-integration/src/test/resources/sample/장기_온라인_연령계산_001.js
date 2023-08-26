@@ -8,6 +8,7 @@ var __RULE_INQUIRY_BASE_DATE__ = __TARGET_DATE__;
     var 보험연령 = null;
     var 생일 = null;
     var 연령 = null;
+    var 성별구분 = null;
 
     // Compiler Version 1 , Created : 2023-08-21 18:19:03
     if(true){
@@ -43,7 +44,8 @@ var __RULE_INQUIRY_BASE_DATE__ = __TARGET_DATE__;
     }
 
     if(LEN(주민등록번호) > 6 && LEN(주민등록번호) != 10){
-        var 룰유틸
+        var 룰유틸;
+CONTEXT.getLogger("생일:{}, 기준일자:{}", 생일, 기준일자);
 만연령 = LEGAL_AGE(생일, 기준일자)
 보험연령 = INSURANCE_AGE(생일, 기준일자)
 

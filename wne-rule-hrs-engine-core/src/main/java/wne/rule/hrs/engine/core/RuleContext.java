@@ -2,6 +2,7 @@ package wne.rule.hrs.engine.core;
 
 import lombok.Getter;
 import wne.rule.hrs.engine.core.exception.RuleException;
+import wne.rule.hrs.engine.core.fetcher.ScriptFetchResult;
 
 
 public class RuleContext {
@@ -66,6 +67,13 @@ public class RuleContext {
         return factory.getMaxTotal();
     }
 
+    public ScriptFetchResult fetchByRuleName(String ruleName, String date) throws Exception {
+        return ((ManagedRuleEngineFactory)factory).getScriptFetcher().fetchByRuleName(ruleName, date);
+    }
+    public ScriptFetchResult fetchByRuleId(String ruleId) throws Exception {
+        return ((ManagedRuleEngineFactory)factory).getScriptFetcher().fetchByRuleId(ruleId);
+    }
+
     /**
      * 새로운 rule engine을 생성하여 실행.
      * @return
@@ -73,6 +81,8 @@ public class RuleContext {
     public Object newEngineByName(String ruleName, String date, Object ... args) {
 
         try {
+            //TODO : 재귀 호출 방지를 위해 검사 로직 추가. ruleid로 검사해야 하는데.....
+
             RuleEngine engine = factory.borrow();
 
             RuleExecuteResult result =  engine.executeByRuleName(ruleId, ruleName, args);
@@ -91,4 +101,5 @@ public class RuleContext {
     public RuleLogger getLogger() {
         return logger;
     }
+
 }

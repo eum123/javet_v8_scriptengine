@@ -4,7 +4,7 @@ var BigDecimal = Java.type('java.math.BigDecimal');
 var __RULE_INQUIRY_BASE_DATE__ = __TARGET_DATE__;
     var __hpasRuleResult = {};
 
-    보상한도금액적합성여부 = "0"
+    var 보상한도금액적합성여부 = "0"
 
 
     // Compiler Version 1 , Created : 2023-08-23 14:41:05

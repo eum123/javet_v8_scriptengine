@@ -7,10 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @ToString
 public class RuleExecuteResult {
@@ -21,12 +18,15 @@ public class RuleExecuteResult {
     @Getter
     private String ruleName;
 
+    /** 입력 parameter */
     @Getter
     private RuleParameters ruleParameters = new RuleParameters();
 
+    /** 실행 결과 */
     @Getter
     private Object result;
 
+    /** 실행 로그 */
     @Setter
     @Builder.Default
     private StringBuilder ruleExecuteLog = new StringBuilder();
@@ -34,6 +34,7 @@ public class RuleExecuteResult {
     @Getter
     private Throwable throwable;
 
+    /** 시작 시간 */
     @Getter @Setter
     @Builder.Default
     private long startTime = 0;
@@ -54,7 +55,11 @@ public class RuleExecuteResult {
     @Getter @Setter
     private String errorDetailMessage;
 
+    /** sub rule의 실행 결과 */
     private List<RuleExecuteResult> subRuleExecuteResult = new LinkedList<>();
+
+    /** global variable */
+    private Map<String, List<Object>> globalVariable = new HashMap<>();
 
     public RuleExecuteResult(String ruleId, String ruleName) {
         this.ruleId = ruleId;
@@ -142,8 +147,22 @@ public class RuleExecuteResult {
         return newList;
     }
 
+    public List<Object> getGlobalVariable(String key) {
+        if(globalVariable.containsKey(key)) {
+            return globalVariable.get(key);
+        } else {
+            List<Object> list = new ArrayList();
+            globalVariable.put(key, list);
+            return globalVariable.get(key);
+        }
+    }
+    public void setGlobalVariable(String key, Object value) {
+        getGlobalVariable(key).add(value);
+    }
+
     /**
      * subRuleExecuteResult를 제외한 모든 내용을 복사한다.
+     * 변수가 추가되면 수정해야 한다.
      * @return
      */
     public RuleExecuteResult copy() {
@@ -157,6 +176,7 @@ public class RuleExecuteResult {
         ruleExecuteResult.errorLineNumber = this.errorLineNumber;
         ruleExecuteResult.ruleParameters = this.ruleParameters;
         ruleExecuteResult.throwable = throwable;
+        ruleExecuteResult.globalVariable = globalVariable;
 
         return ruleExecuteResult;
     }

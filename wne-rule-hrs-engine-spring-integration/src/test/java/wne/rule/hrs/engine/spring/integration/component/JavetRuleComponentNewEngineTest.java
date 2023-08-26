@@ -66,7 +66,7 @@ public class JavetRuleComponentNewEngineTest {
                         .ruleName("sub")
                         .script("function sub() {\n" +
                                 "CONTEXT.getLogger().debug('sub'); \n" +
-                                "var a = CONTEXT.newEngineByName('sub1', 'date'); \n" +
+                                "var a = NEW_ENGINE_BY_NAME('sub1', 'date'); \n" +
                                 " return a + CONTEXT.newEngineByName('sub1', 'date'); \n" +
                                 "}\n")
                         .build();
@@ -81,4 +81,5 @@ public class JavetRuleComponentNewEngineTest {
             }
         }
     }
+
 }

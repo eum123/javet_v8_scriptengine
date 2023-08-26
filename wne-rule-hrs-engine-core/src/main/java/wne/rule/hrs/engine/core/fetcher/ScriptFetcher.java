@@ -10,7 +10,7 @@ public interface ScriptFetcher {
      * @param ruleId
      * @return
      */
-    ScriptFetchResult fetchByRuleId(String ruleId);
+    ScriptFetchResult fetchByRuleId(String ruleId) throws Exception ;
 
     /**
      * Rule 이름으로 rule을 조회 한다.
@@ -18,5 +18,5 @@ public interface ScriptFetcher {
      * @param date
      * @return
      */
-    ScriptFetchResult fetchByRuleName(String ruleName, String date);
+    ScriptFetchResult fetchByRuleName(String ruleName, String date)  throws Exception ;
 }
