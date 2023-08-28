@@ -1,10 +1,12 @@
 package wne.rule.hrs.engine.core;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import wne.rule.hrs.engine.core.exception.RuleException;
 import wne.rule.hrs.engine.core.fetcher.ScriptFetchResult;
 
 
+@Slf4j
 public class RuleContext {
 
     @Getter
@@ -85,7 +87,9 @@ public class RuleContext {
 
             RuleEngine engine = factory.borrow();
 
-            RuleExecuteResult result =  engine.executeByRuleName(ruleId, ruleName, args);
+            log.info("NEW ENGINE(Java) ruleName:{}, date:{}, Parameter:{}", ruleName, date, args);
+
+            RuleExecuteResult result =  engine.executeByRuleName(ruleName, date, args);
 
             //append sub result
             this.ruleExecuteResult.addSubRuleExecuteResult(result);

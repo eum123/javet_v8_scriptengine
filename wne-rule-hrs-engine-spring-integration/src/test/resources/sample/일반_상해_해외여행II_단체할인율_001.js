@@ -4,7 +4,7 @@ var BigDecimal = Java.type('java.math.BigDecimal');
 var __RULE_INQUIRY_BASE_DATE__ = __TARGET_DATE__;
     var __hpasRuleResult = {};
 
-    단체할인율 = 0
+    var 단체할인율 = 0
 
 
     // Compiler Version 1 , Created : 2023-08-24 12:40:55

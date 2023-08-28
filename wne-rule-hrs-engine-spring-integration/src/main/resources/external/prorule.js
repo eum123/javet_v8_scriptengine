@@ -9,7 +9,10 @@ function MIN_BETWEEN_TWO(n1, n2) {
     return Math.min(n1, n2);
 }
 function GET_NEW_DATE(date1) {
+    CONTEXT.getLogger().debug("function GET_NEW_DATE() date1:{}", date1);
+
     if(!(date1 instanceof Date)) {
+
         var year;
         var month;
         var day;
@@ -27,6 +30,7 @@ function GET_NEW_DATE(date1) {
                 year = splitTime[0]
                 month = splitTime[1]
                 day = splitTime[2]
+
             } else {
                 year = date1.substring(0,4)
                 month = date1.substring(4,6)
@@ -42,9 +46,12 @@ function GET_NEW_DATE(date1) {
                 }
             }
         }
+
         var dateValue1 = new Date(year, month, day, hour, min, sec);
+
         return dateValue1;
     }
+
     return date1;
 }
 
@@ -313,9 +320,30 @@ function SWAP_ARRAY_ELEMENT(arrayA, i, j) {
 // 기존 함수 wrapping
 //##########################################
 function LEGAL_AGE(birthDate, baseDate) {
+    CONTEXT.getLogger().debug("function LEGAL_AGE() birthDate:{}, baseDate:{}", birthDate, baseDate);
     return RuleFunction.LEGAL_AGE(birthDate, baseDate);
 }
 
 function INSURANCE_AGE(birthDate, baseDate) {
     return RuleFunction.INSURANCE_AGE(birthDate, baseDate);
 }
+
+function NOT(v) {
+    return !v;
+}
+
+function GET_MATURITY_MONTHS(insuranceAge, gbn, value) {
+    CONTEXT.getLogger().debug("function GET_MATURITY_MONTHS() insuranceAge:{}, gbn:{}, value:{}", insuranceAge, gbn, value);
+    return RuleExternalFunction.GET_MATURITY_MONTHS(insuranceAge, gbn, value);
+}
+
+function GET_AFTER_DATE(baseDate, year, month, day) {
+    CONTEXT.getLogger().debug("function GET_AFTER_DATE() baseDate:{}, year:{}, month:{}, day:{}", baseDate, year, month, day);
+    return RuleExternalFunction.GET_AFTER_DATE(baseDate, year, month, day);
+}
+
+function GET_AFTER_DATE_FORMAT(baseDate, year, month, day) {
+    CONTEXT.getLogger().debug("function GET_AFTER_DATE_FORMAT() baseDate:{}, year:{}, month:{}, day:{}", baseDate, year, month, day);
+    return RuleExternalFunction.GET_AFTER_DATE_FORMAT(baseDate, year, month, day);
+}
+

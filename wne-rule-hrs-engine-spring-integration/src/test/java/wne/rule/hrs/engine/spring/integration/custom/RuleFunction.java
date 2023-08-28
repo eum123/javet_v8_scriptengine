@@ -1,6 +1,7 @@
 package wne.rule.hrs.engine.spring.integration.custom;
 
 import com.caoccao.javet.annotations.V8Function;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jdk.nashorn.internal.runtime.Undefined;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -331,6 +332,37 @@ public class RuleFunction {
 	
 	//서버용 디버그
 
+//	public static void SERVER_DEBUG(Object object) {
+//		SERVER_DEBUG(object, null);
+//	}
+
+//	public static void SERVER_DEBUG(Object object, String ruleId) {
+//		if(DEBUG_MODE < 0) {
+//			return;
+//		}
+//
+//		ObjectMapper JSON_MAPPER = new ObjectMapper();
+//
+//		try {
+//
+//			String str = "[RULE_DEBUG]"+(object==null || object instanceof String || object.getClass().isPrimitive()?object:JSON_MAPPER.writeValueAsString(object));
+//
+//			if(DEBUG_MODE == 0) {
+//				LOGGER.debug(str);
+//			}else if(DEBUG_MODE == 1) {
+//				LOGGER.info(str);
+//			}else if(DEBUG_MODE == 2) {
+//				LOGGER.warn(str);
+//			}else if(DEBUG_MODE == 3) {
+//				LOGGER.error(str);
+//			}
+//
+//		} catch (RuntimeException e) {
+//			LOGGER.error("SERVER_DEBUG RuntimeException error", e);
+//		} catch (Exception e) {
+//			LOGGER.error("SERVER_DEBUG Exception error", e);
+//		}
+//	}
 	
 	//서버용 결과
 	public static Object RESULT(Object object) {

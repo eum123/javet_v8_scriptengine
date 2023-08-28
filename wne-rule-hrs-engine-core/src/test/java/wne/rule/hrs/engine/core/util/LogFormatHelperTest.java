@@ -11,4 +11,13 @@ public class LogFormatHelperTest {
 
         System.out.println(assemble);
     }
+
+    @Test
+    public void 값이_적인경우() {
+        String format = "dkdkdkdk {} dkdkdk {} ";
+
+        String assemble = LogFormatHelper.assemble(format, "aaa");
+
+        System.out.println(assemble);
+    }
 }

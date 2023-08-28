@@ -1,34 +1,39 @@
-function(상품코드,위험유형코드,업종1레벨코드,업종2레벨코드,담보코드,보상한도금액단위코드,배상구분코드,가입금액 ){var start = new Date().getTime();
+var 일반_공통_보상한도금액사이값입력가능금액기준표_001 = function(상품코드,위험유형코드,업종1레벨코드,업종2레벨코드,담보코드,보상한도금액단위코드,배상구분코드,가입금액 ){
+
+    var start = new Date().getTime();
+
+
+
 var __hrs_logger_content = [];
 var __hrs_logger_input = [];
 var __hrs_logger_output = {};
 var __hrs_logger_object = {executionTime: 0,ruleId:'일반_공통_보상한도금액사이값입력가능금액기준표_001',ruleName:'일반_공통_보상한도금액사이값입력가능금액기준표',ruleType:'SPREAD',content:__hrs_logger_content,input:__hrs_logger_input,output:__hrs_logger_output,};
 _GET_GLOBAL('__hrs_logger').push(__hrs_logger_object);
-var DEBUG = function(content) {try{if(!__hrs_logger_object || !SERVER_DEBUG){return;}}catch(e){return;};var str = '['+TODAY_FORMAT(new Date().getTime())+'][UserDebug]['+__hrs_logger_object.ruleId+'] ' + content;if(__hrs_logger_object.content){__hrs_logger_object.content.push(str);}if(SERVER_DEBUG){__hrs_logger_object?SERVER_DEBUG(str, __hrs_logger_object.ruleId):SERVER_DEBUG(str);}}
-var RESULT = function(result) {try{if(!__hrs_logger_object){return result;}}catch(e){return result;};if(__hrs_logger_object.output){__hrs_logger_object.output.value = JSON.stringify(result);}
-if(__hrs_logger_object.ruleType == 'SCRIPT'){
-__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][OUTPUT] '+__hrs_logger_object.output.value); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) };}
-return result;}
+//var DEBUG = function(content) {try{if(!__hrs_logger_object || !SERVER_DEBUG){return;}}catch(e){return;};var str = '['+TODAY_FORMAT(new Date().getTime())+'][UserDebug]['+__hrs_logger_object.ruleId+'] ' + content;if(__hrs_logger_object.content){__hrs_logger_object.content.push(str);}if(SERVER_DEBUG){__hrs_logger_object?SERVER_DEBUG(str, __hrs_logger_object.ruleId):SERVER_DEBUG(str);}}
+//var RESULT = function(result) {try{if(!__hrs_logger_object){return result;}}catch(e){return result;};if(__hrs_logger_object.output){__hrs_logger_object.output.value = JSON.stringify(result);}
+// if(__hrs_logger_object.ruleType == 'SCRIPT'){
+// __hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][OUTPUT] '+__hrs_logger_object.output.value); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) };}
+// return result;}
 
 
 __hrs_logger_object.level = 0;
 
-if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][INPUT] '+'상품코드:'+JSON.stringify(상품코드)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
-if( __hrs_logger_object.input ){__hrs_logger_object.input.push( { 'name':'상품코드' , 'value':JSON.stringify(상품코드) } );}
-if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][INPUT] '+'위험유형코드:'+JSON.stringify(위험유형코드)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
-if( __hrs_logger_object.input ){__hrs_logger_object.input.push( { 'name':'위험유형코드' , 'value':JSON.stringify(위험유형코드) } );}
-if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][INPUT] '+'업종1레벨코드:'+JSON.stringify(업종1레벨코드)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
-if( __hrs_logger_object.input ){__hrs_logger_object.input.push( { 'name':'업종1레벨코드' , 'value':JSON.stringify(업종1레벨코드) } );}
-if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][INPUT] '+'업종2레벨코드:'+JSON.stringify(업종2레벨코드)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
-if( __hrs_logger_object.input ){__hrs_logger_object.input.push( { 'name':'업종2레벨코드' , 'value':JSON.stringify(업종2레벨코드) } );}
-if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][INPUT] '+'담보코드:'+JSON.stringify(담보코드)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
-if( __hrs_logger_object.input ){__hrs_logger_object.input.push( { 'name':'담보코드' , 'value':JSON.stringify(담보코드) } );}
-if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][INPUT] '+'보상한도금액단위코드:'+JSON.stringify(보상한도금액단위코드)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
-if( __hrs_logger_object.input ){__hrs_logger_object.input.push( { 'name':'보상한도금액단위코드' , 'value':JSON.stringify(보상한도금액단위코드) } );}
-if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][INPUT] '+'배상구분코드:'+JSON.stringify(배상구분코드)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
-if( __hrs_logger_object.input ){__hrs_logger_object.input.push( { 'name':'배상구분코드' , 'value':JSON.stringify(배상구분코드) } );}
-if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][INPUT] '+'가입금액:'+JSON.stringify(가입금액)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
-if( __hrs_logger_object.input ){__hrs_logger_object.input.push( { 'name':'가입금액' , 'value':JSON.stringify(가입금액) } );}
+// if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][INPUT] '+'상품코드:'+JSON.stringify(상품코드)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
+// if( __hrs_logger_object.input ){__hrs_logger_object.input.push( { 'name':'상품코드' , 'value':JSON.stringify(상품코드) } );}
+// if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][INPUT] '+'위험유형코드:'+JSON.stringify(위험유형코드)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
+// if( __hrs_logger_object.input ){__hrs_logger_object.input.push( { 'name':'위험유형코드' , 'value':JSON.stringify(위험유형코드) } );}
+// if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][INPUT] '+'업종1레벨코드:'+JSON.stringify(업종1레벨코드)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
+// if( __hrs_logger_object.input ){__hrs_logger_object.input.push( { 'name':'업종1레벨코드' , 'value':JSON.stringify(업종1레벨코드) } );}
+// if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][INPUT] '+'업종2레벨코드:'+JSON.stringify(업종2레벨코드)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
+// if( __hrs_logger_object.input ){__hrs_logger_object.input.push( { 'name':'업종2레벨코드' , 'value':JSON.stringify(업종2레벨코드) } );}
+// if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][INPUT] '+'담보코드:'+JSON.stringify(담보코드)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
+// if( __hrs_logger_object.input ){__hrs_logger_object.input.push( { 'name':'담보코드' , 'value':JSON.stringify(담보코드) } );}
+// if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][INPUT] '+'보상한도금액단위코드:'+JSON.stringify(보상한도금액단위코드)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
+// if( __hrs_logger_object.input ){__hrs_logger_object.input.push( { 'name':'보상한도금액단위코드' , 'value':JSON.stringify(보상한도금액단위코드) } );}
+// if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][INPUT] '+'배상구분코드:'+JSON.stringify(배상구분코드)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
+// if( __hrs_logger_object.input ){__hrs_logger_object.input.push( { 'name':'배상구분코드' , 'value':JSON.stringify(배상구분코드) } );}
+// if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][INPUT] '+'가입금액:'+JSON.stringify(가입금액)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
+// if( __hrs_logger_object.input ){__hrs_logger_object.input.push( { 'name':'가입금액' , 'value':JSON.stringify(가입금액) } );}
 
     var __TARGET_DATE__;
 var BigDecimal = Java.type('java.math.BigDecimal');
@@ -45972,10 +45977,10 @@ var __RULE_INQUIRY_BASE_DATE__ = __TARGET_DATE__;
     }
     }
 
-    보상한도금액적합성여부 = "0"
+    var 보상한도금액적합성여부 = "0"
 
 
-    if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][OUTPUT] '+JSON.stringify(__hpasRuleResult)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
-if( __hrs_logger_object.output && __hpasRuleResult){__hrs_logger_object.output.value = JSON.stringify(__hpasRuleResult);}
+//     if( __hrs_logger_object.content ){__hrs_logger_object.content.push('['+TODAY_FORMAT(new Date().getTime())+'][OUTPUT] '+JSON.stringify(__hpasRuleResult)); if(SERVER_DEBUG){ SERVER_DEBUG(__hrs_logger_object.content[__hrs_logger_object.content.length - 1], __hrs_logger_object.ruleId) }; }
+// if( __hrs_logger_object.output && __hpasRuleResult){__hrs_logger_object.output.value = JSON.stringify(__hpasRuleResult);}
 return RESULT(__hpasRuleResult);
 };

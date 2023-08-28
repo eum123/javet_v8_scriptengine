@@ -185,6 +185,7 @@ public class RuleExternalFunction {
 	 * @return YYYY-MM-DD 형식의 날짜
 	 */
 
+	@V8Function(name = "GET_AFTER_DATE")
 	public static String GET_AFTER_DATE(String baseDate, int year, int month, int day) {
 		GregorianCalendar baseGreCalendar = convertGregorianCalendar(baseDate);
 		Date resultDate = calAfterDate(baseGreCalendar, year, month, day, 0, 0, 0);
@@ -200,6 +201,7 @@ public class RuleExternalFunction {
      * @param day
      * @return 날짜
      */
+   @V8Function(name = "GET_AFTER_DATE_FORMAT")
     public static Date GET_AFTER_DATE_FORMAT(Date baseDate, int year, int month, int day) {
 		GregorianCalendar baseGreCalendar = convertGregorianCalendar(baseDate);
 		Date resultDate = calAfterDate(baseGreCalendar, year, month, day, 0, 0, 0);
@@ -912,6 +914,7 @@ public class RuleExternalFunction {
 	 * @param value
 	 * @return 개월수
 	 */
+	@V8Function(name = "GET_MATURITY_MONTHS")
 	public static int GET_MATURITY_MONTHS(int insuranceAge, String gbn, int value) {
 		if ("02".equals(gbn)) { // 년만기
 			return value * 12;
@@ -1901,4 +1904,6 @@ public class RuleExternalFunction {
 			e.printStackTrace();
 		}
 	}
+
+
 }

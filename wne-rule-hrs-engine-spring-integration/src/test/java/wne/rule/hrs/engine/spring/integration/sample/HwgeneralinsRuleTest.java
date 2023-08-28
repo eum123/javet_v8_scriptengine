@@ -7,21 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import wne.rule.hrs.engine.core.RuleExecuteResult;
-import wne.rule.hrs.engine.core.fetcher.ScriptFetchResult;
-import wne.rule.hrs.engine.core.fetcher.ScriptFetcher;
 import wne.rule.hrs.engine.core.util.ApplicationContextProvider;
 import wne.rule.hrs.engine.spring.integration.TestApplication;
 import wne.rule.hrs.engine.spring.integration.component.RuleComponent;
-import wne.rule.hrs.engine.spring.integration.vo.RuleResultVo;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -29,6 +22,22 @@ import java.util.stream.Collectors;
 public class HwgeneralinsRuleTest {
     @Autowired
     private RuleComponent ruleService;
+
+    @Test
+    public void 장기_온라인_연령계산() throws Exception {
+
+        String path = "sample/장기_온라인_연령계산_001.js";
+        String ruleId ="장기_온라인_연령계산_001";
+        ruleService.setScriptFetcher(new LocalScriptFetcher(path));
+
+        System.out.println("START : " + ruleId + ", parameter:" + getParamter(ruleId));
+
+        RuleExecuteResult obj = ruleService.executeByRuleId(ruleId, ruleId, getParamter(ruleId) );
+
+        System.out.println("execut results: " + obj.getSubRuleExecuteResult());
+        System.out.println("ruleId : " + obj.getRuleId() + ", error line : " + obj.getErrorLineNumber() + ", 오류 메시지 : " + obj.getErrorDetailMessage());
+
+    }
 
     @Test
     public void 일반_상해_공통_보험료수식적용_001() throws Exception {
@@ -113,25 +122,10 @@ public class HwgeneralinsRuleTest {
     @Test
     public void 일반_공통_보상한도금액사이값입력가능금액기준표_001() throws Exception {
 
-        ruleService.setScriptFetcher(new ScriptFetcher() {
-            @Override
-            public ScriptFetchResult fetchByRuleId(String ruleId) throws Exception {
+        String path = "sample/일반_공통_보상한도금액사이값입력가능금액기준표_001.j";
 
-                    String script = Files.readAllLines(Paths.get(
-                            ClassLoader.getSystemResource("sample/일반_공통_보상한도금액사이값입력가능금액기준표_001.js").toURI())
-                    ).stream().collect(Collectors.joining("\n"));
-                    return ScriptFetchResult.builder().ruleId(ruleId).ruleName(ruleId).script(script).build();
+        ruleService.setScriptFetcher(new LocalScriptFetcher(path));
 
-            }
-
-            @Override
-            public ScriptFetchResult fetchByRuleName(String ruleName, String date) throws Exception  {
-                String script = Files.readAllLines(Paths.get(
-                        ClassLoader.getSystemResource("sample/일반_공통_보상한도금액사이값입력가능금액기준표_001.js").toURI())
-                ).stream().collect(Collectors.joining("\n"));
-                return ScriptFetchResult.builder().ruleId(ruleName).ruleName(ruleName).script(script).build();
-            }
-        });
 
         //누적기초보험료=RuleFunction.ROUND((RuleFunction.AMT(누적기초보험료)).multiply(RuleFunction.AMT(LCM계수)),자리수)
         /*
@@ -149,6 +143,61 @@ public class HwgeneralinsRuleTest {
         System.out.println(obj.getRuleExecuteLog());
         System.out.println(obj.getThrowable());
         System.out.println(obj.getErrorDetailMessage());
+        System.out.println("ruleId : " + obj.getRuleId() + ", error line : " + obj.getErrorLineNumber() + ", 오류 메시지 : " + obj.getErrorDetailMessage());
+
+    }
+
+    @Test
+    public void 장기_보험종기계산() throws Exception {
+
+        String path = "sample/장기_보험종기계산_001.js";
+        String ruleId ="장기_보험종기계산_001";
+
+        ruleService.setScriptFetcher(new LocalScriptFetcher(path));
+
+        System.out.println("START : " + ruleId + " parameter:" + getParamter(ruleId).length);
+
+        RuleExecuteResult obj = ruleService.executeByRuleId(ruleId, ruleId, getParamter(ruleId) );
+
+        System.out.println("execut results: " + obj.getSubRuleExecuteResult());
+        System.out.println("ruleId : " + obj.getRuleId() + ", error line : " + obj.getErrorLineNumber() + ", 오류 메시지 : " + obj.getErrorDetailMessage());
+
+    }
+
+    @Test
+    public void 일반_상해의료실비담보_상해통원_외래_요율_CFA11413_개인() throws Exception {
+
+        String path = "sample/일반_상해의료실비담보_상해통원_외래_요율_CFA11413_개인_001.js";
+        String ruleId ="일반_상해의료실비담보_상해통원_외래_요율_CFA11413_개인_001";
+
+        ruleService.setScriptFetcher(new LocalScriptFetcher(path));
+
+        System.out.println("START : " + ruleId + " parameter:" + getParamter(ruleId).length);
+
+        RuleExecuteResult obj = ruleService.executeByRuleId(ruleId, ruleId, getParamter(ruleId) );
+
+        System.out.println(obj.getResult());
+        System.out.println("처리시간:" + (obj.getEndTime() - obj.getStartTime()));
+        System.out.println("execut results: " + obj.getSubRuleExecuteResult());
+        System.out.println("ruleId : " + obj.getRuleId() + ", error line : " + obj.getErrorLineNumber() + ", 오류 메시지 : " + obj.getErrorDetailMessage());
+
+        Assert.assertNull(obj.getThrowable());
+    }
+    @Test
+    public void 일반_공통_보상한도금액사이값입력가능금액기준표_001_debug() throws Exception {
+
+        String path = "sample/일반_공통_보상한도금액사이값입력가능금액기준표_001_debug.js";
+        String ruleId ="일반_공통_보상한도금액사이값입력가능금액기준표_001";
+
+        ruleService.setScriptFetcher(new LocalScriptFetcher(path));
+
+        System.out.println("START : " + ruleId + " parameter:" + getParamter(ruleId).length);
+
+        RuleExecuteResult obj = ruleService.executeByRuleId(ruleId, ruleId, getParamter(ruleId) );
+
+        System.out.println(obj.getResult());
+        System.out.println("처리시간:" + (obj.getEndTime() - obj.getStartTime()));
+        System.out.println("execut results: " + obj.getSubRuleExecuteResult());
         System.out.println("ruleId : " + obj.getRuleId() + ", error line : " + obj.getErrorLineNumber() + ", 오류 메시지 : " + obj.getErrorDetailMessage());
 
     }
@@ -190,28 +239,10 @@ public class HwgeneralinsRuleTest {
             String filePath = "sample/" + s;
             String ruleId = s.substring(0, s.indexOf("."));
 
-            System.out.println(filePath);
-            System.out.println(ruleId);
+            System.out.println("path:" + filePath);
+            System.out.println("ruleId:" + ruleId);
 
-            ruleService.setScriptFetcher(new ScriptFetcher() {
-                @Override
-                public ScriptFetchResult fetchByRuleId(String ruleId) throws Exception {
-
-                    String script = Files.readAllLines(Paths.get(
-                            ClassLoader.getSystemResource(filePath).toURI())
-                    ).stream().collect(Collectors.joining("\n"));
-                    return ScriptFetchResult.builder().ruleId(ruleId).ruleName(ruleId).script(script).build();
-
-                }
-
-                @Override
-                public ScriptFetchResult fetchByRuleName(String ruleName, String date) throws Exception  {
-                    String script = Files.readAllLines(Paths.get(
-                            ClassLoader.getSystemResource(filePath).toURI())
-                    ).stream().collect(Collectors.joining("\n"));
-                    return ScriptFetchResult.builder().ruleId(ruleName).ruleName(ruleName).script(script).build();
-                }
-            });
+            ruleService.setScriptFetcher(new LocalScriptFetcher(filePath));
 
             try {
                 RuleExecuteResult obj = ruleService.executeByRuleId(ruleId, ruleId, getParamter(ruleId)
@@ -230,9 +261,46 @@ public class HwgeneralinsRuleTest {
     }
 
     private Object[] getParamter(String ruleId) {
-        if(ruleId.equals("장기_온라인_연령계산_001")) {
-            return new Object[] {"20230101", "8011111111111", ""};
+
+        if(ruleId.contains("장기_온라인_연령계산")) {
+            return new Object[] {"20230101", "8011111111111", "01"};
         }
+
+        if(ruleId.contains("장기_보험종기계산")) {
+            //기준일자,만기구분코드,만기,연령
+            return new Object[] {"20230101", "03", 5, 4};
+        }
+
+        if(ruleId.contains("장기_보험종기")) {
+            //만기,주민등록번호,만기구분코드,기준일자,연령산출기준구분코드,담보코드,임신경과주
+            return new Object[] {12, "8011111111111", "01", "20230101", "", "", 4};
+        }
+
+        if(ruleId.contains("일반_화재일반물건_특정물건_기본요율")) {
+            //업종코드,건물급수코드
+            return new Object[] {"E011", "1"};
+        }
+
+        if(ruleId.contains("손사_후유장해_좌우구분예외_001")) {
+            //IDX,좌우구분
+            return new Object[] {1, new Object[]{"E", "L"}};
+        }
+
+        if(ruleId.contains("손사_후유장해_동일계열구분_001")) {
+            //CNT1,CNT2,CNT3,IDX,IDXP,구구장해동일계열갯수,구구장해동일계열여부,구장해동일계열갯수,구장해동일계열여부,신장해동일계열갯수,신장해동일계열여부,장해코드
+            return new Object[] {1, 2, 3, 1 };
+        }
+
+        if(ruleId.contains("일반_상해의료실비담보_상해통원_외래_요율_CFA11413_개인")) {
+            //단일요율적용여부,상해급수코드,실손의료비보험가입유형,가입금액,성별코드,담보코드,보험연령
+            return new Object[] {"0", "1", "06", 100000, "01", "CFA11413", 0 };
+        }
+
+        if(ruleId.contains("일반_공통_보상한도금액사이값입력가능금액기준표_001")) {
+            //상품코드,위험유형코드,업종1레벨코드,업종2레벨코드,담보코드,보상한도금액단위코드,배상구분코드,가입금액
+            return new Object[] {"FA00145001", "RFA00068", "", "", "CFA10237", "01", "01", 100000000};
+        }
+
 
         return null;
     }
@@ -240,36 +308,21 @@ public class HwgeneralinsRuleTest {
     @Test
     public void single() throws Exception {
 
-        String path = "sample/장기_온라인_연령계산_001.js";
-        String ruleId ="장기_온라인_연령계산_001";
-        ruleService.setScriptFetcher(new ScriptFetcher() {
-            @Override
-            public ScriptFetchResult fetchByRuleId(String ruleId) throws Exception {
+        String path = "sample/일반_화재일반물건_특정물건_기본요율_001.js";
+        String ruleId ="일반_화재일반물건_특정물건_기본요율_001";
 
-                String script = Files.readAllLines(Paths.get(
-                        ClassLoader.getSystemResource(path).toURI())
-                ).stream().collect(Collectors.joining("\n"));
-                return ScriptFetchResult.builder().ruleId(ruleId).ruleName(ruleId).script(script).build();
+        ruleService.setScriptFetcher(new LocalScriptFetcher(path));
 
-            }
-
-            @Override
-            public ScriptFetchResult fetchByRuleName(String ruleName, String date) throws Exception  {
-                String script = Files.readAllLines(Paths.get(
-                        ClassLoader.getSystemResource(path).toURI())
-                ).stream().collect(Collectors.joining("\n"));
-                return ScriptFetchResult.builder().ruleId(ruleName).ruleName(ruleName).script(script).build();
-            }
-        });
-
+        System.out.println("START : " + ruleId);
 
         RuleExecuteResult obj = ruleService.executeByRuleId(ruleId, ruleId, getParamter(ruleId) );
 
-        System.out.println(obj.getResult());
-        System.out.println(obj.getRuleExecuteLog());
-        System.out.println(obj.getThrowable());
-        System.out.println(obj.getErrorDetailMessage());
+        System.out.println("result:" + obj.getResult());
+        System.out.println("execut results: " + obj.getSubRuleExecuteResult());
         System.out.println("ruleId : " + obj.getRuleId() + ", error line : " + obj.getErrorLineNumber() + ", 오류 메시지 : " + obj.getErrorDetailMessage());
 
     }
+
+
+
 }

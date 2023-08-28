@@ -31,10 +31,13 @@ _GET_GLOBAL('__hrs_flowNode_logger').push('24983a0d-cab1-4a10-a965-bfe3d3255167_
  var _001_기준일자 = 기준일자 
 var _001_연령산출기준구분코드 = 연령산출기준구분코드 
 var _001_주민등록번호 = 주민등록번호 
-var __RULE_INQUIRY_BASE_DATE__ = __TARGET_DATE__; 
-var __RULE_CALL_ID__ = RULESEARCH('장기_온라인_연령계산', __RULE_INQUIRY_BASE_DATE__); 
-var _f = new Function("_001_기준일자,_001_주민등록번호,_001_연령산출기준구분코드", "return "+ __RULE_CALL_ID__ + "(_001_기준일자,_001_주민등록번호,_001_연령산출기준구분코드)"); 
-var _001_rule_output = _f(_001_기준일자,_001_주민등록번호,_001_연령산출기준구분코드);
+// var __RULE_INQUIRY_BASE_DATE__ = __TARGET_DATE__;
+var __RULE_INQUIRY_BASE_DATE__ = '001';
+// var __RULE_CALL_ID__ = RULESEARCH('장기_온라인_연령계산', __RULE_INQUIRY_BASE_DATE__);
+// var _f = new Function("_001_기준일자,_001_주민등록번호,_001_연령산출기준구분코드", "return "+ __RULE_CALL_ID__ + "(_001_기준일자,_001_주민등록번호,_001_연령산출기준구분코드)");
+// var _001_rule_output = _f(_001_기준일자,_001_주민등록번호,_001_연령산출기준구분코드);
+
+ var _001_rule_output = NEW_ENGINE_BY_NAME('장기_온라인_연령계산', __RULE_INQUIRY_BASE_DATE__, _001_기준일자, _001_주민등록번호, _001_연령산출기준구분코드);
 if( IS_EMPTY(_001_rule_output)){ _001_rule_output= { 만연령 : null,보험연령 : null,생일 : null,연령 : null }  } 
 if(!IS_EMPTY(_001_rule_output.만연령)){ 만연령 = _001_rule_output.만연령 }  
 if(!IS_EMPTY(_001_rule_output.보험연령)){ 보험연령 = _001_rule_output.보험연령 }  
@@ -57,11 +60,13 @@ _GET_GLOBAL('__hrs_flowNode_logger').push('a951d6c7-b99c-4f62-9cc4-fdfb4b3c05e6_
 var _004_담보코드 = 담보코드 
 var _004_생일 = 생일 
 var _004_임신경과주 = 임신경과주 
-var __RULE_INQUIRY_BASE_DATE__ = __TARGET_DATE__; 
-var __RULE_CALL_ID__ = RULESEARCH('장기_보험기간월수계산', __RULE_INQUIRY_BASE_DATE__); 
-var _f = new Function("_004_담보코드,_004_임신경과주,_004_생일,_004_기준일자", "return "+ __RULE_CALL_ID__ + "(_004_담보코드,_004_임신경과주,_004_생일,_004_기준일자)"); 
-var _004_rule_output = _f(_004_담보코드,_004_임신경과주,_004_생일,_004_기준일자);
-if( IS_EMPTY(_004_rule_output)){ _004_rule_output= { 보험기간개월수 : null,보험종료일자 : null }  } 
+// var __RULE_INQUIRY_BASE_DATE__ = __TARGET_DATE__;
+var __RULE_INQUIRY_BASE_DATE__ = '001';
+// var __RULE_CALL_ID__ = RULESEARCH('장기_보험기간월수계산', __RULE_INQUIRY_BASE_DATE__);
+// var _f = new Function("_004_담보코드,_004_임신경과주,_004_생일,_004_기준일자", "return "+ __RULE_CALL_ID__ + "(_004_담보코드,_004_임신경과주,_004_생일,_004_기준일자)");
+// var _004_rule_output = _f(_004_담보코드,_004_임신경과주,_004_생일,_004_기준일자);
+var _004_rule_output = NEW_ENGINE_BY_NAME('장기_보험기간월수계산', __RULE_INQUIRY_BASE_DATE__, _004_담보코드,_004_임신경과주,_004_생일,_004_기준일자);
+if( IS_EMPTY(_004_rule_output)){ _004_rule_output= { 보험기간개월수 : null,보험종료일자 : null }  }
 if(!IS_EMPTY(_004_rule_output.보험기간개월수)){ 보험기간 = _004_rule_output.보험기간개월수 }  
 if(!IS_EMPTY(_004_rule_output.보험종료일자)){ 보험종료일자 = _004_rule_output.보험종료일자 }  
 // [a951d6c7-b99c-4f62-9cc4-fdfb4b3c05e6_018528] Rule Call End [장기_보험기간월수계산] 
@@ -83,11 +88,13 @@ _GET_GLOBAL('__hrs_flowNode_logger').push('3e1cf113-6ed1-40e3-9e52-ca066b8fc454_
 var _002_만기 = 만기 
 var _002_만기구분코드 = 만기구분코드 
 var _002_연령 = 연령 
-var __RULE_INQUIRY_BASE_DATE__ = __TARGET_DATE__; 
-var __RULE_CALL_ID__ = RULESEARCH('장기_보험종기계산', __RULE_INQUIRY_BASE_DATE__); 
-var _f = new Function("_002_기준일자,_002_만기구분코드,_002_만기,_002_연령", "return "+ __RULE_CALL_ID__ + "(_002_기준일자,_002_만기구분코드,_002_만기,_002_연령)"); 
-var _002_rule_output = _f(_002_기준일자,_002_만기구분코드,_002_만기,_002_연령);
-if( IS_EMPTY(_002_rule_output)){ _002_rule_output= { 보험기간 : null,보험종기 : null,보험종료일자 : null }  } 
+// var __RULE_INQUIRY_BASE_DATE__ = __TARGET_DATE__;
+var __RULE_INQUIRY_BASE_DATE__ = '001';
+// var __RULE_CALL_ID__ = RULESEARCH('장기_보험종기계산', __RULE_INQUIRY_BASE_DATE__);
+// var _f = new Function("_002_기준일자,_002_만기구분코드,_002_만기,_002_연령", "return "+ __RULE_CALL_ID__ + "(_002_기준일자,_002_만기구분코드,_002_만기,_002_연령)");
+// var _002_rule_output = _f(_002_기준일자,_002_만기구분코드,_002_만기,_002_연령);
+var _002_rule_output = NEW_ENGINE_BY_NAME('장기_보험종기계산', __RULE_INQUIRY_BASE_DATE__, _002_기준일자, _002_만기구분코드, _002_만기, _002_연령);
+if( IS_EMPTY(_002_rule_output)){ _002_rule_output= { 보험기간 : null,보험종기 : null,보험종료일자 : null }  }
 if(!IS_EMPTY(_002_rule_output.보험기간)){ 보험기간 = _002_rule_output.보험기간 }  
 if(!IS_EMPTY(_002_rule_output.보험종기)){ 보험종기 = _002_rule_output.보험종기 }  
 if(!IS_EMPTY(_002_rule_output.보험종료일자)){ 보험종료일자 = _002_rule_output.보험종료일자 }  

@@ -13,7 +13,14 @@ public class LogFormatHelper {
         int index = 0;
         int i = 0;
         while (matcher.find()) {
-            Object replacement = objects[index];
+            Object replacement = null;
+
+            if(objects.length <= index) {
+                replacement = "{}";
+            } else {
+                replacement = objects[index];
+            }
+
             builder.append(format.substring(i, matcher.start()));
             if (replacement == null) {
                 builder.append("");

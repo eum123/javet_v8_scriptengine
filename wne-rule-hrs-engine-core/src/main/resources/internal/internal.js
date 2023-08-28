@@ -13,7 +13,8 @@
  * @constructor
  */
 function NEW_ENGINE_BY_NAME(ruleName, baseDate, ...args) {
-    return CONTEXT.newEngineByName(ruleName, baseDate, args);
+    CONTEXT.getLogger().debug("NEW ENGINE(Script) ruleName:{}, baseDate:{}, parameter:{}", ruleName, baseDate, args);
+    return CONTEXT.newEngineByName(ruleName, baseDate, ...args);
 }
 
 function _GET_GLOBAL(loggerId) {
