@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.util.Date;
 
 @Builder
-public class DBScriptEntity {
+public class ScriptEntity {
     @Getter
     private String ruleName;
     @Getter

@@ -54,8 +54,8 @@ public class DBScriptFetcher implements ScriptFetcher {
 
         SqlParameterSource parameters = new MapSqlParameterSource("ruleId", ruleId);
 
-        DBScriptEntity entity = jdbcTemplate.queryForObject(query, parameters, (rs, rowNum) -> {
-            return DBScriptEntity.builder().ruleName(rs.getString("rule_name"))
+        ScriptEntity entity = jdbcTemplate.queryForObject(query, parameters, (rs, rowNum) -> {
+            return ScriptEntity.builder().ruleName(rs.getString("rule_name"))
                     .ruleId(rs.getString("rule_id"))
                     .ruleCodeContent(rs.getString("rule_code_content"))
                     .ruleCodeContentDebug(rs.getString("rule_code_content_debug"))
@@ -76,10 +76,10 @@ public class DBScriptFetcher implements ScriptFetcher {
     @Override
     public ScriptFetchResult fetchByRuleName(String ruleName, String baseDate) throws Exception {
         //self invoke 방지.
-        List<DBScriptEntity> list = self.fetchDB(ruleName);
+        List<ScriptEntity> list = self.fetchDB(ruleName);
 
         //기준일자가 startEffective와 endEffective 사이 값인 script를 찾는다.
-        DBScriptEntity entity = list.stream().filter(x -> {
+        ScriptEntity entity = list.stream().filter(x -> {
             return DateUtil.isBetween(x.getStartEffectiveDate(), x.getEndEffectiveDate(), DateUtil.toDate(baseDate, "yyyyMMdd", new Date()));
         }).findAny().orElseThrow(() -> new RuleException("ruleName:" + ruleName + ", baseDate:" + baseDate + " 의 Rule ID가 존재하지 않습니다."));
 
@@ -89,7 +89,7 @@ public class DBScriptFetcher implements ScriptFetcher {
     }
 
     @Cacheable(value = CACHE_NAME, key = "#ruleName")
-    public List<DBScriptEntity> fetchDB(String ruleName) throws Exception {
+    public List<ScriptEntity> fetchDB(String ruleName) throws Exception {
 
         log.debug("search db : " + ruleName);
 
@@ -101,7 +101,7 @@ public class DBScriptFetcher implements ScriptFetcher {
         SqlParameterSource parameters = new MapSqlParameterSource("ruleName", ruleName);
 
         return jdbcTemplate.query(query, parameters, (rs, rowNum) -> {
-            return DBScriptEntity.builder().ruleName(rs.getString("rule_name"))
+            return ScriptEntity.builder().ruleName(rs.getString("rule_name"))
                     .ruleId(rs.getString("rule_id"))
                     .ruleCodeContent(rs.getString("rule_code_content"))
                     .ruleCodeContentDebug(rs.getString("rule_code_content_debug"))

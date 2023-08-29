@@ -82,3 +82,14 @@ spring:
   cache:
     ehcache:
       config: classpath:ehcache.xml
+
+  redis:
+    host: 172.16.51.78
+    port: 50021
+    database: 1
+#    lettuce:
+#      pool:
+#        max-active: 10
+#        max-wait: 1000ms
+#        max-idle: 8
+
