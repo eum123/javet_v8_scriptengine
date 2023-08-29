@@ -145,6 +145,7 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
             //TODO: 추후 개선
             ScriptFetcher fetcher = factory.getScriptFetcher();
             if(fetcher == null) {
+                //이름으로 id와 script를 구해야 하므로 반드시 필요하다.
                 throw new RuleException("ScriptFetcher Not Found");
             }
             fetcher.setDebug(isDebug);
