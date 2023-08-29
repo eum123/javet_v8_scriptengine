@@ -55,10 +55,6 @@ public class JavetRuleEngineFactory implements RuleEngineFactory, ManagedRuleEng
 
     public RuleEngine borrow() throws InterruptedException, RuleException, ComponentException {
 
-        if(scriptFetcher == null) {
-            throw new RuleException("ScriptFetcher not found");
-        }
-
         lock.lock();
         try {
             if(isUpdate) {

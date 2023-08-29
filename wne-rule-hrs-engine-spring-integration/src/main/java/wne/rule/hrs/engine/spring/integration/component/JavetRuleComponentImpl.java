@@ -2,6 +2,7 @@ package wne.rule.hrs.engine.spring.integration.component;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import wne.rule.hrs.engine.core.*;
 import wne.rule.hrs.engine.core.fetcher.ScriptFetcher;
@@ -13,6 +14,7 @@ import javax.annotation.PreDestroy;
 
 @Slf4j
 @RequiredArgsConstructor
+@Scope("prototype")
 @Component
 public class JavetRuleComponentImpl implements RuleComponent {
     private final RuleServiceProperties properties;

@@ -10,10 +10,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import wne.rule.hrs.engine.core.*;
 import wne.rule.hrs.engine.core.constants.SystemConstants;
-import wne.rule.hrs.engine.core.exception.EngineInitializationException;
-import wne.rule.hrs.engine.core.exception.EngineResetException;
-import wne.rule.hrs.engine.core.exception.RuleException;
-import wne.rule.hrs.engine.core.exception.RuleNotFoundException;
+import wne.rule.hrs.engine.core.exception.*;
 import wne.rule.hrs.engine.core.fetcher.ScriptFetchResult;
 import wne.rule.hrs.engine.core.fetcher.ScriptFetcher;
 
@@ -107,7 +104,7 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
             context.start();
 
             //execute script
-            Object result = v8Runtime.getGlobalObject().invokeObject(scriptFetchResult.getRuleId(), parameters);
+            Object result = v8Runtime.getGlobalObject().invokeObject(ruleId, parameters);
 
             //종료시간
             context.end(result);
@@ -147,6 +144,9 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
 
             //TODO: 추후 개선
             ScriptFetcher fetcher = factory.getScriptFetcher();
+            if(fetcher == null) {
+                throw new RuleException("ScriptFetcher Not Found");
+            }
             fetcher.setDebug(isDebug);
             ScriptFetchResult scriptFetchResult = fetcher.fetchByRuleName(ruleName, baseDate);
             context = new RuleContext((RuleEngineFactory) this.factory, scriptFetchResult.getRuleId(), ruleName);

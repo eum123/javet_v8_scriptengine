@@ -100,7 +100,11 @@ public class RuleContext {
     public Object newEngineByName(String ruleName, String date, Object ... args) {
 
         try {
-            //TODO : 재귀 호출 방지를 위해 검사 로직 추가. ruleid로 검사해야 하는데.....
+
+            //동일 이름에 ID가 다를수 있으나 history라서 이름으로 비교해도 로직상 문제 없을거라 판단됨
+            if(this.ruleName != null && this.ruleName.equalsIgnoreCase(ruleName)) {
+                throw new RuntimeException("not support recursive function. ruleName : " + ruleName);
+            }
 
             RuleEngine engine = factory.borrow();
 
