@@ -80,6 +80,11 @@ public class JavetRuleComponentNewEngineTest {
                         .build();
             }
         }
+
+        @Override
+        public void setDebug(boolean isDebug) {
+
+        }
     }
 
 }

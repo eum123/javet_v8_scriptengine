@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ehcache
+         maxBytesLocalHeap="600M"
+
+         >
+
+    <!-- 임시저장 경로를 설정 -->
+    <diskStore path="java.io.tmpdir" />
+
+    <!--
+        Cache에 저장할 레퍼런스의 최대값을 100000으로 지정,
+        maxDepthExceededBehavior = "continue" :  초과 된 최대 깊이에 대해 경고하지만 크기가 조정 된 요소를 계속 탐색
+        maxDepthExceededBehavior = "abort" : 순회를 중지하고 부분적으로 계산 된 크기를 즉시 반환
+    -->
+    <sizeOfPolicy maxDepth="100000" maxDepthExceededBehavior="continue"/>
+
+    <!-- DBRuleScript -->
+    <cache name="DBRuleScript"
+           maxBytesLocalHeap="300M"
+           eternal="false"
+           memoryStoreEvictionPolicy="LRU">
+    </cache>
+
+    <!-- RedisRuleScript -->
+    <cache name="RedisRuleScript"
+           maxBytesLocalHeap="300M"
+           eternal="false"
+           memoryStoreEvictionPolicy="LRU">
+    </cache>
+
+<!--    <cache name="DBRuleScript"-->
+<!--           maxBytesLocalHeap="300M"-->
+<!--           eternal="false"-->
+<!--           timeToIdleSeconds="0"-->
+<!--           timeToLiveSeconds="0"-->
+<!--           overflowToDisk="false"-->
+<!--           diskPersistent="false"-->
+<!--           diskExpiryThreadIntervalSeconds="120"-->
+<!--           memoryStoreEvictionPolicy="LRU">-->
+<!--    </cache>-->
+</ehcache>

@@ -15,8 +15,10 @@ public interface ScriptFetcher {
     /**
      * Rule 이름으로 rule을 조회 한다.
      * @param ruleName
-     * @param date
+     * @param baseDate
      * @return
      */
-    ScriptFetchResult fetchByRuleName(String ruleName, String date)  throws Exception ;
+    ScriptFetchResult fetchByRuleName(String ruleName, String baseDate)  throws Exception ;
+
+    void setDebug(boolean isDebug);
 }

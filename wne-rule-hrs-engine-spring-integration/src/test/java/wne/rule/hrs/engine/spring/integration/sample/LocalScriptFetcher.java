@@ -50,4 +50,9 @@ public class LocalScriptFetcher implements ScriptFetcher {
 
         return ScriptFetchResult.builder().ruleId(ruleName + append).ruleName(ruleName).script(script).build();
     }
+
+    @Override
+    public void setDebug(boolean isDebug) {
+
+    }
 }

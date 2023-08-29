@@ -1,9 +1,12 @@
 package wne.rule.hrs.engine.core;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import wne.rule.hrs.engine.core.exception.RuleException;
 import wne.rule.hrs.engine.core.fetcher.ScriptFetchResult;
+import wne.rule.hrs.engine.core.fetcher.ScriptFetcher;
 
 
 @Slf4j
@@ -22,12 +25,17 @@ public class RuleContext {
     @Getter
     private RuleExecuteResult ruleExecuteResult;
 
+    @Getter @Setter
+    @Builder.Default
+    private boolean debug = false;
+
     public RuleContext(RuleEngineFactory factory, String ruleId, String ruleName) {
         this.factory = factory;
         this.ruleId = ruleId;
         this.ruleName = ruleName;
         this.ruleExecuteResult = new RuleExecuteResult(ruleId, ruleName);
     }
+
 
     public void start() {
         ruleExecuteResult.setStartTime(System.currentTimeMillis());
@@ -73,6 +81,15 @@ public class RuleContext {
         return ((ManagedRuleEngineFactory)factory).getScriptFetcher().fetchByRuleName(ruleName, date);
     }
     public ScriptFetchResult fetchByRuleId(String ruleId) throws Exception {
+
+        ScriptFetcher scriptFetcher = ((ManagedRuleEngineFactory)factory).getScriptFetcher();
+
+        if(scriptFetcher == null) {
+            return null;
+        }
+
+
+
         return ((ManagedRuleEngineFactory)factory).getScriptFetcher().fetchByRuleId(ruleId);
     }
 
@@ -89,7 +106,7 @@ public class RuleContext {
 
             log.info("NEW ENGINE(Java) ruleName:{}, date:{}, Parameter:{}", ruleName, date, args);
 
-            RuleExecuteResult result =  engine.executeByRuleName(ruleName, date, args);
+            RuleExecuteResult result =  engine.executeByRuleName(debug, ruleName, date, args);
 
             //append sub result
             this.ruleExecuteResult.addSubRuleExecuteResult(result);

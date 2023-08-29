@@ -1,7 +1,6 @@
 package wne.rule.hrs.engine.core.javet;
 
 import com.caoccao.javet.exceptions.JavetException;
-import com.caoccao.javet.interception.logging.JavetStandardConsoleInterceptor;
 import com.caoccao.javet.interop.V8Host;
 import com.caoccao.javet.interop.V8Runtime;
 import com.caoccao.javet.interop.converters.JavetProxyConverter;
@@ -11,12 +10,13 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import wne.rule.hrs.engine.core.*;
 import wne.rule.hrs.engine.core.constants.SystemConstants;
-import wne.rule.hrs.engine.core.exception.*;
+import wne.rule.hrs.engine.core.exception.EngineInitializationException;
+import wne.rule.hrs.engine.core.exception.EngineResetException;
+import wne.rule.hrs.engine.core.exception.RuleException;
+import wne.rule.hrs.engine.core.exception.RuleNotFoundException;
 import wne.rule.hrs.engine.core.fetcher.ScriptFetchResult;
+import wne.rule.hrs.engine.core.fetcher.ScriptFetcher;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
@@ -25,8 +25,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
 public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
-
-    private static final String ID_EXECUTE_TYPE = "ID";
 
     private Lock lock = new ReentrantLock();
     private Condition updateCondition = lock.newCondition();
@@ -40,9 +38,6 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
 
     private ManagedRuleEngineFactory factory;
 
-    private ByteArrayOutputStream byteArrayOutputStream;
-    private PrintStream printStream;
-    private JavetStandardConsoleInterceptor interceptor;
 
     @Getter
     private boolean start = false;
@@ -60,14 +55,6 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
             v8Runtime = V8Host.getV8Instance().createV8Runtime();
             v8Runtime.setConverter(new JavetProxyConverter());
 
-//            byteArrayOutputStream = new ByteArrayOutputStream();
-//            printStream = new PrintStream(byteArrayOutputStream);
-//
-//            interceptor =
-//                    new JavetStandardConsoleInterceptor(v8Runtime);
-//            interceptor.setLog(printStream);
-//            interceptor.register(v8Runtime.getGlobalObject());
-
             //system
             JavetSystemBinder.bind(factory, v8Runtime);
 
@@ -83,22 +70,6 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
 
         start = false;
 
-        if(byteArrayOutputStream != null) {
-            try {
-                byteArrayOutputStream.close();
-            } catch (IOException e) {
-                log.warn("byteArrayOutputStream close fail", e);
-            }
-        }
-
-        if(interceptor != null) {
-            try {
-                interceptor.unregister(v8Runtime.getGlobalObject());
-            } catch (JavetException e) {
-                log.warn("interceptor unregist fail", e);
-            }
-        }
-
         if(v8Runtime != null) {
             try {
                 v8Runtime.close();
@@ -108,14 +79,13 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
         }
     }
 
-
-
-    public RuleExecuteResult executeByRuleId(String ruleId, String ruleName, Object ... parameters) {
+    public RuleExecuteResult executeByRuleId(boolean isDebug, String ruleId, String ruleName, Object ... parameters) {
         lock.lock();
 
         log.debug("START(ruleId) ruleId:{}, ruleName{}", ruleId, ruleName);
 
         RuleContext context = new RuleContext((RuleEngineFactory) this.factory, ruleId, ruleName);
+        context.setDebug(isDebug);
 
         try {
 
@@ -124,9 +94,10 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
             }
 
             ScriptFetchResult scriptFetchResult = context.fetchByRuleId(ruleId);
-
-            //실행 하기 전 script를 조회 후 engine에 등록한다.
-            v8Runtime.getExecutor(scriptFetchResult.getScript()).executeVoid();
+            if(scriptFetchResult != null) {
+                //실행 하기 전 script를 조회 후 engine에 등록한다.
+                v8Runtime.getExecutor(scriptFetchResult.getScript()).executeVoid();
+            }
 
             //context 추가
             v8Runtime.getGlobalObject().set(SystemConstants.CONTEXT, context);
@@ -155,7 +126,14 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
         }
     }
 
+    public RuleExecuteResult executeByRuleId(String ruleId, String ruleName, Object ... parameters) {
+        return executeByRuleId(false, ruleId, ruleName, parameters);
+    }
+
     public RuleExecuteResult executeByRuleName(String ruleName, String baseDate, Object ... parameters) {
+        return executeByRuleName(false, ruleName, baseDate, parameters);
+    }
+    public RuleExecuteResult executeByRuleName(boolean isDebug, String ruleName, String baseDate, Object ... parameters) {
         lock.lock();
 
         log.debug("START(ruleName) ruleName:{}, date{}", ruleName, baseDate);
@@ -163,12 +141,16 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
         RuleContext context = null;
 
         try {
-            ScriptFetchResult scriptFetchResult = factory.getScriptFetcher().fetchByRuleName(ruleName, baseDate);
-            context = new RuleContext((RuleEngineFactory) this.factory, scriptFetchResult.getRuleId(), ruleName);
-
             if (factory.isUpdate()) {
                 updateCondition.await();
             }
+
+            //TODO: 추후 개선
+            ScriptFetcher fetcher = factory.getScriptFetcher();
+            fetcher.setDebug(isDebug);
+            ScriptFetchResult scriptFetchResult = fetcher.fetchByRuleName(ruleName, baseDate);
+            context = new RuleContext((RuleEngineFactory) this.factory, scriptFetchResult.getRuleId(), ruleName);
+            context.setDebug(isDebug);
 
             //실행 하기 전 script를 조회 후 engine에 등록한다.
             v8Runtime.getExecutor(scriptFetchResult.getScript()).executeVoid();
@@ -244,9 +226,6 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
             }
         }
 
-        if(byteArrayOutputStream != null) {
-            byteArrayOutputStream.reset();
-        }
     }
 
     public void reset() throws EngineResetException {

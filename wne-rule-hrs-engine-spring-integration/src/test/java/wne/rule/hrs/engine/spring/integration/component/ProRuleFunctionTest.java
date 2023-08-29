@@ -66,4 +66,9 @@ class DefaultScriptFetcher implements ScriptFetcher {
                 .build();
 
     }
+
+    @Override
+    public void setDebug(boolean isDebug) {
+
+    }
 }
