@@ -37,23 +37,24 @@ public class InternalRuleLoader {
         StringBuilder builder = new StringBuilder();
         String line = "";
         ClassPathResource resource = new ClassPathResource("internal/" + FILE_NAME);
+        if(resource.exists()) {
+            try (
+                    InputStreamReader reader = new InputStreamReader(resource.getInputStream());
+                    BufferedReader br = new BufferedReader(reader);
+            ) {
 
-        try (
-                InputStreamReader reader = new InputStreamReader(resource.getInputStream());
-                BufferedReader br = new BufferedReader(reader);
-                ) {
+                while ((line = br.readLine()) != null) {
+                    builder.append(line).append("\r\n");
+                }
 
-            while((line = br.readLine()) != null) {
-                builder.append(br).append("\r\n");
+                script = builder.toString();
+
+                log.info("internal script loaded. length:{}", script.length());
+
+                return Optional.ofNullable(script);
+            } catch (Exception e) {
+                log.warn("internal rule error", e);
             }
-
-            script = builder.toString();
-
-            log.info("internal script loaded. length:{}", script.length());
-
-            return Optional.ofNullable(script);
-        } catch (Exception e) {
-            log.warn("internal rule error", e);
         }
 
         return Optional.empty();
