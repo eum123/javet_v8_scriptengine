@@ -34,9 +34,6 @@ public class JavetRuleEngineFactory implements RuleEngineFactory, ManagedRuleEng
     private RuleConfig ruleConfig;
     private ExternalExecutorRegistry registry;
 
-    @Setter @Getter
-    private ScriptFetcher scriptFetcher;
-
     private GenericObjectPool pool = null;
 
     public JavetRuleEngineFactory(RuleConfig config) throws Exception {

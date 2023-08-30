@@ -5,7 +5,10 @@ import org.junit.Test;
 public class RuleContextTest {
     @Test
     public void test() throws Exception{
-        RuleContext context = new RuleContext(null, "id", "name");
+
+        EngineParameter parameter = EngineParameter.builder().ruleId("id").ruleName("name").build();
+
+        RuleContext context = new RuleContext(null, parameter);
         context.start();
         context.addParameter("param1", "value1");
 

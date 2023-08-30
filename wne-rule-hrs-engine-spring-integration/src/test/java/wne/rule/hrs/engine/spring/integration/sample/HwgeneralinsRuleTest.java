@@ -10,6 +10,7 @@ import wne.rule.hrs.engine.core.RuleExecuteResult;
 import wne.rule.hrs.engine.core.util.ApplicationContextProvider;
 import wne.rule.hrs.engine.spring.integration.TestApplication;
 import wne.rule.hrs.engine.spring.integration.component.RuleComponent;
+import wne.rule.hrs.engine.spring.integration.configuration.StandaloneRedisProperties;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -18,7 +19,7 @@ import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = {TestApplication.class, ApplicationContextProvider.class})
+@SpringBootTest(classes = {TestApplication.class, ApplicationContextProvider.class, StandaloneRedisProperties.class})
 public class HwgeneralinsRuleTest {
     @Autowired
     private RuleComponent ruleService;

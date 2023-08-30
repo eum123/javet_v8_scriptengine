@@ -4,6 +4,7 @@ package wne.rule.hrs.engine.core;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
 import org.junit.Test;
+import wne.rule.hrs.engine.core.exception.RuleException;
 import wne.rule.hrs.engine.core.exception.RuleExecuteException;
 import wne.rule.hrs.engine.core.javet.JavetRuleEngineFactory;
 
@@ -25,8 +26,10 @@ public class NotFoundRuleTest  {
 
         RuleEngine engine = factory.borrow();
 
-        Assert.assertThrows(RuleExecuteException.class, () -> {
-            engine.executeByRuleId("noname", null);
+        EngineParameter engineParameter = EngineParameter.builder().ruleId("noname").ruleName("noname").build();
+
+        Assert.assertThrows(RuleException.class, () -> {
+            engine.executeByRuleId(engineParameter);
         });
 
 

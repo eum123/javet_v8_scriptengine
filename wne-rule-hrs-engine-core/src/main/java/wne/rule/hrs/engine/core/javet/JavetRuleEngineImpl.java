@@ -76,13 +76,12 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
         }
     }
 
-    public RuleExecuteResult executeByRuleId(boolean isDebug, String ruleId, String ruleName, Object ... parameters) {
+    public RuleExecuteResult executeByRuleId(EngineParameter engineParameter, Object ... parameters) {
         lock.lock();
 
-        log.debug("START(ruleId) ruleId:{}, ruleName{}", ruleId, ruleName);
+        log.debug("START(ruleId). engineParameter : {}", engineParameter);
 
-        RuleContext context = new RuleContext((RuleEngineFactory) this.factory, ruleId, ruleName);
-        context.setDebug(isDebug);
+        RuleContext context = new RuleContext((RuleEngineFactory) this.factory, engineParameter);
 
         try {
 
@@ -90,7 +89,7 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
                 updateCondition.await();
             }
 
-            ScriptFetchResult scriptFetchResult = context.fetchByRuleId(ruleId);
+            ScriptFetchResult scriptFetchResult = context.fetchByRuleId();
             if(scriptFetchResult != null) {
                 //실행 하기 전 script를 조회 후 engine에 등록한다.
                 v8Runtime.getExecutor(scriptFetchResult.getScript()).executeVoid();
@@ -98,20 +97,21 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
 
             //context 추가
             v8Runtime.getGlobalObject().set(SystemConstants.CONTEXT, context);
-            validate(ruleId);
+
+            validate(engineParameter.getRuleId());
 
             //시작 시간
             context.start();
 
             //execute script
-            Object result = v8Runtime.getGlobalObject().invokeObject(ruleId, parameters);
+            Object result = v8Runtime.getGlobalObject().invokeObject(engineParameter.getRuleId(), parameters);
 
             //종료시간
             context.end(result);
 
             return context.getRuleExecuteResult();
         } catch (Exception e ) {
-            log.error("execute fail. ruleId:{}", ruleId, e);
+            log.error("execute fail. {}", engineParameter, e);
 
             context.getRuleExecuteResult().setThrowable(e);
 
@@ -123,35 +123,63 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
         }
     }
 
-    public RuleExecuteResult executeByRuleId(String ruleId, String ruleName, Object ... parameters) {
-        return executeByRuleId(false, ruleId, ruleName, parameters);
-    }
-
-    public RuleExecuteResult executeByRuleName(String ruleName, String baseDate, Object ... parameters) {
-        return executeByRuleName(false, ruleName, baseDate, parameters);
-    }
-    public RuleExecuteResult executeByRuleName(boolean isDebug, String ruleName, String baseDate, Object ... parameters) {
+    public RuleExecuteResult executeByScript(EngineParameter engineParameter, String script, Object ... parameters) {
         lock.lock();
 
-        log.debug("START(ruleName) ruleName:{}, date{}", ruleName, baseDate);
+        log.debug("START(script) engineParameter:{}", engineParameter);
 
-        RuleContext context = null;
+        RuleContext context = new RuleContext((RuleEngineFactory) this.factory, engineParameter);
 
+        try {
+
+            if (factory.isUpdate()) {
+                updateCondition.await();
+            }
+
+            //실행 하기 전 script를 조회 후 engine에 등록한다.
+            v8Runtime.getExecutor(script).executeVoid();
+
+            //context 추가
+            v8Runtime.getGlobalObject().set(SystemConstants.CONTEXT, context);
+            validate(engineParameter.getRuleId());
+
+            //시작 시간
+            context.start();
+
+            //execute script
+            Object result = v8Runtime.getGlobalObject().invokeObject(engineParameter.getRuleId(), parameters);
+
+            //종료시간
+            context.end(result);
+
+            return context.getRuleExecuteResult();
+        } catch (Exception e ) {
+            log.error("execute fail. engineParameter:{}", engineParameter, e);
+
+            context.getRuleExecuteResult().setThrowable(e);
+
+            return context.getRuleExecuteResult();
+        } finally {
+            lock.unlock();
+
+            deleteSystem();
+        }
+    }
+
+
+    public RuleExecuteResult executeByRuleName(EngineParameter engineParameter, String baseDate, Object ... parameters) {
+        lock.lock();
+
+        log.debug("START(ruleName) engineParameter:{}, date{}", engineParameter, baseDate);
+
+        RuleContext context = new RuleContext((RuleEngineFactory)this.factory, engineParameter);
         try {
             if (factory.isUpdate()) {
                 updateCondition.await();
             }
 
-            //TODO: 추후 개선
-            ScriptFetcher fetcher = factory.getScriptFetcher();
-            if(fetcher == null) {
-                //이름으로 id와 script를 구해야 하므로 반드시 필요하다.
-                throw new RuleException("ScriptFetcher Not Found");
-            }
-            fetcher.setDebug(isDebug);
-            ScriptFetchResult scriptFetchResult = fetcher.fetchByRuleName(ruleName, baseDate);
-            context = new RuleContext((RuleEngineFactory) this.factory, scriptFetchResult.getRuleId(), ruleName);
-            context.setDebug(isDebug);
+            ScriptFetchResult scriptFetchResult = context.fetchByRuleName(baseDate);
+
 
             //실행 하기 전 script를 조회 후 engine에 등록한다.
             v8Runtime.getExecutor(scriptFetchResult.getScript()).executeVoid();
@@ -173,7 +201,7 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
 
             return context.getRuleExecuteResult();
         } catch (Exception e ) {
-            log.error("execute fail. ruleName : {}", ruleName, e);
+            log.error("execute fail. engineParameter : {}", engineParameter, e);
 
             context.getRuleExecuteResult().setThrowable(e);
 

@@ -26,9 +26,10 @@ public class RecursiveRuleTest {
 
         RuleEngine engine = factory.borrow();
 
+        EngineParameter engineParameter = EngineParameter.builder().ruleId("my").ruleName("my").build();
 
         Assert.assertThrows(Exception.class, () -> {
-            engine.executeByRuleId("my", "my");
+            engine.executeByRuleId(engineParameter);
         });
 
 

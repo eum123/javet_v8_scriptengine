@@ -125,16 +125,6 @@ public class GenericObjectPoolTest {
         }
 
         @Override
-        public void setScriptFetcher(ScriptFetcher scriptFetcher) {
-
-        }
-
-        @Override
-        public ScriptFetcher getScriptFetcher() {
-            return null;
-        }
-
-        @Override
         public RuleConfig getRuleConfig() {
             return null;
         }

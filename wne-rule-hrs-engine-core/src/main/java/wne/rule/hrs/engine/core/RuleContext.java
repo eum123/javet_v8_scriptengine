@@ -13,10 +13,8 @@ import wne.rule.hrs.engine.core.fetcher.ScriptFetcher;
 public class RuleContext {
 
     @Getter
-    private String ruleId;
+    private EngineParameter engineParameter;
 
-    @Getter
-    private String ruleName;
 
     private RuleEngineFactory factory;
 
@@ -25,22 +23,34 @@ public class RuleContext {
     @Getter
     private RuleExecuteResult ruleExecuteResult;
 
-    @Getter @Setter
-    @Builder.Default
-    private boolean debug = false;
-
-    public RuleContext(RuleEngineFactory factory, String ruleId, String ruleName) {
+//
+//    public RuleContext(RuleEngineFactory factory, String ruleId, String ruleName) {
+//        this.factory = factory;
+//        this.ruleId = ruleId;
+//        this.ruleName = ruleName;
+//        this.ruleExecuteResult = new RuleExecuteResult(ruleId, ruleName);
+//    }
+//
+    public RuleContext(RuleEngineFactory factory, EngineParameter engineParameter) {
         this.factory = factory;
-        this.ruleId = ruleId;
-        this.ruleName = ruleName;
-        this.ruleExecuteResult = new RuleExecuteResult(ruleId, ruleName);
+        this.engineParameter = engineParameter;
+        this.ruleExecuteResult = new RuleExecuteResult(engineParameter.getRuleId(), engineParameter.getRuleName());
     }
 
 
+    /**
+     * 시작 시간 설정
+     */
     public void start() {
         ruleExecuteResult.setStartTime(System.currentTimeMillis());
     }
 
+    /**
+     * script parameter 추가.
+     *
+     * @param key
+     * @param value
+     */
     public void addParameter(String key, Object value) {
         ruleExecuteResult.addParameter(key, value);
     }
@@ -77,20 +87,30 @@ public class RuleContext {
         return factory.getMaxTotal();
     }
 
-    public ScriptFetchResult fetchByRuleName(String ruleName, String date) throws Exception {
-        return ((ManagedRuleEngineFactory)factory).getScriptFetcher().fetchByRuleName(ruleName, date);
-    }
-    public ScriptFetchResult fetchByRuleId(String ruleId) throws Exception {
+    public ScriptFetchResult fetchByRuleName(String baseDate) throws Exception {
 
-        ScriptFetcher scriptFetcher = ((ManagedRuleEngineFactory)factory).getScriptFetcher();
+        ScriptFetcher scriptFetcher = this.engineParameter.getScriptFetcher();
+
+        if(scriptFetcher == null) {
+            throw new Exception("ScriptFetcher not found");
+        }
+
+        ScriptFetchResult result = scriptFetcher.fetchByRuleName(engineParameter.getRuleName(), baseDate);
+
+        //이름으로 ruleId를 조회 하므로 현재 ruleId를 변경한다. 반드시 필요하다.
+        this.engineParameter.setRuleId(result.getRuleId());
+
+        return result;
+    }
+    public ScriptFetchResult fetchByRuleId() throws Exception {
+
+        ScriptFetcher scriptFetcher = this.engineParameter.getScriptFetcher();
 
         if(scriptFetcher == null) {
             return null;
         }
 
-
-
-        return ((ManagedRuleEngineFactory)factory).getScriptFetcher().fetchByRuleId(ruleId);
+        return scriptFetcher.fetchByRuleId(engineParameter.getRuleId());
     }
 
     /**
@@ -102,7 +122,7 @@ public class RuleContext {
         try {
 
             //동일 이름에 ID가 다를수 있으나 history라서 이름으로 비교해도 로직상 문제 없을거라 판단됨
-            if(this.ruleName != null && this.ruleName.equalsIgnoreCase(ruleName)) {
+            if(this.engineParameter.getRuleName() != null && this.engineParameter.getRuleName().equalsIgnoreCase(ruleName)) {
                 throw new RuntimeException("not support recursive function. ruleName : " + ruleName);
             }
 
@@ -110,8 +130,15 @@ public class RuleContext {
 
             log.info("NEW ENGINE(Java) ruleName:{}, date:{}, Parameter:{}", ruleName, date, args);
 
-            RuleExecuteResult result =  engine.executeByRuleName(debug, ruleName, date, args);
-            result.setParentRuleId(this.ruleId);    //parent urleId 설정
+            //ruleId는 scriptfecher에서 조회 후 설정된다.
+            EngineParameter subEngineParameter = EngineParameter.builder()
+                    .ruleName(ruleName)
+                    .isDebug(this.engineParameter.isDebug())
+                    .scriptFetcher(this.engineParameter.getScriptFetcher())
+                    .build();
+
+            RuleExecuteResult result =  engine.executeByRuleName(subEngineParameter, date, args);
+            result.setParentRuleId(this.engineParameter.getRuleId());    //parent urleId 설정
 
             //append sub result
             this.ruleExecuteResult.addSubRuleExecuteResult(result);

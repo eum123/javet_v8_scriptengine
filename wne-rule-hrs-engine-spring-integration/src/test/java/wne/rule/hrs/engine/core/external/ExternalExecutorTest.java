@@ -2,6 +2,7 @@ package wne.rule.hrs.engine.core.external;
 
 import org.assertj.core.util.Lists;
 import org.junit.Test;
+import wne.rule.hrs.engine.core.EngineParameter;
 import wne.rule.hrs.engine.core.javet.JavetRuleEngineFactory;
 import wne.rule.hrs.engine.core.RuleConfig;
 import wne.rule.hrs.engine.core.RuleEngine;
@@ -22,11 +23,12 @@ public class ExternalExecutorTest {
                 "return result; \n" +
                 "} \n";
 
-        factory.update("my", script);
-
 
         RuleEngine engine = factory.borrow();
-        Object result = engine.executeByRuleId("my", null);
+
+        EngineParameter engineParameter = EngineParameter.builder().ruleId("my").ruleName("my").build();
+
+        Object result = engine.executeByScript(engineParameter, script);
 
         System.out.println("result:" + result);
 
