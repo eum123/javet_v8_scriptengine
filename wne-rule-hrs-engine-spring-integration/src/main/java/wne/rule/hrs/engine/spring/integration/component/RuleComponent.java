@@ -13,6 +13,17 @@ public interface RuleComponent {
      */
     RuleExecuteResult executeByRuleId(String ruleId, String ruleName, Object ... parameters) throws Exception;
 
+    /**
+     * 스크립트로 실행
+     * @param ruleId
+     * @param ruleName
+     * @param script
+     * @param parameter
+     * @return
+     * @throws Exception
+     */
+    RuleExecuteResult executeByScript(String ruleId, String ruleName, String script, Object ... parameter) throws Exception;
+
 
     /**
      * Rule 변경
