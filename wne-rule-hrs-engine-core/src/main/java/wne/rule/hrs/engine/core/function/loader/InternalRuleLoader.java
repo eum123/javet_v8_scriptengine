@@ -1,7 +1,10 @@
 package wne.rule.hrs.engine.core.function.loader;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -30,10 +33,21 @@ public class InternalRuleLoader {
     }
 
     public static Optional<String> loadForce() {
-        try {
-            script = Files.readAllLines(Paths.get(
-                    ClassLoader.getSystemResource("internal/" + FILE_NAME).toURI())
-            ).stream().collect(Collectors.joining("\n"));
+
+        StringBuilder builder = new StringBuilder();
+        String line = "";
+        ClassPathResource resource = new ClassPathResource("internal/" + FILE_NAME);
+
+        try (
+                InputStreamReader reader = new InputStreamReader(resource.getInputStream());
+                BufferedReader br = new BufferedReader(reader);
+                ) {
+
+            while((line = br.readLine()) != null) {
+                builder.append(br).append("\r\n");
+            }
+
+            script = builder.toString();
 
             log.info("internal script loaded. length:{}", script.length());
 
