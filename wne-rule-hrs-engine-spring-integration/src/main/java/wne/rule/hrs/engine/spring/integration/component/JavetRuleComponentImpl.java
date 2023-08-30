@@ -52,6 +52,22 @@ public class JavetRuleComponentImpl implements RuleComponent {
         }
     }
 
+    public RuleExecuteResult executeByScript(String ruleId, String ruleName, String script, Object ... parameter) throws Exception {
+        RuleEngine engine = null;
+        try {
+            engine = factory.borrow();
+
+            EngineParameter engineParameter = EngineParameter.builder().ruleId(ruleId).ruleName(ruleName).scriptFetcher(scriptFetcher).build();
+
+            return engine.executeByScript(engineParameter, script, parameter);
+
+        } finally {
+            if(engine != null) {
+                factory.release(engine);
+            }
+        }
+    }
+
 
     public void updateRule(String ruleId, String script) {
         factory.update(ruleId, script);
