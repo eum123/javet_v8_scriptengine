@@ -111,6 +111,7 @@ public class RuleContext {
             log.info("NEW ENGINE(Java) ruleName:{}, date:{}, Parameter:{}", ruleName, date, args);
 
             RuleExecuteResult result =  engine.executeByRuleName(debug, ruleName, date, args);
+            result.setParentRuleId(this.ruleId);    //parent urleId 설정
 
             //append sub result
             this.ruleExecuteResult.addSubRuleExecuteResult(result);

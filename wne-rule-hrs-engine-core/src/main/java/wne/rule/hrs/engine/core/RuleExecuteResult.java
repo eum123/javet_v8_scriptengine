@@ -12,6 +12,9 @@ import java.util.*;
 @ToString
 public class RuleExecuteResult {
 
+    @Getter @Setter
+    private String parentRuleId;
+
     @Getter
     private String ruleId;
 
@@ -177,6 +180,7 @@ public class RuleExecuteResult {
         ruleExecuteResult.ruleParameters = this.ruleParameters;
         ruleExecuteResult.throwable = throwable;
         ruleExecuteResult.globalVariable = globalVariable;
+        ruleExecuteResult.parentRuleId = this.parentRuleId;
 
         return ruleExecuteResult;
     }
