@@ -35,6 +35,15 @@ public interface RuleEngine {
      */
     RuleExecuteResult executeByRuleName(EngineParameter engineParameter, String baseDate, Object ... parameters);
 
+    /**
+     * 스크립트 단순 문법 검사.
+     * @param engineParameter
+     * @param script
+     * @return
+     * @throws Exception
+     */
+    boolean validateScript(EngineParameter engineParameter, String script) throws Exception;
+
 
     /**
      * RuleEngine에 script를 변경한다.

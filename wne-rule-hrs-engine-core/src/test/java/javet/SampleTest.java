@@ -254,7 +254,7 @@ public class SampleTest {
     public void 문법검증_테스트() throws Exception {
         String script1 = "function getName(a, b, c) {\n" +
                 "fun(); \n" +
-                "aaaa = 1; \n" +
+                "aaaa = 1 and 2; \n" +
                 "hong.date = 1; \n" +
                 "return 'hong'; \n" +
                 "} \n";

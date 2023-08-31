@@ -4,6 +4,8 @@ import com.caoccao.javet.exceptions.JavetException;
 import com.caoccao.javet.interop.V8Host;
 import com.caoccao.javet.interop.V8Runtime;
 import com.caoccao.javet.interop.converters.JavetProxyConverter;
+import com.caoccao.javet.interop.executors.IV8Executor;
+import com.caoccao.javet.values.reference.V8Script;
 import com.caoccao.javet.values.reference.V8ValueObject;
 import lombok.Getter;
 import lombok.Setter;
@@ -74,6 +76,23 @@ public class JavetRuleEngineImpl implements ManagedRuleEngine, RuleEngine {
                 log.warn("close fail", e);
             }
         }
+    }
+
+    public boolean validateScript(EngineParameter engineParameter, String script) throws Exception {
+        RuleContext context = new RuleContext((RuleEngineFactory) this.factory, engineParameter);
+        //context 추가
+        v8Runtime.getGlobalObject().set(SystemConstants.CONTEXT, context);
+        IV8Executor iV8Executor = v8Runtime.getExecutor(script);
+
+        try (
+            V8Script v8Script = iV8Executor.compileV8Script();
+        ) {
+            return true;
+        }finally {
+            deleteSystem();
+        }
+
+
     }
 
     public RuleExecuteResult executeByRuleId(EngineParameter engineParameter, Object ... parameters) {

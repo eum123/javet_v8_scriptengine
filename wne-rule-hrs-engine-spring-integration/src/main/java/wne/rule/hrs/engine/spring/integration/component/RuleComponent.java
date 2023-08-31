@@ -37,4 +37,14 @@ public interface RuleComponent {
      * @param scriptFetcher
      */
     void setScriptFetcher(ScriptFetcher scriptFetcher);
+
+    /**
+     * 스크립트 단순 문법 검사
+     * @param ruleId
+     * @param ruleName
+     * @param script
+     * @return
+     * @throws Exception
+     */
+    boolean validateScript(String ruleId, String ruleName, String script) throws Exception;
 }

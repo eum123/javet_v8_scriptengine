@@ -52,6 +52,22 @@ public class JavetRuleComponentImpl implements RuleComponent {
         }
     }
 
+    public boolean validateScript(String ruleId, String ruleName, String script) throws Exception {
+        RuleEngine engine = null;
+        try {
+            engine = factory.borrow();
+
+            EngineParameter engineParameter = EngineParameter.builder().ruleId(ruleId).ruleName(ruleName).scriptFetcher(scriptFetcher).build();
+
+            return engine.validateScript(engineParameter, script);
+
+        } finally {
+            if(engine != null) {
+                factory.release(engine);
+            }
+        }
+    }
+
     public RuleExecuteResult executeByScript(String ruleId, String ruleName, String script, Object ... parameter) throws Exception {
         RuleEngine engine = null;
         try {
