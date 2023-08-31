@@ -6,7 +6,7 @@
     <parent>
         <groupId>wne.rule</groupId>
         <artifactId>wne-rule-hrs-engine</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>wne-rule-hrs-engine-external-bean</artifactId>
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>wne.rule</groupId>
             <artifactId>wne-rule-hrs-engine-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
