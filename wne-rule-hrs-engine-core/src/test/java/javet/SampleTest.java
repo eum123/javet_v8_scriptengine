@@ -5,8 +5,12 @@ import com.caoccao.javet.interop.V8Runtime;
 import com.caoccao.javet.interop.converters.JavetBridgeConverter;
 import com.caoccao.javet.interop.converters.JavetProxyConverter;
 import com.caoccao.javet.interop.executors.IV8Executor;
+import com.caoccao.javet.values.reference.V8Script;
 import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SampleTest {
     @Test
@@ -246,6 +250,27 @@ public class SampleTest {
 
     }
 
+    @Test
+    public void 문법검증_테스트() throws Exception {
+        String script1 = "function getName(a, b, c) {\n" +
+                "fun(); \n" +
+                "aaaa = 1; \n" +
+                "hong.date = 1; \n" +
+                "return 'hong'; \n" +
+                "} \n";
+
+        try (V8Runtime v8Runtime = V8Host.getV8Instance().createV8Runtime()) {
+
+            IV8Executor iV8Executor = v8Runtime.getExecutor(script1);
+
+            try (V8Script v8Script = iV8Executor.compileV8Script()) {
+                assertNotNull(v8Script);
+                byte[] initializedCachedData = v8Script.getCachedData();
+                assertTrue(initializedCachedData != null && initializedCachedData.length > 0);
+            }
+
+        }
+    }
 
 
 }

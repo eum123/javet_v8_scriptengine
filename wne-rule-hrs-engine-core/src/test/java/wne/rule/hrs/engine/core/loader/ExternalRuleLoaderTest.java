@@ -42,6 +42,8 @@ public class ExternalRuleLoaderTest {
 
         Optional<String> optional = ExternalRuleLoader.load(Lists.newArrayList(x));
 
+        System.out.println(optional.get().substring(0, 100));
+
         Assert.assertTrue(optional.isPresent());
     }
 

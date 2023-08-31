@@ -16,6 +16,8 @@ public class InternalRuleLoaderTest {
 
         Assert.assertTrue(optional.isPresent());
 
+        System.out.println(optional.get().substring(0, 100));
+
         Assert.assertTrue(optional.get().length() > 0);
 
 

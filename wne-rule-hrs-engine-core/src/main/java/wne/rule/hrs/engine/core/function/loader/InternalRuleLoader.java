@@ -2,6 +2,7 @@ package wne.rule.hrs.engine.core.function.loader;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
+import wne.rule.hrs.engine.core.util.FileUtil;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -34,27 +35,14 @@ public class InternalRuleLoader {
 
     public static Optional<String> loadForce() {
 
-        StringBuilder builder = new StringBuilder();
-        String line = "";
-        ClassPathResource resource = new ClassPathResource("internal/" + FILE_NAME);
-        if(resource.exists()) {
-            try (
-                    InputStreamReader reader = new InputStreamReader(resource.getInputStream());
-                    BufferedReader br = new BufferedReader(reader);
-            ) {
+        try {
+            script = FileUtil.readInJar("internal/" + FILE_NAME);
 
-                while ((line = br.readLine()) != null) {
-                    builder.append(line).append("\r\n");
-                }
+            log.info("internal script loaded. length:{}", script.length());
 
-                script = builder.toString();
-
-                log.info("internal script loaded. length:{}", script.length());
-
-                return Optional.ofNullable(script);
-            } catch (Exception e) {
-                log.warn("internal rule error", e);
-            }
+            return Optional.ofNullable(script);
+        } catch (Exception e) {
+            log.warn("internal rule error", e);
         }
 
         return Optional.empty();

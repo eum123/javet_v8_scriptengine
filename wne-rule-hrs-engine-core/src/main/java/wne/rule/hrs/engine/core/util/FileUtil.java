@@ -18,9 +18,12 @@ package wne.rule.hrs.engine.core.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
@@ -573,4 +576,30 @@ public final class FileUtil {
         return uri.startsWith("file:") || uri.startsWith("classpath:") || uri.startsWith("http:");
     }
 
+
+    /**
+     * jar 내의 파일을 읽는다.
+     * @param path
+     * @return
+     * @throws Exception
+     */
+    public static String readInJar(String path) throws Exception {
+        StringBuilder builder = new StringBuilder();
+        String line = "";
+        ClassPathResource resource = new ClassPathResource(path);
+        if(resource.exists()) {
+            try (
+                    InputStreamReader reader = new InputStreamReader(resource.getInputStream());
+                    BufferedReader br = new BufferedReader(reader);
+            ) {
+
+                while ((line = br.readLine()) != null) {
+                    builder.append(line).append("\r\n");
+                }
+
+                return builder.toString();
+            }
+        }
+        return "";
+    }
 }

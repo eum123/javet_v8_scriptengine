@@ -1,6 +1,7 @@
 package wne.rule.hrs.engine.core.function.loader;
 
 import lombok.extern.slf4j.Slf4j;
+import wne.rule.hrs.engine.core.util.FileUtil;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ExternalRuleLoader {
 
-    private static String script = null;
+    private static String script = "";
 
     /**
      * 외부 rule을 로딩한다.
@@ -110,7 +111,7 @@ public class ExternalRuleLoader {
                 try {
                     builder.append(loadClassPathFile(pathString + File.separator + x));
                     builder.append("\r\n");
-                } catch (IOException | URISyntaxException  e) {
+                } catch (Exception  e) {
                     throw new RuntimeException(e);
                 }
             });
@@ -125,10 +126,7 @@ public class ExternalRuleLoader {
 
     }
 
-    private static String loadClassPathFile(String path) throws URISyntaxException, IOException {
-
-        return Files.readAllLines(Paths.get(
-                ClassLoader.getSystemResource(path).toURI())
-        ).stream().collect(Collectors.joining("\n"));
+    private static String loadClassPathFile(String path) throws Exception {
+        return FileUtil.readInJar(path);
     }
 }
