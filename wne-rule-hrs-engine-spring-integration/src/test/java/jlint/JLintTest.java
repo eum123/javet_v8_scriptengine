@@ -25,9 +25,15 @@ public class JLintTest {
         System.out.println(result.isJson());
 
         result.getIssues().forEach(x -> {
-            System.out.println(x);
-//            System.out.println("evidence: " + x.getEvidence());
-//            System.out.println("reason:" + x.getReason());
+            //System.out.println(x);
+            System.out.println("raw:" + x.getRaw());
+
+            System.out.println("evidence: " + x.getEvidence());
+            System.out.println("reason:" + x.getReason());
+            System.out.println("character:" + x.getCharacter());
+            System.out.println("line: " + x.getLine());
+
+            System.out.println("===========");
         });
     }
 }
