@@ -26,10 +26,8 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-
-
         <spring-boot-version>1.5.22.RELEASE</spring-boot-version>
+        <nexus.repository.id>shinhanez</nexus.repository.id>
     </properties>
 
     <build>
@@ -167,4 +165,36 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>${nexus.repository.id}-local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>${nexus.repository.id}-snapshots</id>
+                    <url>http://wine-web/nexus2/repository/${nexus.repository.id}-snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>${nexus.repository.id}-releases</id>
+                    <url>http://wine-web/nexus2/repository/${nexus.repository.id}-releases</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>${nexus.repository.id}-server</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>${nexus.repository.id}-snapshots</id>
+                    <url>http://wine-cicd:8082/nexus2/repository/${nexus.repository.id}-snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>${nexus.repository.id}-releases</id>
+                    <url>http://wine-cicd:8082/nexus2/repository/${nexus.repository.id}-releases</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 </project>
