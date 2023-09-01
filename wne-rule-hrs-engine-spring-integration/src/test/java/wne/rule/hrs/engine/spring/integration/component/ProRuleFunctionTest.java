@@ -33,7 +33,7 @@ public class ProRuleFunctionTest {
 
         System.out.println("result:" +obj);
 
-        Assert.assertEquals(1, obj.getGlobalVariable("my").size());
+        Assert.assertEquals(1, obj.getGlobalVariable("my"));
 
     }
 

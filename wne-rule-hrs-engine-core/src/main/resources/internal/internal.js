@@ -13,7 +13,6 @@
  * @constructor
  */
 function NEW_ENGINE_BY_NAME(ruleName, baseDate, ...args) {
-    CONTEXT.getLogger().debug("NEW ENGINE(Script) ruleName:{}, baseDate:{}, parameter:{}", ruleName, baseDate, args);
     return CONTEXT.newEngineByName(ruleName, baseDate, ...args);
 }
 
@@ -21,8 +20,17 @@ function _GET_GLOBAL(loggerId) {
     return CONTEXT.getRuleExecuteResult().getGlobalVariable(loggerId);
 }
 
-function _SET_GLOBAL(loggerId, data) {
-    CONTEXT.getRuleExecuteResult().setGlobalVariable(loggerId, data);
+function _SET_GLOBAL(loggerId, ...data) {
+    if(data == null || data == undefined) {
+        CONTEXT.getRuleExecuteResult().setGlobalVariable(loggerId, data);
+    } else {
+        if(data.length == 1) {
+            CONTEXT.getRuleExecuteResult().setGlobalVariable(loggerId, data[0]);
+        } else {
+            //map으로 저장
+            CONTEXT.getRuleExecuteResult().setGlobalVariable(loggerId, data[0], data[1]);
+        }
+    }
 }
 
 

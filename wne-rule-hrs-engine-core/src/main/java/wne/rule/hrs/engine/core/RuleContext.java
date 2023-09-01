@@ -20,7 +20,7 @@ public class RuleContext {
 
     private RuleLogger logger = new RuleLogger(this);
 
-    @Getter
+    @Getter @Setter
     private RuleExecuteResult ruleExecuteResult;
 
 //
@@ -99,6 +99,7 @@ public class RuleContext {
 
         //이름으로 ruleId를 조회 하므로 현재 ruleId를 변경한다. 반드시 필요하다.
         this.engineParameter.setRuleId(result.getRuleId());
+        this.ruleExecuteResult.updateRuleId(result);
 
         return result;
     }
@@ -139,7 +140,7 @@ public class RuleContext {
 
             RuleExecuteResult result =  engine.executeByRuleName(subEngineParameter, date, args);
             result.setParentRuleId(this.engineParameter.getRuleId());    //parent urleId 설정
-
+log.debug(ruleName + "===========>{}" + result.getSubRuleExecuteResult() );
             //append sub result
             this.ruleExecuteResult.addSubRuleExecuteResult(result);
 

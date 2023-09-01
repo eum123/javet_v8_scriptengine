@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import wne.rule.hrs.engine.core.fetcher.ScriptFetchResult;
 
 import java.util.*;
 
@@ -59,14 +60,20 @@ public class RuleExecuteResult {
     private String errorDetailMessage;
 
     /** sub rule의 실행 결과 */
+    @Getter
     private List<RuleExecuteResult> subRuleExecuteResult = new LinkedList<>();
 
     /** global variable */
-    private Map<String, List<Object>> globalVariable = new HashMap<>();
+    @Getter
+    private Map<String, Object> globalVariable = new HashMap<>();
 
     public RuleExecuteResult(String ruleId, String ruleName) {
         this.ruleId = ruleId;
         this.ruleName = ruleName;
+    }
+
+    public void updateRuleId(ScriptFetchResult scriptFetchResult) {
+        this.ruleId = scriptFetchResult.getRuleId();
     }
 
     public void appendRuleExecuteLog(String message) {
@@ -97,6 +104,8 @@ public class RuleExecuteResult {
         ruleParameters.add(key, value);
     }
 
+
+
     public void setThrowable(Throwable throwable) {
         this.throwable = throwable;
 
@@ -118,21 +127,21 @@ public class RuleExecuteResult {
 
     }
 
-    public List<RuleExecuteResult> getSubRuleExecuteResult() {
-        List<RuleExecuteResult> list = new LinkedList<>();
-        for (RuleExecuteResult executeResult : subRuleExecuteResult) {
-
-            list.add(executeResult.copy());
-
-            List<RuleExecuteResult> subList = executeResult.getSubRuleExecuteResult();
-            if(!subList.isEmpty()) {
-                //sub 실행 결과가 있는 경우
-                list.addAll(getSubRuleExecuteResult(subList));
-            }
-        }
-
-        return list;
-    }
+//    public List<RuleExecuteResult> getSubRuleExecuteResult() {
+//        List<RuleExecuteResult> list = new LinkedList<>();
+//        for (RuleExecuteResult executeResult : subRuleExecuteResult) {
+//
+//            list.add(executeResult.copy());
+//
+//            List<RuleExecuteResult> subList = executeResult.getSubRuleExecuteResult();
+//            if(!subList.isEmpty()) {
+//                //sub 실행 결과가 있는 경우
+//                list.addAll(getSubRuleExecuteResult(subList));
+//            }
+//        }
+//
+//        return list;
+//    }
 
     private List<RuleExecuteResult> getSubRuleExecuteResult(List<RuleExecuteResult> list) {
         List<RuleExecuteResult> newList = new LinkedList<>();
@@ -150,17 +159,23 @@ public class RuleExecuteResult {
         return newList;
     }
 
-    public List<Object> getGlobalVariable(String key) {
+    public Object getGlobalVariable(String key) {
+        return globalVariable.get(key);
+    }
+
+    public void setGlobalVariable(String key, String subKey, Object value) {
         if(globalVariable.containsKey(key)) {
-            return globalVariable.get(key);
+            ((Map)globalVariable.get(key)).put(subKey, value);
         } else {
-            List<Object> list = new ArrayList();
-            globalVariable.put(key, list);
-            return globalVariable.get(key);
+            Map<String, Object> map = new HashMap();
+            map.put(subKey, value);
+
+            globalVariable.put(key, map);
         }
     }
+
     public void setGlobalVariable(String key, Object value) {
-        getGlobalVariable(key).add(value);
+        globalVariable.put(key, value);
     }
 
     /**
