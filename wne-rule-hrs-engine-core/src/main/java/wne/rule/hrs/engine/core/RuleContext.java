@@ -140,7 +140,6 @@ public class RuleContext {
 
             RuleExecuteResult result =  engine.executeByRuleName(subEngineParameter, date, args);
             result.setParentRuleId(this.engineParameter.getRuleId());    //parent urleId 설정
-log.debug(ruleName + "===========>{}" + result.getSubRuleExecuteResult() );
             //append sub result
             this.ruleExecuteResult.addSubRuleExecuteResult(result);
 
